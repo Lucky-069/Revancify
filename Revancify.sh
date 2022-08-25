@@ -166,7 +166,7 @@ then
     su -c 'mkdir /data/adb/revanced'
     if [ "$appname" = "YouTube" ]
     then
-        if $(su -c 'dumpsys package com.google.android.youtube | grep -q path')
+        if $( su -c dumpsys package com.google.android.youtube | grep -q path )
         then
             tput sc
             echo "SU Status: Root"
@@ -195,7 +195,7 @@ then
         fi
     elif [ "$appname" = "YouTubeMusic" ] 
     then
-        if $( su -c 'dumpsys package com.google.android.apps.youtube.music | grep -q path' )
+        if $( su -c dumpsys package com.google.android.apps.youtube.music | grep -q path )
         then
             tput sc
             echo "Checking if YouTube Music is installed..."
