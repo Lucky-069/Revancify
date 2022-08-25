@@ -14,7 +14,7 @@ termux-setup-storage && pkg update -y && pkg install git -y && cd storage && git
 # Usage
 1. Open Termux.  
 2. Type `cd storage/Revancify`  
-3. To run the script, type `bash main.sh`  
+3. To run the script, type `bash Revancify.sh`  
 > Don't run sh main.sh, otherwise script will give errors.  
 
 # Uninstallation
