@@ -164,21 +164,21 @@ then
     variant="root"
     su -c 'rm -rf /data/adb/revanced'
     su -c 'mkdir /data/adb/revanced'
+    tput sc
     echo "SU Status: Root"
+    echo ""
+    sleep 1
     if [ "$appname" = "YouTube" ]
     then
+        echo "Checking if YouTube is installed..."
         if $( su -c dumpsys package com.google.android.youtube | grep -q path )
         then
-            tput sc
-            echo "Checking if YouTube is installed..."
             sleep 1
             echo ""
             echo "YouTube is installed"
             sleep 1
             tput rc; tput cd
         else
-            tput sc
-            echo "Checking if YouTube is installed..."
             sleep 1
             tput rc; tput cd
             echo "Oh No, YouTube is not installed"
@@ -190,20 +190,17 @@ then
         fi
     elif [ "$appname" = "YouTubeMusic" ] 
     then
+        echo "Checking if YouTube Music is installed..."
         if $( su -c dumpsys package com.google.android.apps.youtube.music | grep -q path )
         then
-            tput sc
-            echo "Checking if YouTube Music is installed..."
             sleep 1
             echo ""
-            echo "Hurray, YouTube Music is installed"
+            echo "YouTube Music is installed"
             sleep 1
             tput rc; tput cd
         else
-            tput sc
-            echo "Checking if YouTube Music is installed..."
-            echo ""
             sleep 1
+            tput rc; tput cd
             echo "Oh No, YouTube Music is not installed"
             echo ""
             sleep 1
