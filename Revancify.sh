@@ -53,7 +53,8 @@ else
     pip install bs4 &&
     export PATH="$HOME/storage/Revancify:$PATH"
     chmod +x Revancify.sh
-    sed -i 's/# allow-external-apps = true/allow-external-apps = true/g'
+    sed -i 's/# allow-external-apps = true/allow-external-apps = true/g' ~/.termux/termux.properties
+    git config core.fileMode false
     sleep 1
     echo "Dependencies installed successfully."
     sleep 1
