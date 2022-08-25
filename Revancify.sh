@@ -227,7 +227,7 @@ get_components(){
     int_latest=$(sed -n '3p' latest.txt)
 
     #check patch
-    if ls -l | grep -q revanced-patches*
+    if ls -l | grep -q revanced-patches
     then
         patches_available=$(basename revanced-patches* .jar | cut -d'-' -f 3) #get version
         if [ "$patches_latest" = "$patches_available" ]
@@ -263,7 +263,7 @@ get_components(){
     fi
 
     #check cli
-    if ls -l | grep -q revanced-cli*
+    if ls -l | grep -q revanced-cli
     then
         cli_available=$(basename revanced-cli* .jar | cut -d'-' -f 3) #get version
         if [ "$cli_latest" = "$cli_available" ]
@@ -300,7 +300,7 @@ get_components(){
     fi
 
     #check integrations
-    if ls -l | grep -q revanced-integrations*
+    if ls -l | grep -q revanced-integrations
     then
         int_available=$(basename revanced-integrations* .apk | cut -d'-' -f 3) #get version
         if [ "$int_latest" = "$int_available" ]
@@ -342,7 +342,7 @@ get_components(){
 #Check and Get Youtube
 yt_dl()
 {
-    if ls -l | grep -q YouTube-*
+    if ls -l | grep -q YouTube-
     then
         yt_available=$(basename YouTube-* .apk | cut -d'-' -f2) #get version
         if [ "$ytver" = "$yt_available" ];then
@@ -380,7 +380,7 @@ yt_dl()
 #Check and Get Youtube Music
 ytm_dl()
 {
-    if ls -l | grep -q YouTubeMusic-*
+    if ls -l | grep -q YouTubeMusic-
     then
         ytm_available=$(basename YouTubeMusic-* .apk | cut -d'-' -f2) #get version
         if [ "$ytmver" = "$ytm_available" ]
