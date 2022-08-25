@@ -52,6 +52,7 @@ else
     pip install wheel &&
     pip install bs4 &&
     export PATH="$HOME/storage/Revancify:$PATH"
+    chmod +x Revancify.sh
     sed -i 's/# allow-external-apps = true/allow-external-apps = true/g'
     sleep 1
     echo "Dependencies installed successfully."
@@ -161,6 +162,7 @@ then
     :
 else 
     mv ./aapt2_$arch ./aapt2
+    chmod +x aapt2
     rm ./aapt2_*
 fi
 
