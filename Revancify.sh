@@ -41,8 +41,8 @@ else
     pkg update -y && 
     pkg install python -y &&
     pkg install openjdk-17 -y && 
-    pkg install wget && 
-    pkg install ncurses-utils &&
+    pkg install wget -y && 
+    pkg install ncurses-utils -y &&
     pip install --upgrade pip &&
     pip install requests &&
     pip install wheel &&
@@ -166,7 +166,7 @@ then
     su -c 'mkdir /data/adb/revanced'
     if [ "$appname" = "YouTube" ]
     then
-        if $(su -c 'ls /data/app | grep -q com.google.android.youtube')
+        if $(su -c 'dumpsys package com.google.android.youtube | grep -q com.google.android.youtube')
         then
             tput sc
             echo "SU Status: Root"
@@ -195,7 +195,7 @@ then
         fi
     elif [ "$appname" = "YouTubeMusic" ] 
     then
-        if $( su -c 'ls /data/app | grep -q com.google.android.apps.youtube.music' )
+        if $( su -c 'dumpsys package com.google.android.apps.youtube.music | grep -q com.google.android.apps.youtube.music' )
         then
             tput sc
             echo "Checking if YouTube Music is installed..."
