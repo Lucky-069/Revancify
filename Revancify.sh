@@ -54,7 +54,6 @@ else
     export PATH="$HOME/storage/Revancify:$PATH"
     chmod +x Revancify.sh
     sed -i 's/# allow-external-apps = true/allow-external-apps = true/g' ~/.termux/termux.properties
-    git config core.fileMode false
     sleep 1
     echo "Dependencies installed successfully."
     sleep 1
@@ -119,6 +118,7 @@ tput sc
 echo "Checking for update..."
 sleep 1
 
+git config core.fileMode false
 if [ "$(git pull)" != "Already up to date." ]
 then
     sleep 1
