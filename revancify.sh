@@ -29,7 +29,7 @@ intro()
     tput cm 8 0
 }
 
-if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/tput ] && [ $(find ~/../usr/lib/ -name "wheel" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "requests" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "bs4" | wc -l) != "0" ] && echo $PATH|grep -q Revancify
+if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/tput ] && [ $(find ~/../usr/lib/ -name "wheel" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "requests" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "bs4" | wc -l) != "0" ] && [ -e ~/../usr/bin/revancify ]
 then
     tput civis
     intro
@@ -51,8 +51,8 @@ else
     pip install requests &&
     pip install wheel &&
     pip install bs4 &&
-    export PATH="$HOME/storage/Revancify:$PATH"
-    chmod +x Revancify.sh
+    cp ./revancify.sh ~/../usr/bin/revancify &&
+    chmod +x ~/../usr/bin/revancify
     sed -i 's/# allow-external-apps = true/allow-external-apps = true/g' ~/.termux/termux.properties
     sleep 1
     echo "Dependencies installed successfully."
@@ -123,6 +123,8 @@ if [ "$(git pull)" != "Already up to date." ]
 then
     sleep 1
     tput rc; tput cd
+    cp ./revancify.sh ~/../usr/bin/revancify &&
+    chmod +x ~/../usr/bin/revancify
     echo Revancify updated...
     sleep 1
     echo Run this script again
