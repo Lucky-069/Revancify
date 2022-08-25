@@ -228,7 +228,11 @@ then
 else
     variant="non_root"
     mkdir -p /storage/emulated/0/Revancify
+    tput sc
     echo "SU Status: Non Root"
+    sleep 1
+    tput rc; tput ed
+
 fi
 
 get_components(){
