@@ -29,7 +29,7 @@ intro()
     tput cm 8 0
 }
 
-if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/tput ] && [ $(find ~/../usr/lib/ -name "wheel" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "requests" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "bs4" | wc -l) != "0" ]
+if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/tput ] && [ $(find ~/../usr/lib/ -name "wheel" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "requests" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "bs4" | wc -l) != "0" ] && echo $PATH|grep -q Revancify
 then
     tput civis
     intro
