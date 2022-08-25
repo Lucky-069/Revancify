@@ -326,7 +326,7 @@ get_components(){
         then
             tput sc
             echo "Latest Integrations already exists"
-            sleep 3
+            sleep 1
             tput rc; tput cd
         else
             tput sc
@@ -457,7 +457,6 @@ then
         echo "Building Youtube Revanced ..."
         echo ""
         java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTube-* -e custom-branding -e always-autorepeat -e custom-playback-speed -e microg-support --keystore ./revanced.keystore -o ./com.google.android.youtube.apk --custom-aapt2-binary ./aapt2 --experimental
-        sleep 3
         echo "Mounting the apk"
         sleep 1; tput rc; tput cd
         su -c 'cp com.google.android.youtube.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.youtube.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0  "$revancedapp" && exit' &&
@@ -479,8 +478,6 @@ then
         yt_dl &&
         echo Building YouTube Revanced
         java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTube-* -e custom-branding -e always-autorepeat -e custom-playback-speed --keystore ./revanced.keystore -o ./com.google.android.youtube.apk --custom-aapt2-binary ./aapt2 --experimental
-        trap - EXIT
-        sleep 3
         cp com.google.android.youtube.apk /storage/emulated/0/Revancify/ &&
         sleep 1 &&
         echo "YouTube App saved to Revancify folder." &&
