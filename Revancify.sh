@@ -164,14 +164,12 @@ then
     variant="root"
     su -c 'rm -rf /data/adb/revanced'
     su -c 'mkdir /data/adb/revanced'
+    echo "SU Status: Root"
     if [ "$appname" = "YouTube" ]
     then
         if $( su -c dumpsys package com.google.android.youtube | grep -q path )
         then
             tput sc
-            echo "SU Status: Root"
-            echo ""
-            sleep 1
             echo "Checking if YouTube is installed..."
             sleep 1
             echo ""
@@ -180,9 +178,6 @@ then
             tput rc; tput cd
         else
             tput sc
-            echo "SU Status: Non Root"
-            echo ""
-            sleep 1
             echo "Checking if YouTube is installed..."
             sleep 1
             tput rc; tput cd
@@ -221,6 +216,7 @@ then
 else
     variant="non_root"
     mkdir -p /storage/emulated/0/Revancify
+    echo "SU Status: Non Root"
 fi
 
 get_components(){
