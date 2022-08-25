@@ -1,4 +1,4 @@
-#!/data/data/com.termux/files/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
 
 revive(){
     clear && echo "Script terminated" && tput cnorm && exit
