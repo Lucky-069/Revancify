@@ -253,6 +253,9 @@ get_components(){
         then
             tput sc
             echo "Latest Patches already exixts."
+            echo ""
+            sleep 1
+            wget -q -c "https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
             sleep 1
             tput rc; tput cd
         else
@@ -266,7 +269,7 @@ get_components(){
             tput rc; tput cd
             echo "Downloading latest Patches..."
             echo " "
-            wget -q -c "https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36" || rm revanced-patches*
+            wget -q -c "https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
             sleep 1
             tput rc; tput cd
         fi
@@ -276,7 +279,7 @@ get_components(){
         echo ""
         echo Downloading latest patches file...
         echo ""
-        wget -q -c "https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36" || rm revanced-patches*
+        wget -q -c "https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
         sleep 1
         tput rc; tput cd
     fi
@@ -289,6 +292,9 @@ get_components(){
         then
             tput sc
             echo "Latest CLI already exists"
+            echo ""
+            sleep 1
+            wget -q -c "https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar" -O "revanced-cli-"$cli_latest".jar" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
             sleep 1
             tput rc; tput cd
         else
@@ -303,7 +309,7 @@ get_components(){
             echo " "
             echo Downloading latest CLI...
             echo ""
-            wget -q -c "https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar" -O "revanced-cli-"$cli_latest".jar" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36" || rm revanced-cli*
+            wget -q -c "https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar" -O "revanced-cli-"$cli_latest".jar" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
             sleep 1
             tput rc; tput cd
         fi
@@ -313,7 +319,7 @@ get_components(){
         echo ""
         echo Downloading latest CLI...
         echo ""
-        wget -q -c "https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar" -O "revanced-cli-"$cli_latest".jar" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36" || rm revanced-cli*
+        wget -q -c "https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar" -O "revanced-cli-"$cli_latest".jar" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
         sleep 1
         tput rc; tput cd
     fi
@@ -326,6 +332,9 @@ get_components(){
         then
             tput sc
             echo "Latest Integrations already exists"
+            echo ""
+            sleep 1
+            wget -q -c "https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk" -O "revanced-integrations-"$int_latest".apk" --show-progress  --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
             sleep 1
             tput rc; tput cd
         else
@@ -339,7 +348,7 @@ get_components(){
             tput rc; tput cd
             echo "Downloading latest Integrations apk..."
             echo ""
-            wget -q -c "https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk" -O "revanced-integrations-"$int_latest".apk" --show-progress  --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36" || rm revanced-integrations*
+            wget -q -c "https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk" -O "revanced-integrations-"$int_latest".apk" --show-progress  --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
             echo ""
             sleep 1
             tput rc; tput cd
@@ -350,7 +359,7 @@ get_components(){
         echo ""
         echo Downloading latest Integrations apk...
         echo ""
-        wget -q -c "https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk" -O "revanced-integrations-"$int_latest".apk" --show-progress  --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36" || rm revanced-integrations*
+        wget -q -c "https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk" -O "revanced-integrations-"$int_latest".apk" --show-progress  --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
         sleep 1
         tput rc; tput cd
     fi
@@ -367,6 +376,9 @@ yt_dl()
         if [ "$ytver" = "$yt_available" ];then
             tput sc
             echo "YouTube already on latest version"
+            echo ""
+            sleep 1
+            wget -q -c $getlink -O "YouTube-"$ytver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
             sleep 1
             tput rc; tput cd
         else
@@ -390,7 +402,7 @@ yt_dl()
         echo " "
         echo "Downloading latest YouTube apk..."
         echo " "
-        wget -q -c $getlink -O "YouTube-"$ytver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36" || rm YouTube-*
+        wget -q -c $getlink -O "YouTube-"$ytver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
         sleep 1
         tput rc; tput cd
     fi
@@ -406,6 +418,9 @@ ytm_dl()
         then
             tput sc
             echo "YouTube Music already on latest version"
+            echo ""
+            sleep 1
+            wget -q -c $getlink -O "YouTubeMusic-"$ytmver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
             sleep 1
             tput rc; tput cd
         else
@@ -419,7 +434,7 @@ ytm_dl()
             tput rc; tput cd
             echo "Downloading latest YouTube Music apk..."
             echo ""
-            wget -q -c $getlink -O "YouTubeMusic-"$ytmver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36" || rm YouTubeMusic-*
+            wget -q -c $getlink -O "YouTubeMusic-"$ytmver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
             sleep 1
             tput rc; tput cd
         fi
@@ -459,7 +474,7 @@ then
         java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTube-* -e custom-branding -e always-autorepeat -e custom-playback-speed -e microg-support --keystore ./revanced.keystore -o ./com.google.android.youtube.apk --custom-aapt2-binary ./aapt2 --experimental
         echo "Mounting the apk"
         sleep 1; tput rc; tput cd
-        su -c 'cp com.google.android.youtube.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.youtube.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0  "$revancedapp" && exit' &&
+        su -c 'mv com.google.android.youtube.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.youtube.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0  "$revancedapp" && exit' &&
         su -mm -c 'revancedapp=/data/adb/revanced/com.google.android.youtube.apk; stockapp=$(pm path com.google.android.youtube | grep base | sed 's/package://g' ); mount -o bind "$revancedapp" "$stockapp" && exit' &&
         su -c 'am force-stop com.google.android.youtube' && echo "YouTube Revanced successfully mounted. You can now use YouTube Revanced." && echo " " && echo "Thanks for using the Revancify..." || echo "Mount failed..." && tput cnorm && cd ~ && exit
     elif [ "$variant" = "non_root" ]
@@ -477,12 +492,12 @@ then
         get_components
         yt_dl &&
         echo Building YouTube Revanced
-        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTube-* -e custom-branding -e always-autorepeat -e custom-playback-speed --keystore ./revanced.keystore -o ./com.google.android.youtube.apk --custom-aapt2-binary ./aapt2 --experimental
-        cp com.google.android.youtube.apk /storage/emulated/0/Revancify/ &&
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTube-* -e custom-branding -e always-autorepeat -e custom-playback-speed --keystore ./revanced.keystore -o ./"YouTubeRevanced-"$ytver".apk" --custom-aapt2-binary ./aapt2 --experimental
+        mv YouTubeRevanced* /storage/emulated/0/Revancify/ &&
         sleep 1 &&
         echo "YouTube App saved to Revancify folder." &&
-        echo "Thanks for using the Revancify..." &&
-        termux-open /storage/emulated/0/Revancify/com.google.android.youtube.apk
+        echo "Thanks for using Revancify..." &&
+        termux-open /storage/emulated/0/Revancify/YouTubeRevanced*
 
     fi
 elif [ "$appname" = "YouTubeMusic" ]
@@ -507,9 +522,9 @@ then
             echo Building YouTube Music Revanced...
             java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTubeMusic* -e music-microg-support --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2 --experimental
             echo "Mounting the app"
-            su -c 'cp com.google.android.apps.youtube.music.apk /data/adb/revanced; revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0  "$revancedapp" && exit' &&
+            su -c 'mv com.google.android.apps.youtube.music.apk /data/adb/revanced; revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0  "$revancedapp" && exit' &&
             su -mm -c 'revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; stockapp=$(pm path com.google.android.apps.youtube.music | grep base | sed 's/package://g' ); mount -o bind "$revancedapp" "$stockapp" && exit' &&
-            su -c 'am force-stop com.google.android.apps.youtube.music' && echo "YouTube Music Revanced successfully mounted. You can now use YouTube Revanced." && echo " " && echo "Thanks for using the Revancify..." || echo "Mount failed..." && echo "Exiting the script" && tput cnorm && cd ~ && exit
+            su -c 'am force-stop com.google.android.apps.youtube.music' && echo "YouTube Music Revanced successfully mounted. You can now use YouTube Revanced." && echo " " && echo "Thanks for using Revancify..." || echo "Mount failed..." && echo "Exiting the script" && tput cnorm && cd ~ && exit
         elif [ "$arch" = "armeabi" ]
         then
             python fetch.py ytm root armeabi $getapp & pid=$!
@@ -526,9 +541,9 @@ then
             echo Building YouTube Music Revanced...
             java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTubeMusic* -e music-microg-support --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2 --experimental
             echo "Mounting the app"
-            su -c 'cp com.google.android.apps.youtube.music.apk /data/adb/revanced; revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0  "$revancedapp" && exit' &&
+            su -c 'mv com.google.android.apps.youtube.music.apk /data/adb/revanced; revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0  "$revancedapp" && exit' &&
             su -mm -c 'revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; stockapp=$(pm path com.google.android.apps.youtube.music | grep base | sed 's/package://g' ); mount -o bind "$revancedapp" "$stockapp" && exit' &&
-            su -c 'am force-stop com.google.android.apps.youtube.music' && echo "YouTube Music Revanced successfully mounted. You can now use YouTube Revanced." && echo " " && echo "Thanks for using the Revancify..." || echo "Mount failed..." && echo "Exiting the script" && tput cnorm && cd ~ && exit
+            su -c 'am force-stop com.google.android.apps.youtube.music' && echo "YouTube Music Revanced successfully mounted. You can now use YouTube Revanced." && echo " " && echo "Thanks for using Revancify..." || echo "Mount failed..." && echo "Exiting the script" && tput cnorm && cd ~ && exit
             fi
     elif [ "$variant" = "non_root" ]
     then
@@ -547,12 +562,12 @@ then
             get_components
             ytm_dl &&
             echo Building YouTube Music Revanced...
-            java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTubeMusic* --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2 --experimental
-            cp com.google.android.apps.youtube.music.apk /storage/emulated/0/Revancify/ &&
+            java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTubeMusic* --keystore ./revanced.keystore -o ./"YouTubeMusicRevanced-"$ytmver".apk" --custom-aapt2-binary ./aapt2 --experimental
+            mv YouTubeMusicRevanced* /storage/emulated/0/Revancify/ &&
             sleep 1 &&
             echo "YouTube Music App saved to Revancify folder." &&
-            echo "Thanks for using the Revancify..." &&
-            termux-open /storage/emulated/0/Revancify/com.google.android.apps.youtube.music.apk
+            echo "Thanks for using Revancify..." &&
+            termux-open /storage/emulated/0/Revancify/YouTubeMusicRevanced*
         elif [ "$arch" = "armeabi" ]
         then
             python fetch.py ytm non_root armeabi & pid=$!
@@ -568,12 +583,12 @@ then
             get_components
             ytm_dl &&
             echo Building YouTube Music Revanced...
-            java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTubeMusic* --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2 --experimental
-            cp com.google.android.apps.youtube.music.apk /storage/emulated/0/Revancify/ &&
+            java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTubeMusic* --keystore ./revanced.keystore -o ./"YouTubeMusicRevanced-"$ytmver".apk" --custom-aapt2-binary ./aapt2 --experimental
+            mv YouTubeMusicRevanced-* /storage/emulated/0/Revancify/ &&
             sleep 1 &&
             echo "YouTube Music App saved to Revancify folder." &&
-            echo "Thanks for using the Revancify..."
-            termux-open /storage/emulated/0/Revancify/com.google.android.apps.youtube.music.apk
+            echo "Thanks for using Revancify..."
+            termux-open /storage/emulated/0/Revancify/YouTubeMusicRevanced*
             fi
     fi
 fi
