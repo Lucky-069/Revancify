@@ -175,8 +175,7 @@ user_input
 if su -c exit > /dev/null 2>&1
 then
     variant="root"
-    su -c 'rm -rf /data/adb/revanced'
-    su -c 'mkdir /data/adb/revanced'
+    su -c 'mkdir -p /data/adb/revanced'
     tput sc
     echo "SU Status: Root"
     echo ""
