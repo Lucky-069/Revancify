@@ -15,18 +15,20 @@ internet()
 {
     if wget -q --spider http://google.com
     then
-        tput civis
+        :
     else
         echo "Oops, No internet"
         sleep 1
         echo "Connect to internet and try again."
         cd ~
+        tput cnorm
         exit
     fi
 }
 
 intro()
 {
+    tput civis
     tput cs 7 $LINES
     leave1=$(($(($(tput cols) - 34)) / 2))
     tput cm 0 $leave1
