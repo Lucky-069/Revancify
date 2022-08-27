@@ -93,6 +93,8 @@ def ytm_non_root():
     elif arch == "armeabi":
         armeabi()
 
+# YouTube Music Root        
+        
 def ytm_root():
     arch = sys.argv[3]
     ytmver = sys.argv[4]
@@ -126,6 +128,8 @@ def ytm_root():
     elif arch == "armeabi":
         armeabi()
 
+# Twitter for both
+        
 def twitter():
     for a in ((BeautifulSoup((urlopen(Request(url="https://www.apkmirror.com/apk/twitter-inc/", headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find_all(["a"], class_="fontBlack", text=re.compile("^.*.release*"))):
         ytverlist.append(a.string) 
