@@ -658,7 +658,7 @@ then
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./Twitter-* --keystore ./revanced.keystore -o ./"TwitterRevanced-"$twver".apk" --custom-aapt2-binary ./aapt2 --experimental
     mv TwitterRevanced* /storage/emulated/0/Revancify/ &&
     sleep 1 &&
-    echo "YouTube App saved to Revancify folder." &&
+    echo "Twitter App saved to Revancify folder." &&
     echo "Thanks for using Revancify..." &&
     termux-open /storage/emulated/0/Revancify/"TwitterRevanced-"$twver".apk"
 fi
