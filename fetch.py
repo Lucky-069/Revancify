@@ -31,7 +31,7 @@ def yt_non_root():
 
     ytpage1= "https://apkmirror.com" + ((((BeautifulSoup((urlopen(Request(url=yturl, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(["span"], text="APK")).parent).find(["a"], class_="accent_color")['href'])
 
-    ytpage2= "https://apkmirror.com" + ((((BeautifulSoup((urlopen(Request(url=ytpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(["span"], class_="downloadButtonSubtitle")).parent)['href'])
+    ytpage2= "https://apkmirror.com" + ((((BeautifulSoup((urlopen(Request(url=ytpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(["svf"], class_="icon download-button-icon")).parent)['href'])
 
     ytdllink = "https://apkmirror.com" + (((BeautifulSoup((urlopen(Request(url=ytpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(rel="nofollow"))['href'])
     
@@ -46,7 +46,7 @@ def yt_root():
 
     ytpage1= "https://apkmirror.com" + ((((BeautifulSoup((urlopen(Request(url=yturl, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(["span"], text="APK")).parent).find(["a"], class_="accent_color")['href'])
 
-    ytpage2= "https://apkmirror.com" + ((((BeautifulSoup((urlopen(Request(url=ytpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(["span"], class_="downloadButtonSubtitle")).parent)['href'])
+    ytpage2= "https://apkmirror.com" + ((((BeautifulSoup((urlopen(Request(url=ytpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(["svg"], class_="icon download-button-icon")).parent)['href'])
 
     ytdllink = "https://apkmirror.com" + (((BeautifulSoup((urlopen(Request(url=ytpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(rel="nofollow"))['href'])
     
