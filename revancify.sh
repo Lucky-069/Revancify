@@ -646,7 +646,7 @@ then
     twver=$(sed -n '4p' latest.txt | sed 's/-/\./g' )
     getlink="$(sed -n '5p' latest.txt)"
     get_components
-    yt_dl &&
+    twitter_dl &&
     echo Building Twitter Revanced
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./Twitter-* --keystore ./revanced.keystore -o ./"TwitterRevanced-"$twver".apk" --custom-aapt2-binary ./aapt2 --experimental
     mv TwitterRevanced* /storage/emulated/0/Revancify/ &&
