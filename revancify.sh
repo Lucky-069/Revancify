@@ -54,14 +54,9 @@ else
     echo "Installing dependencies..."
     sleep 1
     pkg update -y &&
-    pkg install python -y &&
-    pkg install openjdk-17 -y &&
-    pkg install wget -y &&
-    pkg install ncurses-utils -y &&
+    pkg install python openjdk-17 wget ncurses-utils-y &&
     pip install --upgrade pip &&
-    pip install requests &&
-    pip install wheel &&
-    pip install bs4 &&
+    pip install requests wheel bs4 &&
     cp ./revancify.sh ~/../usr/bin/revancify &&
     chmod +x ~/../usr/bin/revancify
     sed -i 's/# allow-external-apps = true/allow-external-apps = true/g' ~/.termux/termux.properties
