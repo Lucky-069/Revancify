@@ -54,7 +54,7 @@ else
     echo "Installing dependencies..."
     sleep 1
     pkg update -y &&
-    pkg install python openjdk-17 wget ncurses-utils-y &&
+    pkg install python openjdk-17 wget ncurses-utils -y &&
     pip install --upgrade pip &&
     pip install requests wheel bs4 &&
     cp ./revancify.sh ~/../usr/bin/revancify &&
