@@ -152,7 +152,7 @@ user_input()
     echo "Which app do you want to patch?"
     echo "1. YouTube"
     echo "2. YouTube Music"
-    echo "2. Twitter"
+    echo "3. Twitter"
     read -p "Your Input: " input
     if [ "$input" -eq "1" ]
     then
