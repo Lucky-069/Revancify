@@ -11,6 +11,19 @@ cd ~/storage/Revancify
 
 clear
 
+internet()
+{
+    if wget -q --spider http://google.com
+    then
+        tput civis
+    else
+        echo "Oops, No internet"
+        sleep 1
+        echo "Connect to internet and try again."
+        cd ~
+        exit
+}
+
 intro()
 {
     tput cs 7 $LINES
@@ -29,16 +42,11 @@ intro()
     tput cm 8 0
 }
 
+
 if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/tput ] && [ $(find ~/../usr/lib/ -name "wheel" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "requests" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "bs4" | wc -l) != "0" ] && [ -e ~/../usr/bin/revancify ]
 then
-    tput civis
     intro
-    tput sc
-    echo "Dependencies already installed"
-    sleep 1
-    tput rc
-    tput cd
-    sleep 1
+    internet
 else
     echo "Installing dependencies..."
     sleep 1
@@ -61,6 +69,7 @@ else
     cd ~ 
     exit
 fi
+
 
 anim()
 {
@@ -654,7 +663,6 @@ then
     echo "YouTube App saved to Revancify folder." &&
     echo "Thanks for using Revancify..." &&
     termux-open /storage/emulated/0/Revancify/"TwitterRevanced-"$twver".apk"
-    fi
 fi
 cd ~
 tput cnorm
