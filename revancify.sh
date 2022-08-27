@@ -152,6 +152,9 @@ user_input()
     elif [ "$input" -eq "2" ]
     then
         appname="YouTubeMusic"
+    elif [ "$input" -eq "3" ]
+    then
+        appname="Twitter"
     else
         echo No input given..
         user_input
@@ -180,6 +183,7 @@ then
     echo "SU Status: Root"
     echo ""
     sleep 1
+    tput rc; tput cd
     if [ "$appname" = "YouTube" ]
     then
         echo "Checking if YouTube is installed..."
@@ -192,7 +196,6 @@ then
             tput rc; tput cd
         else
             sleep 1
-            tput rc; tput cd
             echo "Oh No, YouTube is not installed"
             echo ""
             sleep 1
@@ -391,7 +394,7 @@ yt_dl()
             tput rc; tput cd
             echo "Downloading latest YouTube apk..."
             echo " "
-            wget -q -c $getlink -O "YouTube-"$ytver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36" || rm YouTube-*
+            wget -q -c $getlink -O "YouTube-"$ytver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
             sleep 1
             tput rc; tput cd
         fi
@@ -443,13 +446,53 @@ ytm_dl()
         echo " "
         echo "Downloading latest YouTube Music apk..."
         echo " "
-        wget -q -c $getlink -O "YouTubeMusic-"$ytmver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36" || rm YouTubeMusic-*
+        wget -q -c $getlink -O "YouTubeMusic-"$ytmver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
         sleep 1
         tput rc; tput cd
     fi
 }
 
 
+#Check and Get Youtube
+twitter_dl()
+{
+    if ls -l | grep -q Twitter-
+    then
+        tw_available=$(basename Twitter-* .apk | cut -d'-' -f2) #get version
+        if [ "$twver" = "$tw_available" ];then
+            tput sc
+            echo "Twitter already on latest version"
+            echo ""
+            sleep 1
+            wget -q -c $getlink -O "Twitter-"$twver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+            sleep 1
+            tput rc; tput cd
+        else
+            tput sc
+            echo "Twitter update available"
+            sleep 1
+            tput rc; tput cd
+            echo Removing previous Twitter apk
+            rm YouTube-*.apk
+            sleep 1
+            tput rc; tput cd
+            echo "Downloading latest Twitter apk..."
+            echo " "
+            wget -q -c $getlink -O "Twitter-"$twver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+            sleep 1
+            tput rc; tput cd
+        fi
+    else
+        tput sc
+        echo "No Twitter apk found locally"
+        echo " "
+        echo "Downloading latest Twitter apk..."
+        echo " "
+        wget -q -c $getlink -O "Twitter-"$twver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+        sleep 1
+        tput rc; tput cd
+    fi
+}
 
 if [ "$appname" = "YouTube" ]
 then
@@ -478,7 +521,6 @@ then
         su -c 'am force-stop com.google.android.youtube' && echo "YouTube Revanced successfully mounted. You can now use YouTube Revanced." && echo " " && echo "Thanks for using the Revancify..." || echo "Mount failed..." && tput cnorm && cd ~ && exit
     elif [ "$variant" = "non_root" ]
     then
-        ytver=$(sed -n '4p' latest.txt | sed 's/-/\./g' )
         python fetch.py yt non_root & pid=$!
         trap "kill $pid 2> /dev/null" EXIT
         while kill -0 $pid 2> /dev/null; do
@@ -487,6 +529,7 @@ then
         trap - EXIT
         sleep 1
         tput rc; tput cd
+        ytver=$(sed -n '4p' latest.txt | sed 's/-/\./g')
         getlink="$(sed -n '5p' latest.txt)"
         get_components
         yt_dl &&
@@ -496,9 +539,8 @@ then
         sleep 1 &&
         echo "YouTube App saved to Revancify folder." &&
         echo "Thanks for using Revancify..." &&
-        termux-open /storage/emulated/0/Revancify/YouTubeRevanced*
-
-    fi
+        termux-open /storage/emulated/0/Revancify/"YouTubeRevanced-"$ytver".apk"
+        fi
 elif [ "$appname" = "YouTubeMusic" ]
 then
     if [ "$variant" = "root" ]
@@ -566,7 +608,7 @@ then
             sleep 1 &&
             echo "YouTube Music App saved to Revancify folder." &&
             echo "Thanks for using Revancify..." &&
-            termux-open /storage/emulated/0/Revancify/YouTubeMusicRevanced*
+            termux-open /storage/emulated/0/Revancify/"YouTubeMusicRevanced-"$ytmver".apk"
         elif [ "$arch" = "armeabi" ]
         then
             python fetch.py ytm non_root armeabi & pid=$!
@@ -587,8 +629,30 @@ then
             sleep 1 &&
             echo "YouTube Music App saved to Revancify folder." &&
             echo "Thanks for using Revancify..."
-            termux-open /storage/emulated/0/Revancify/YouTubeMusicRevanced*
+            termux-open /storage/emulated/0/Revancify/"YouTubeMusicRevanced-"$ytmver".apk"
             fi
+    fi
+elif [ "$appname" = "Twitter" ]
+then
+    python fetch.py twitter both & pid=$!
+    trap "kill $pid 2> /dev/null" EXIT
+    while kill -0 $pid 2> /dev/null; do
+        anim
+    done
+    trap - EXIT
+    sleep 1
+    tput rc; tput cd
+    twver=$(sed -n '4p' latest.txt | sed 's/-/\./g' )
+    getlink="$(sed -n '5p' latest.txt)"
+    get_components
+    yt_dl &&
+    echo Building Twitter Revanced
+    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./Twitter-* --keystore ./revanced.keystore -o ./"TwitterRevanced-"$twver".apk" --custom-aapt2-binary ./aapt2 --experimental
+    mv TwitterRevanced* /storage/emulated/0/Revancify/ &&
+    sleep 1 &&
+    echo "YouTube App saved to Revancify folder." &&
+    echo "Thanks for using Revancify..." &&
+    termux-open /storage/emulated/0/Revancify/"TwitterRevanced-"$twver".apk"
     fi
 fi
 cd ~
