@@ -22,6 +22,7 @@ internet()
         echo "Connect to internet and try again."
         cd ~
         exit
+    fi
 }
 
 intro()
