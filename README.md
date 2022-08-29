@@ -1,8 +1,12 @@
 # Revancify
-A simple and direct YouTube and YouTube Music Revanced Installer script.  
-It uses Revanced CLI to build YouTube and YouTube Music Revanced.
+A simple and direct Revanced Installer script.  
+It uses Revanced CLI to build Revanced Apps.
 
-> I am working to include Twitter, Reddit and other apps that are Revanced Supported. Please wait.
+Apps Supported:
+1. YouTube
+2. YouTube Music
+3. Twitter
+4. Reddit
 
 # Installation
 1. Open Termux.  
