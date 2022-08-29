@@ -721,7 +721,7 @@ then
     get_components
     reddit_dl &&
     echo Building Reddit Revanced
-    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./Reddit-* --keystore ./revanced.keystore -o ./"RedditRevanced-"$twver".apk" --custom-aapt2-binary ./aapt2 --experimental
+    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./Reddit-* -r --keystore ./revanced.keystore -o ./"RedditRevanced-"$twver".apk" --custom-aapt2-binary ./aapt2 --experimental
     mv RedditRevanced* /storage/emulated/0/Revancify/ &&
     sleep 1 &&
     echo "Reddit App saved to Revancify folder." &&
