@@ -153,6 +153,7 @@ user_input()
     echo "1. YouTube"
     echo "2. YouTube Music"
     echo "3. Twitter"
+    echo "4. Reddit"
     read -p "Your Input: " input
     if [ "$input" -eq "1" ]
     then
@@ -163,6 +164,9 @@ user_input()
     elif [ "$input" -eq "3" ]
     then
         appname="Twitter"
+    elif [ "$input" -eq "4" ]
+    then
+        appname="Reddit"
     else
         echo No input given..
         user_input
@@ -481,7 +485,7 @@ twitter_dl()
             sleep 1
             tput rc; tput cd
             echo Removing previous Twitter apk
-            rm YouTube-*.apk
+            rm Twitter-*.apk
             sleep 1
             tput rc; tput cd
             echo "Downloading latest Twitter apk..."
@@ -501,6 +505,47 @@ twitter_dl()
         tput rc; tput cd
     fi
 }
+
+reddit_dl()
+{
+    if ls -l | grep -q Reddit-
+    then
+        rd_available=$(basename Reddit-* .apk | cut -d'-' -f2) #get version
+        if [ "$rdver" = "$rd_available" ];then
+            tput sc
+            echo "Reddit already on latest version"
+            echo ""
+            sleep 1
+            wget -q -c $getlink -O "Reddit-"$rdver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+            sleep 1
+            tput rc; tput cd
+        else
+            tput sc
+            echo "Reddit update available"
+            sleep 1
+            tput rc; tput cd
+            echo Removing previous Reddit apk
+            rm Reddit-*.apk
+            sleep 1
+            tput rc; tput cd
+            echo "Downloading latest Reddit apk..."
+            echo " "
+            wget -q -c $getlink -O "Reddit-"$rdver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+            sleep 1
+            tput rc; tput cd
+        fi
+    else
+        tput sc
+        echo "No Reddit apk found locally"
+        echo " "
+        echo "Downloading latest Reddit apk..."
+        echo " "
+        wget -q -c $getlink -O "Reddit-"$rdver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+        sleep 1
+        tput rc; tput cd
+    fi
+}
+
 
 if [ "$appname" = "YouTube" ]
 then
@@ -661,6 +706,27 @@ then
     echo "Twitter App saved to Revancify folder." &&
     echo "Thanks for using Revancify..." &&
     termux-open /storage/emulated/0/Revancify/"TwitterRevanced-"$twver".apk"
+elif [ "$appname" = "Twitter" ]
+then
+    python fetch.py reddit both & pid=$!
+    trap "kill $pid 2> /dev/null" EXIT
+    while kill -0 $pid 2> /dev/null; do
+        anim
+    done
+    trap - EXIT
+    sleep 1
+    tput rc; tput cd
+    rdver=$(sed -n '4p' latest.txt | sed 's/-/\./g' )
+    getlink="$(sed -n '5p' latest.txt)"
+    get_components
+    reddit_dl &&
+    echo Building Reddit Revanced
+    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./Reddit-* --keystore ./revanced.keystore -o ./"RedditRevanced-"$twver".apk" --custom-aapt2-binary ./aapt2 --experimental
+    mv RedditRevanced* /storage/emulated/0/Revancify/ &&
+    sleep 1 &&
+    echo "Reddit App saved to Revancify folder." &&
+    echo "Thanks for using Revancify..." &&
+    termux-open /storage/emulated/0/Revancify/"RedditRevanced-"$rdver".apk"
 fi
 cd ~
 tput cnorm
