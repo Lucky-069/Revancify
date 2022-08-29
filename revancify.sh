@@ -706,7 +706,7 @@ then
     echo "Twitter App saved to Revancify folder." &&
     echo "Thanks for using Revancify..." &&
     termux-open /storage/emulated/0/Revancify/"TwitterRevanced-"$twver".apk"
-elif [ "$appname" = "Twitter" ]
+elif [ "$appname" = "Reddit" ]
 then
     python fetch.py reddit both & pid=$!
     trap "kill $pid 2> /dev/null" EXIT
