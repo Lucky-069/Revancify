@@ -31,7 +31,7 @@ def yt_non_root():
 
     ytpage1= "https://apkmirror.com" + ((((BeautifulSoup((urlopen(Request(url=yturl, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(["span"], text="APK")).parent).find(["a"], class_="accent_color")['href'])
 
-    ytpage2= "https://apkmirror.com" + ((((BeautifulSoup((urlopen(Request(url=ytpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(["svf"], class_="icon download-button-icon")).parent)['href'])
+    ytpage2= "https://apkmirror.com" + ((((BeautifulSoup((urlopen(Request(url=ytpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(["span"], class_="downloadButtonSubtitle")).parent)['href'])
 
     ytdllink = "https://apkmirror.com" + (((BeautifulSoup((urlopen(Request(url=ytpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(rel="nofollow"))['href'])
     
@@ -46,7 +46,7 @@ def yt_root():
 
     ytpage1= "https://apkmirror.com" + ((((BeautifulSoup((urlopen(Request(url=yturl, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(["span"], text="APK")).parent).find(["a"], class_="accent_color")['href'])
 
-    ytpage2= "https://apkmirror.com" + ((((BeautifulSoup((urlopen(Request(url=ytpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(["svg"], class_="icon download-button-icon")).parent)['href'])
+    ytpage2= "https://apkmirror.com" + ((((BeautifulSoup((urlopen(Request(url=ytpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(["span"], class_="downloadButtonSubtitle")).parent)['href'])
 
     ytdllink = "https://apkmirror.com" + (((BeautifulSoup((urlopen(Request(url=ytpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(rel="nofollow"))['href'])
     
@@ -93,8 +93,6 @@ def ytm_non_root():
     elif arch == "armeabi":
         armeabi()
 
-# YouTube Music Root        
-        
 def ytm_root():
     arch = sys.argv[3]
     ytmver = sys.argv[4]
@@ -128,8 +126,6 @@ def ytm_root():
     elif arch == "armeabi":
         armeabi()
 
-# Twitter for both
-        
 def twitter():
     for a in ((BeautifulSoup((urlopen(Request(url="https://www.apkmirror.com/apk/twitter-inc/", headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find_all(["a"], class_="fontBlack", text=re.compile("^.*.release*"))):
         ytverlist.append(a.string) 
@@ -145,6 +141,21 @@ def twitter():
     with open("latest.txt", "a") as f:
             f.write(twver + '\n' + twdllink)
 
+def reddit():
+    for a in ((BeautifulSoup((urlopen(Request(url="https://www.apkmirror.com/apk/redditinc/", headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find_all(["a"], class_="fontBlack")):
+        ytverlist.append(a.string) 
+    rdver = ((str(ytverlist[0])).split(' ')[1]).replace(".", "-")
+    rdurl = "https://www.apkmirror.com/apk/reddditinc/reddit/reddit-"+rdver+"-release/"
+
+    rdpage1= "https://apkmirror.com" + ((((BeautifulSoup((urlopen(Request(url=rdurl, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(["span"], text="APK")).parent).find(["a"], class_="accent_color")['href'])
+
+    rdpage2= "https://apkmirror.com" + (((BeautifulSoup((urlopen(Request(url=rdpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(["svg"], class_="icon download-button-icon")).parent)['href']
+
+    rddllink = "https://apkmirror.com" + (((BeautifulSoup((urlopen(Request(url=rdpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(rel="nofollow"))['href'])
+
+    with open("latest.txt", "a") as f:
+            f.write(rdver + '\n' + rddllink)
+
 
 
 if appname == "yt" and variant == "non_root":
@@ -157,3 +168,5 @@ elif appname == "ytm" and variant == "root":
     ytm_root()
 elif appname == "twitter" and variant == "both":
     twitter()
+elif appname == "reddit" and variant == "both":
+    reddit()
