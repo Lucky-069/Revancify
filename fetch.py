@@ -37,8 +37,14 @@ def yt_non_root():
 
     ytdllink = "https://apkmirror.com" + (((BeautifulSoup((urlopen(Request(url=ytpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(rel="nofollow"))['href'])
     
+    mgpage1 = "https://www.apkmirror.com/apk/team-vanced/microg-youtube-vanced/microg-youtube-vanced-0-2-24-220220-release/vanced-microg-0-2-24-220220-android-apk-download/"
+
+    mgpage2= "https://apkmirror.com" + (((BeautifulSoup((urlopen(Request(url=mgpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(["svg"], class_="icon download-button-icon")).parent)['href']
+
+    mgdllink = "https://apkmirror.com" + (((BeautifulSoup((urlopen(Request(url=mgpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(rel="nofollow"))['href'])
+
     with open("latest.txt", "a") as f:
-        f.write(ytver + '\n' + ytdllink)
+        f.write(ytver + '\n' + ytdllink + '\n' + mgdllink)
 
 # YouTube Root
 
@@ -75,8 +81,14 @@ def ytm_non_root():
 
         ytmdllink = "https://apkmirror.com" + (((BeautifulSoup((urlopen(Request(url=pagelink2, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(rel="nofollow"))['href'])
 
+        mgpage1 = "https://www.apkmirror.com/apk/team-vanced/microg-youtube-vanced/microg-youtube-vanced-0-2-24-220220-release/vanced-microg-0-2-24-220220-android-apk-download/"
+
+        mgpage2= "https://apkmirror.com" + (((BeautifulSoup((urlopen(Request(url=mgpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(["svg"], class_="icon download-button-icon")).parent)['href']
+
+        mgdllink = "https://apkmirror.com" + (((BeautifulSoup((urlopen(Request(url=mgpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(rel="nofollow"))['href'])
+
         with open("latest.txt", "a") as f:
-            f.write(ytmver + '\n' + ytmdllink)
+            f.write(ytmver + '\n' + ytmdllink + '\n' + mgdllink)
 
     # arch = armeabi
     def armeabi():
@@ -89,8 +101,14 @@ def ytm_non_root():
 
         ytmdllink = "https://apkmirror.com" + (((BeautifulSoup((urlopen(Request(url=pagelink2, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(rel="nofollow"))['href'])
 
+        mgpage1 = "https://www.apkmirror.com/apk/team-vanced/microg-youtube-vanced/microg-youtube-vanced-0-2-24-220220-release/vanced-microg-0-2-24-220220-android-apk-download/"
+
+        mgpage2= "https://apkmirror.com" + (((BeautifulSoup((urlopen(Request(url=mgpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(["svg"], class_="icon download-button-icon")).parent)['href']
+
+        mgdllink = "https://apkmirror.com" + (((BeautifulSoup((urlopen(Request(url=mgpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(rel="nofollow"))['href'])
+
         with open("latest.txt", "a") as f:
-            f.write(ytmver + '\n' + ytmdllink)
+            f.write(ytmver + '\n' + ytmdllink + '\n' + mgdllink)
 
     if arch == "arm64":
         arm64()
@@ -159,6 +177,13 @@ def reddit():
 
     with open("latest.txt", "a") as f:
             f.write(rdver + '\n' + rddllink)
+
+
+def microog():
+    mgpage1 = "https://www.apkmirror.com/apk/team-vanced/microg-youtube-vanced/microg-youtube-vanced-0-2-24-220220-release/vanced-microg-0-2-24-220220-android-apk-download/"
+    mgpage2= "https://apkmirror.com" + (((BeautifulSoup((urlopen(Request(url=mgpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(["svg"], class_="icon download-button-icon")).parent)['href']
+    mgdllink = "https://apkmirror.com" + (((BeautifulSoup((urlopen(Request(url=mgpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(rel="nofollow"))['href'])
+
 
 
 
