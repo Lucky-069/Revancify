@@ -566,7 +566,7 @@ then
         yt_dl &&
         echo "Building Youtube Revanced ..."
         echo ""
-        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTube-* -e custom-branding -e custom-playback-speed -e microg-support --keystore ./revanced.keystore -o ./com.google.android.youtube.apk --custom-aapt2-binary ./aapt2 --experimental
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTube-* -e custom-branding -e microg-support --keystore ./revanced.keystore -o ./com.google.android.youtube.apk --custom-aapt2-binary ./aapt2 --experimental
         echo "Mounting the apk"
         sleep 1; tput rc; tput cd
         su -c 'mv com.google.android.youtube.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.youtube.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0  "$revancedapp" && exit' &&
@@ -587,7 +587,7 @@ then
         get_components
         yt_dl &&
         echo Building YouTube Revanced
-        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTube-* -e custom-branding -e custom-playback-speed --keystore ./revanced.keystore -o ./"YouTubeRevanced-"$ytver".apk" --custom-aapt2-binary ./aapt2 --experimental
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTube-* -e custom-branding --keystore ./revanced.keystore -o ./"YouTubeRevanced-"$ytver".apk" --custom-aapt2-binary ./aapt2 --experimental
         mv YouTubeRevanced* /storage/emulated/0/Revancify/ &&
         sleep 1 &&
         echo "YouTube App saved to Revancify folder." &&
