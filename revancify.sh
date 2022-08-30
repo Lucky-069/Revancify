@@ -565,7 +565,6 @@ then
     mv "Vanced_MicroG.apk" /storage/emulated/0/Revancify
     echo MicroG App saved to Revancify folder.
     termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
-    user_input
 elif [ "$appname" = "YouTube" ]
 then
     if [ "$variant" = "root" ]
