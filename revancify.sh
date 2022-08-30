@@ -739,7 +739,7 @@ then
         anim
     done
     trap - EXIT
-    microglink = "$(sed -n '6p' latest.txt)"
+    microglink="$(sed -n '6p' latest.txt)"
     wget -q -c $microglink -O "Vanced_MicroG.apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
     mv "Vanced_MicroG.apk" /storage/emulated/0/Revancify
     termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
