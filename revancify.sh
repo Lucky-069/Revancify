@@ -439,7 +439,7 @@ ytm_dl()
             tput rc; tput cd
         else
             tput sc
-            echo "YouTube update available"
+            echo "YouTube Music update available"
             sleep 1
             tput rc; tput cd
             echo Removing previous YouTube Music apk
