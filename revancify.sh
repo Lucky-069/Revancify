@@ -46,7 +46,7 @@ intro()
 }
 
 
-if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/tput ] && [ $(find ~/../usr/lib/ -name "wheel" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "requests" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "bs4" | wc -l) != "0" ] && [ -e ~/../usr/bin/revancify ]
+if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/tput ] && [ $(find ~/../usr/lib/ -name "wheel" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "requests" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "bs4" | wc -l) != "0" ] && [ -e ~/../usr/bin/revancify ] && su -c ls /data/adb/service.d | grep -q mountyt.sh && su -c ls /data/adb/service.d | grep -q mountytm.sh
 then
     intro
     internet
@@ -60,6 +60,10 @@ else
     cp ./revancify.sh ~/../usr/bin/revancify &&
     chmod +x ~/../usr/bin/revancify
     sed -i 's/# allow-external-apps = true/allow-external-apps = true/g' ~/.termux/termux.properties
+    su -c cp mountyt.sh /data/adb/service.d/
+    su -c chmod +x /data/adb/service.d/mountyt.sh
+    su -c cp mountytm.sh /data/adb/service.d/
+    su -c chmod +x /data/adb/service.d/mountytm.sh
     sleep 1
     echo "Dependencies installed successfully."
     sleep 1
