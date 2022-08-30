@@ -682,7 +682,7 @@ then
                 :
             fi
             tput rc; tput cd
-            ytmver=$(sed -n '4p' latest.txt | sed 's/\./-/g')
+            ytmver=$(sed -n '4p' latest.txt | sed 's/-/\./g')
             getlink="$(sed -n '5p' latest.txt)"
             get_components
             ytm_dl &&
@@ -722,7 +722,7 @@ then
                 :
             fi
             tput rc; tput cd
-            ytmver=$(sed -n '4p' latest.txt | sed 's/\./-/g')
+            ytmver=$(sed -n '4p' latest.txt | sed 's/-/\./g')
             getlink="$(sed -n '5p' latest.txt)"
             get_components
             ytm_dl &&
