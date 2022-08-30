@@ -24,9 +24,11 @@ ytmverlist = []
 # YouTube NonRoot
 
 def yt_non_root():
-    for a in ((BeautifulSoup((urlopen(Request(url="https://www.apkmirror.com/apk/google-inc/youtube/", headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find_all(["a"], class_="fontBlack", text=re.compile("^YouTube.((?!beta).)*$"))):
-        ytverlist.append(a.string) 
-    ytver = ((str(ytverlist[0])).split(' ')[1]).replace(".", "-")
+    patchesjson = (requests.get('https://raw.githubusercontent.com/revanced/revanced-patches/main/patches.json')).json()
+    for i in patchesjson:
+        if i['name'] == 'swipe-controls':
+            ytver = ((((i['compatiblePackages'])[0])['versions'])[-1]).replace(".","-")
+            break
     yturl = "https://www.apkmirror.com/apk/google-inc/youtube/youtube-"+ytver+"-release/"
 
     ytpage1= "https://apkmirror.com" + ((((BeautifulSoup((urlopen(Request(url=yturl, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(["span"], text="APK")).parent).find(["a"], class_="accent_color")['href'])
@@ -58,9 +60,11 @@ def yt_root():
 
 def ytm_non_root():
     arch = sys.argv[3]
-    for a in ((BeautifulSoup((urlopen(Request(url="https://www.apkmirror.com/apk/google-inc/youtube-music/", headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find_all(["a"], class_="fontBlack", text=re.compile("YouTube.*"))):
-        ytmverlist.append(a.string)
-    ytmver = (((ytmverlist[1]).split(' '))[2]).replace(".", "-")
+    patchesjson = (requests.get('https://raw.githubusercontent.com/revanced/revanced-patches/main/patches.json')).json()
+    for i in patchesjson:
+        if i['name'] == 'compact-header':
+            ytmver = ((((i['compatiblePackages'])[0])['versions'])[-1]).replace(".","-")
+            break
     # arch = arm64
     def arm64():
         ytmurl = "https://www.apkmirror.com/apk/google-inc/youtube-music/youtube-music-"+ytmver+"-release/"
