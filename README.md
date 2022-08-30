@@ -19,6 +19,17 @@ termux-setup-storage && pkg update -y && pkg install git -y && cd storage && git
 1. Open Termux.  
 2. Type `revancify` 
 > Now Revancify is a binary, it can be run directly after opening.
+
+# Troubleshoot
+## Method 1:  
+```
+cd storage/Revancify && bash revancify.sh
+```  
+## Method 2:  
+Type 
+```
+cd storage && rm -rf Revnacify && git clone https://github.com/decipher3114/Revancify && cd Revancify && bash revancify.sh
+```
 # Uninstallation
 1. Open Termux.  
 2. Type `cd storage`  
