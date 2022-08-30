@@ -611,6 +611,7 @@ then
         else
             :
         fi
+    fi
 elif [ "$appname" = "YouTubeMusic" ]
 then
     if [ "$variant" = "root" ]
@@ -655,7 +656,7 @@ then
             su -c 'mv com.google.android.apps.youtube.music.apk /data/adb/revanced; revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0  "$revancedapp" && exit' &&
             su -mm -c 'revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; stockapp=$(pm path com.google.android.apps.youtube.music | grep base | sed 's/package://g' ); mount -o bind "$revancedapp" "$stockapp" && exit' &&
             su -c 'am force-stop com.google.android.apps.youtube.music' && echo "YouTube Music Revanced successfully mounted. You can now use YouTube Revanced." && echo " " && echo "Thanks for using Revancify..." || echo "Mount failed..." && echo "Exiting the script" && tput cnorm && cd ~ && exit
-            fi
+        fi
     elif [ "$variant" = "non_root" ]
     then
         if [ "$arch" = "arm64" ]
