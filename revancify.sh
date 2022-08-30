@@ -199,6 +199,7 @@ then
         su -c chmod +x /data/adb/service.d/mountyt.sh
         su -c cp mountytm.sh /data/adb/service.d/
         su -c chmod +x /data/adb/service.d/mountytm.sh
+    fi
     tput sc
     echo "SU Status: Root"
     echo ""
