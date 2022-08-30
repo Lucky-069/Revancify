@@ -149,12 +149,11 @@ fi
 user_input()
 {
     tput sc
-    echo "What do you want to do patch?"
+    echo "Which app do you want to do patch?"
     echo "1. Patch YouTube"
     echo "2. Patch YouTube Music"
     echo "3. Patch Twitter"
     echo "4. Patch Reddit"
-    echo "5. Download Vanced MicroG"
     read -p "Your Input: " input
     if [ "$input" -eq "1" ]
     then
@@ -168,9 +167,6 @@ user_input()
     elif [ "$input" -eq "4" ]
     then
         appname="Reddit"
-    elif [ "$input" -eq "5" ]
-    then
-        appname="MicroG"
     else
         echo No input given..
         user_input
@@ -550,22 +546,7 @@ reddit_dl()
     fi
 }
 
-if [ "$appname" = "MicroG" ]
-then
-    python fetch.py yt non_root & pid=$!
-    trap "kill $pid 2> /dev/null" EXIT
-    while kill -0 $pid 2> /dev/null; do
-        anim
-    done
-    trap - EXIT
-    sleep 1
-    tput rc; tput cd
-    microglink="$(sed -n '6p' latest.txt)"
-    wget -q -c $microglink -O "Vanced_MicroG.apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
-    mv "Vanced_MicroG.apk" /storage/emulated/0/Revancify
-    echo MicroG App saved to Revancify folder.
-    termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
-elif [ "$appname" = "YouTube" ]
+if [ "$appname" = "YouTube" ]
 then
     if [ "$variant" = "root" ]
     then
@@ -600,6 +581,19 @@ then
         trap - EXIT
         sleep 1
         tput rc; tput cd
+        tput sc
+        read -p "Download MicroG [y/n]:  " mgprompt
+        if [ "$mgprompt" = "y" ]
+        then
+            microglink="$(sed -n '6p' latest.txt)"
+            wget -q -c $microglink -O "Vanced_MicroG.apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+            echo ""
+            mv "Vanced_MicroG.apk" /storage/emulated/0/Revancify
+            echo MicroG App saved to Revancify folder.
+        else
+            :
+        fi
+        tput rc; tput cd
         ytver=$(sed -n '4p' latest.txt | sed 's/-/\./g')
         getlink="$(sed -n '5p' latest.txt)"
         get_components
@@ -611,6 +605,11 @@ then
         echo "YouTube App saved to Revancify folder." &&
         echo "Thanks for using Revancify..." &&
         termux-open /storage/emulated/0/Revancify/"YouTubeRevanced-"$ytver".apk"
+        if [ "$mgprompt" = "y" ]
+        then
+            termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
+        else
+            :
         fi
 elif [ "$appname" = "YouTubeMusic" ]
 then
@@ -669,6 +668,19 @@ then
             trap - EXIT
             sleep 1
             tput rc; tput cd
+            tput sc
+            read -p "Download MicroG [y/n]:  " mgprompt
+            if [ "$mgprompt" = "y" ]
+            then
+                microglink="$(sed -n '6p' latest.txt)"
+                wget -q -c $microglink -O "Vanced_MicroG.apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+                echo ""
+                mv "Vanced_MicroG.apk" /storage/emulated/0/Revancify
+                echo MicroG App saved to Revancify folder.
+            else
+                :
+            fi
+            tput rc; tput cd
             ytmver=$(sed -n '4p' latest.txt | sed 's/\./-/g')
             getlink="$(sed -n '5p' latest.txt)"
             get_components
@@ -680,6 +692,12 @@ then
             echo "YouTube Music App saved to Revancify folder." &&
             echo "Thanks for using Revancify..." &&
             termux-open /storage/emulated/0/Revancify/"YouTubeMusicRevanced-"$ytmver".apk"
+            if [ "$mgprompt" = "y" ]
+            then
+                termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
+            else
+                :
+            fi
         elif [ "$arch" = "armeabi" ]
         then
             python fetch.py ytm non_root armeabi & pid=$!
@@ -689,6 +707,19 @@ then
             done
             trap - EXIT
             sleep 1
+            tput rc; tput cd
+            tput sc
+            read -p "Download MicroG [y/n]: " mgprompt
+            if [ "$mgprompt" = "y" ]
+            then
+                microglink="$(sed -n '6p' latest.txt)"
+                wget -q -c $microglink -O "Vanced_MicroG.apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+                echo ""
+                mv "Vanced_MicroG.apk" /storage/emulated/0/Revancify
+                echo MicroG App saved to Revancify folder.
+            else
+                :
+            fi
             tput rc; tput cd
             ytmver=$(sed -n '4p' latest.txt | sed 's/\./-/g')
             getlink="$(sed -n '5p' latest.txt)"
@@ -701,7 +732,13 @@ then
             echo "YouTube Music App saved to Revancify folder." &&
             echo "Thanks for using Revancify..."
             termux-open /storage/emulated/0/Revancify/"YouTubeMusicRevanced-"$ytmver".apk"
+            if [ "$mgprompt" = "y" ]
+            then
+                termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
+            else
+                :
             fi
+        fi
     fi
 elif [ "$appname" = "Twitter" ]
 then
