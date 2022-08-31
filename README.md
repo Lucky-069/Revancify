@@ -21,12 +21,13 @@ termux-setup-storage && pkg update -y && pkg install git -y && cd storage && git
 > Now Revancify is a binary, it can be run directly after opening.
 
 # Troubleshoot
-## Method 1:  
+## Command 1: 
+Use this command in case of any fatal error
 ```
 cd storage/Revancify && bash revancify.sh
 ```  
 ## Method 2:  
-Type 
+if command 1 fails, use this command, this will delete and reinitialize the repo.
 ```
 cd storage && rm -rf Revnacify && git clone https://github.com/decipher3114/Revancify && cd Revancify && bash revancify.sh
 ```
