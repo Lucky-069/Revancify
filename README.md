@@ -8,6 +8,9 @@ Apps Supported:
 3. Twitter
 4. Reddit
 
+### Note:  
+Download Termux from their github or FDroid
+
 # Installation
 1. Open Termux.  
 2. Copy and paste this code.  
