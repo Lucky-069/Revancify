@@ -591,7 +591,7 @@ then
         sleep 1
         tput rc; tput cd
         tput sc
-        read -p "Download MicroG [y/n]:  " mgprompt
+        read -p "Download MicroG [y/n]: " mgprompt
         if [ "$mgprompt" = "y" ]
         then
             microglink="$(sed -n '6p' latest.txt)"
@@ -679,7 +679,7 @@ then
             sleep 1
             tput rc; tput cd
             tput sc
-            read -p "Download MicroG [y/n]:  " mgprompt
+            read -p "Download MicroG [y/n]: " mgprompt
             if [ "$mgprompt" = "y" ]
             then
                 microglink="$(sed -n '6p' latest.txt)"
