@@ -7,6 +7,7 @@ Apps Supported:
 2. YouTube Music
 3. Twitter
 4. Reddit
+5. TikTok
 
 ### Note:  
 Download Termux from their github or FDroid

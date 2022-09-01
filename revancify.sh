@@ -154,6 +154,7 @@ user_input()
     echo "2. Patch YouTube Music"
     echo "3. Patch Twitter"
     echo "4. Patch Reddit"
+    echo "5. Patch TikTok"
     read -p "Your Input: " input
     if [ "$input" -eq "1" ]
     then
@@ -167,6 +168,9 @@ user_input()
     elif [ "$input" -eq "4" ]
     then
         appname="Reddit"
+    elif [ "$input" -eq "5" ]
+    then
+        appname="TikTok"
     else
         echo No input given..
         user_input
@@ -555,6 +559,46 @@ reddit_dl()
     fi
 }
 
+tiktok_dl()
+{
+    if ls -l | grep -q TikTok-
+    then
+        tt_available=$(basename TikTok-* .apk | cut -d'-' -f2) #get version
+        if [ "$ttver" = "$tt_available" ];then
+            tput sc
+            echo "TikTok already on latest version"
+            echo ""
+            sleep 1
+            wget -q -c $getlink -O "TikTok-"$ttver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+            sleep 1
+            tput rc; tput cd
+        else
+            tput sc
+            echo "TikTok update available"
+            sleep 1
+            tput rc; tput cd
+            echo Removing previous TikTok apk
+            rm TikTok-*.apk
+            sleep 1
+            tput rc; tput cd
+            echo "Downloading latest TikTok apk..."
+            echo " "
+            wget -q -c $getlink -O "TikTok-"$ttver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+            sleep 1
+            tput rc; tput cd
+        fi
+    else
+        tput sc
+        echo "No TikTok apk found locally"
+        echo " "
+        echo "Downloading latest TikTok apk..."
+        echo " "
+        wget -q -c $getlink -O "TikTok-"$ttver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+        sleep 1
+        tput rc; tput cd
+    fi
+}
+
 if [ "$appname" = "YouTube" ]
 then
     if [ "$variant" = "root" ]
@@ -792,6 +836,27 @@ then
     echo "Reddit App saved to Revancify folder." &&
     echo "Thanks for using Revancify..." &&
     termux-open /storage/emulated/0/Revancify/"RedditRevanced-"$rdver".apk"
+elif [ "$appname" = "TikTok" ]
+then
+    python fetch.py tiktok both & pid=$!
+    trap "kill $pid 2> /dev/null" EXIT
+    while kill -0 $pid 2> /dev/null; do
+        anim
+    done
+    trap - EXIT
+    sleep 1
+    tput rc; tput cd
+    rdver=$(sed -n '4p' latest.txt | sed 's/-/\./g' )
+    getlink="$(sed -n '5p' latest.txt)"
+    get_components
+    tiktok_dl &&
+    echo Building TikTok Revanced
+    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./TikTok-* -r --keystore ./revanced.keystore -o ./"TikTokRevanced-"$ttver".apk" --custom-aapt2-binary ./aapt2 --experimental
+    mv TikTokRevanced* /storage/emulated/0/Revancify/ &&
+    sleep 1 &&
+    echo "TikTok App saved to Revancify folder." &&
+    echo "Thanks for using Revancify..." &&
+    termux-open /storage/emulated/0/Revancify/"TikTokRevanced-"$ttver".apk"
 elif [ "$appname" = "MicroG" ]
 then
     python fetch.py yt non_root & pid=$!
