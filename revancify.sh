@@ -851,12 +851,12 @@ then
     get_components
     tiktok_dl &&
     echo Building TikTok Revanced
-    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./TikTok-* -r --keystore ./revanced.keystore -o ./"TikTokRevanced-"$ttver".apk" --custom-aapt2-binary ./aapt2 --experimental
+    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./TikTok-* --keystore ./revanced.keystore -o ./"TikTokRevanced-"$ttver".apk" --custom-aapt2-binary ./aapt2 --experimental
     mv TikTokRevanced* /storage/emulated/0/Revancify/ &&
     sleep 1 &&
     echo "TikTok App saved to Revancify folder." &&
     echo "Thanks for using Revancify..." &&
-    termux-open /storage/emulated/0/Revancify/"TikTokRevanced-"$ttver".apk
+    termux-open /storage/emulated/0/Revancify/"TikTokRevanced-"$ttver".apk"
 fi
 cd ~
 tput cnorm
