@@ -846,7 +846,7 @@ then
     trap - EXIT
     sleep 1
     tput rc; tput cd
-    rdver=$(sed -n '4p' latest.txt | sed 's/-/\./g' )
+    ttver=$(sed -n '4p' latest.txt | sed 's/-/\./g' )
     getlink="$(sed -n '5p' latest.txt)"
     get_components
     tiktok_dl &&
