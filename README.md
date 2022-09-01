@@ -9,6 +9,10 @@ Apps Supported:
 4. Reddit
 5. TikTok
 
+<a href="https://github.com/decipher3114/Revancify/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=decipher3114/Revancify" />
+</a>
+
 ### Note:  
 Download Termux from their github or FDroid
 
