@@ -9,9 +9,6 @@ Apps Supported:
 4. Reddit
 5. TikTok
 
-<a href="https://github.com/decipher3114/Revancify/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=decipher3114/Revancify" />
-</a>
 
 ### Note:  
 Download Termux from their github or FDroid
@@ -45,4 +42,9 @@ cd storage && rm -rf Revnacify && git clone https://github.com/decipher3114/Reva
 3. Type `rm -rf Revancify`  
 
 # Thanks & Credits
-[Revanced](https://github.com/revanced)  
+[Revanced](https://github.com/revanced) 
+## Contributors  
+<a href="https://github.com/decipher3114/Revancify/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=decipher3114/Revancify" />
+</a>
+
