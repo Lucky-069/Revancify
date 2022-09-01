@@ -178,6 +178,21 @@ def reddit():
     with open("latest.txt", "a") as f:
             f.write(rdver + '\n' + rddllink)
 
+def tiktok():
+    for a in ((BeautifulSoup((urlopen(Request(url="https://www.apkmirror.com/uploads/?appcategory=tik-tok/",headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find_all(["a"], class_="fontBlack")):
+        ytverlist.append(a.string) 
+    ttver = ((str(ytverlist[0])).split(' ')[1]).replace(".", "-")
+    tturl = "https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok/tik-tok-"+ttver+"-release/"
+
+    ttpage1= "https://apkmirror.com" + ((((BeautifulSoup((urlopen(Request(url=tturl, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(["span"], text="APK")).parent).find(["a"], class_="accent_color")['href'])
+
+    ttpage2= "https://apkmirror.com" + (((BeautifulSoup((urlopen(Request(url=ttpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(["svg"], class_="icon download-button-icon")).parent)['href']
+
+    ttdllink = "https://apkmirror.com" + (((BeautifulSoup((urlopen(Request(url=ttpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(rel="nofollow"))['href'])
+
+    with open("latest.txt", "a") as f:
+            f.write(ttver + '\n' + ttdllink)
+
 
 def microog():
     mgpage1 = "https://www.apkmirror.com/apk/team-vanced/microg-youtube-vanced/microg-youtube-vanced-0-2-24-220220-release/vanced-microg-0-2-24-220220-android-apk-download/"
@@ -199,3 +214,5 @@ elif appname == "twitter" and variant == "both":
     twitter()
 elif appname == "reddit" and variant == "both":
     reddit()
+elif appname == "tiktok" and variant == "both":
+    tiktok()
