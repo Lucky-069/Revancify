@@ -856,22 +856,7 @@ then
     sleep 1 &&
     echo "TikTok App saved to Revancify folder." &&
     echo "Thanks for using Revancify..." &&
-    termux-open /storage/emulated/0/Revancify/"TikTokRevanced-"$ttver".apk"
-elif [ "$appname" = "MicroG" ]
-then
-    python fetch.py yt non_root & pid=$!
-    trap "kill $pid 2> /dev/null" EXIT
-    while kill -0 $pid 2> /dev/null; do
-        anim
-    done
-    trap - EXIT
-    sleep 1
-    tput rc; tput cd
-    microglink="$(sed -n '6p' latest.txt)"
-    wget -q -c $microglink -O "Vanced_MicroG.apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
-    mv "Vanced_MicroG.apk" /storage/emulated/0/Revancify
-    echo MicroG App saved to Revancify folder.
-    termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
+    termux-open /storage/emulated/0/Revancify/"TikTokRevanced-"$ttver".apk
 fi
 cd ~
 tput cnorm
