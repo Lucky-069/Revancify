@@ -194,12 +194,6 @@ def tiktok():
             f.write(ttver + '\n' + ttdllink)
 
 
-def microog():
-    mgpage1 = "https://www.apkmirror.com/apk/team-vanced/microg-youtube-vanced/microg-youtube-vanced-0-2-24-220220-release/vanced-microg-0-2-24-220220-android-apk-download/"
-    mgpage2= "https://apkmirror.com" + (((BeautifulSoup((urlopen(Request(url=mgpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(["svg"], class_="icon download-button-icon")).parent)['href']
-    mgdllink = "https://apkmirror.com" + (((BeautifulSoup((urlopen(Request(url=mgpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), "html.parser")).find(rel="nofollow"))['href'])
-
-
 
 
 if appname == "yt" and variant == "non_root":
