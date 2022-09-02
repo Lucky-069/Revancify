@@ -212,7 +212,7 @@ then
     if [ "$appname" = "YouTube" ]
     then
         echo "Checking if YouTube is installed..."
-        if $( su -c dumpsys package com.google.android.youtube | grep -q path )
+        if su -c dumpsys package com.google.android.youtube | grep -q path
         then
             sleep 1
             echo ""
@@ -232,7 +232,7 @@ then
     elif [ "$appname" = "YouTubeMusic" ] 
     then
         echo "Checking if YouTube Music is installed..."
-        if $( su -c dumpsys package com.google.android.apps.youtube.music | grep -q path )
+        if su -c dumpsys package com.google.android.apps.youtube.music | grep -q path
         then
             sleep 1
             echo ""
