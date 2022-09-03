@@ -58,7 +58,6 @@ else
     pip install --upgrade pip &&
     pip install requests wheel bs4 &&
     cp ./revancify.sh ~/../usr/bin/revancify &&
-    chmod +x ~/../usr/bin/revancify
     sed -i 's/# allow-external-apps = true/allow-external-apps = true/g' ~/.termux/termux.properties
     sleep 1
     echo "Dependencies installed successfully."
@@ -131,7 +130,6 @@ then
     sleep 1
     tput rc; tput cd
     cp ./revancify.sh ~/../usr/bin/revancify &&
-    chmod +x ~/../usr/bin/revancify
     echo Revancify updated...
     sleep 1
     echo Run this script again
@@ -184,7 +182,6 @@ then
     :
 else 
     mv ./aapt2_$arch ./aapt2
-    chmod +x aapt2
     rm ./aapt2_*
 fi
 
