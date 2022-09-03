@@ -7,7 +7,6 @@ revive(){
 }
 trap revive SIGINT
 
-cd ~/storage/Revancify
 
 clear
 
@@ -46,7 +45,7 @@ intro()
 }
 
 
-if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/tput ] && [ $(find ~/../usr/lib/ -name "wheel" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "requests" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "bs4" | wc -l) != "0" ] && [ -e ~/../usr/bin/revancify ] 
+if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/tput ] && [ $(find ~/../usr/lib/ -name "wheel" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "requests" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "bs4" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "lxml" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "cchardet" | wc -l) != "0" ] && [ -e ~/../usr/bin/revancify ] 
 then
     intro
     internet
@@ -56,7 +55,7 @@ else
     pkg update -y &&
     pkg install python openjdk-17 wget ncurses-utils -y &&
     pip install --upgrade pip &&
-    pip install requests wheel bs4 &&
+    pip install requests wheel bs4 cchardet lxml &&
     cp ./revancify.sh ~/../usr/bin/revancify &&
     sed -i 's/# allow-external-apps = true/allow-external-apps = true/g' ~/.termux/termux.properties
     sleep 1
@@ -618,9 +617,16 @@ then
         java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTube-* -e custom-branding -e microg-support --keystore ./revanced.keystore -o ./com.google.android.youtube.apk --custom-aapt2-binary ./aapt2 --experimental
         echo "Mounting the apk"
         sleep 1; tput rc; tput cd
-        su -c 'mv com.google.android.youtube.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.youtube.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0  "$revancedapp" && exit' &&
-        su -mm -c 'revancedapp=/data/adb/revanced/com.google.android.youtube.apk; stockapp=$(pm path com.google.android.youtube | grep base | sed 's/package://g' ); mount -o bind "$revancedapp" "$stockapp" && exit' &&
-        su -c 'am force-stop com.google.android.youtube' && echo "YouTube Revanced successfully mounted. You can now use YouTube Revanced." && echo " " && echo "Thanks for using the Revancify..." || echo "Mount failed..." && tput cnorm && cd ~ && exit
+        if su -mm -c 'mv com.google.android.youtube.apk /data/adb/revanced; revancedapp=/data/adb/revanced/com.google.android.youtube.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0  "$revancedapp"; stockapp=$(pm path com.google.android.youtube | grep base | sed 's/package://g' ); mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.youtube && exit'
+            then
+                echo "Mounting successful"
+                tput cnorm && cd ~ && exit
+            
+            else
+                echo "Mount failed..."
+                echo "Exiting the script"
+                tput cnorm && cd ~ && exit
+        fi
     elif [ "$variant" = "non_root" ]
     then
         python fetch.py yt non_root & pid=$!
@@ -640,6 +646,7 @@ then
             echo ""
             mv "Vanced_MicroG.apk" /storage/emulated/0/Revancify
             echo MicroG App saved to Revancify folder.
+            sleep 1
         else
             :
         fi
@@ -684,9 +691,16 @@ then
             echo Building YouTube Music Revanced...
             java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTubeMusic* -e music-microg-support --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2 --experimental
             echo "Mounting the app"
-            su -c 'mv com.google.android.apps.youtube.music.apk /data/adb/revanced; revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0  "$revancedapp" && exit' &&
-            su -mm -c 'revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; stockapp=$(pm path com.google.android.apps.youtube.music | grep base | sed 's/package://g' ); mount -o bind "$revancedapp" "$stockapp" && exit' &&
-            su -c 'am force-stop com.google.android.apps.youtube.music' && echo "YouTube Music Revanced successfully mounted. You can now use YouTube Revanced." && echo " " && echo "Thanks for using Revancify..." || echo "Mount failed..." && echo "Exiting the script" && tput cnorm && cd ~ && exit
+            if su -mm -c 'mv com.google.android.apps.youtube.music.apk /data/adb/revanced; revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0  "$revancedapp"; stockapp=$(pm path com.google.android.apps.youtube.music | grep base | sed 's/package://g' ); mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.apps.youtube.music && exit'
+            then
+                echo "Mounting successful"
+                tput cnorm && cd ~ && exit
+            
+            else
+                echo "Mount failed..."
+                echo "Exiting the script"
+                tput cnorm && cd ~ && exit
+            fi
         elif [ "$arch" = "armeabi" ]
         then
             python fetch.py ytm root armeabi $getapp & pid=$!
@@ -703,9 +717,16 @@ then
             echo Building YouTube Music Revanced...
             java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTubeMusic* -e music-microg-support --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2 --experimental
             echo "Mounting the app"
-            su -c 'mv com.google.android.apps.youtube.music.apk /data/adb/revanced; revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0  "$revancedapp" && exit' &&
-            su -mm -c 'revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; stockapp=$(pm path com.google.android.apps.youtube.music | grep base | sed 's/package://g' ); mount -o bind "$revancedapp" "$stockapp" && exit' &&
-            su -c 'am force-stop com.google.android.apps.youtube.music' && echo "YouTube Music Revanced successfully mounted. You can now use YouTube Revanced." && echo " " && echo "Thanks for using Revancify..." || echo "Mount failed..." && echo "Exiting the script" && tput cnorm && cd ~ && exit
+            if su -mm -c 'mv com.google.android.apps.youtube.music.apk /data/adb/revanced; revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0  "$revancedapp"; stockapp=$(pm path com.google.android.apps.youtube.music | grep base | sed 's/package://g' ); mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.apps.youtube.music && exit'
+            then
+                echo "Mounting successful"
+                tput cnorm && cd ~ && exit
+            
+            else
+                echo "Mount failed..."
+                echo "Exiting the script"
+                tput cnorm && cd ~ && exit
+            fi
         fi
     elif [ "$variant" = "non_root" ]
     then
