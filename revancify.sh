@@ -55,7 +55,7 @@ else
     pkg update -y &&
     pkg install python openjdk-17 wget ncurses-utils -y &&
     pip install --upgrade pip &&
-    pip install requests wheel bs4 cchardet lxml &&
+    pip install requests wheel bs4 cchardet lxml libxml2 libxslt &&
     cp ./revancify.sh ~/../usr/bin/revancify &&
     sed -i 's/# allow-external-apps = true/allow-external-apps = true/g' ~/.termux/termux.properties
     sleep 1
