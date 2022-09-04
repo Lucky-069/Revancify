@@ -9,8 +9,6 @@ import sys
 appname = sys.argv[1]
 variant = sys.argv[2]
 
-[...]
-
 
 requests_session = requests.Session()
 patches_version = (((requests_session.get('https://api.github.com/repos/revanced/revanced-patches/releases/latest')).json())['name']).replace("v","")
