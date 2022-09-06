@@ -20,8 +20,8 @@ Download Termux from their github or FDroid
 termux-setup-storage && pkg update -y && pkg install git -y && cd storage && git clone https://github.com/decipher3114/Revancify && cd Revancify && bash revancify.sh && exit
 ```
 ### Dependencies:  
-packages: python, openjdk-17, wget, ncurses-utils, libxml2, libxslt
-python modules: requests, wheel, bs4, cython, cchardet, lxml (may take longer to install)
+**packages**: python, openjdk-17, wget, ncurses-utils, libxml2, libxslt  
+**python modules**: requests, wheel, bs4, cython, cchardet, lxml (may take longer to install)
 
 # Usage
 1. Open Termux.  
