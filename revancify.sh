@@ -2,31 +2,6 @@
 
 cd ~/storage/Revancify
 
-tput sc
-echo "Checking for update..."
-sleep 1
-
-
-if [ "$(git pull)" != "Already up to date." ]
-then
-    sleep 1
-    tput rc; tput cd
-    cp ./revancify.sh ~/../usr/bin/revancify &&
-    echo Revancify updated...
-    sleep 1
-    echo Run this script again
-    sleep 1
-    tput cnorm
-    cd ~
-    exit
-else
-    echo ""
-    echo "Script already up to date."
-    sleep 1
-    tput rc; tput cd
-fi
-
-
 revive(){
     clear && echo "Script terminated" && tput cnorm && cd ~ && exit
 }
@@ -149,17 +124,6 @@ user_input()
     tput cd
 }
 
-report()
-{
-    read -p "Do you want to report this bug to the developer? [Y/n]" reportopt
-    reportopt=${reportopt:-y}
-    if [ $reportopt = "y" ]
-    then
-        termux-open https://github.com/decipher3114/Revancify/issues/new
-    else
-        exit
-    fi
-}
 
 if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/tput ] && [ $(find ~/../usr/lib/ -name "wheel" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "requests" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "bs4" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "lxml" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "cchardet" | wc -l) != "0" ] && [ -e ~/../usr/bin/revancify ] 
 then
@@ -180,6 +144,30 @@ else
     echo "Run this script again"
     cd ~ 
     exit
+fi
+
+tput sc
+echo "Checking for update..."
+sleep 1
+
+
+if [ "$(git pull)" != "Already up to date." ]
+then
+    sleep 1
+    tput rc; tput cd
+    cp ./revancify.sh ~/../usr/bin/revancify &&
+    echo Revancify updated...
+    sleep 1
+    echo Run this script again
+    sleep 1
+    tput cnorm
+    cd ~
+    exit
+else
+    echo ""
+    echo "Script already up to date."
+    sleep 1
+    tput rc; tput cd
 fi
 
 
@@ -602,6 +590,19 @@ tiktok_dl()
         tput rc; tput cd
     fi
 }
+
+report()
+{
+    read -p "Do you want to report this bug to the developer? [Y/n]" reportopt
+    reportopt=${reportopt:-y}
+    if [ $reportopt = "y" ]
+    then
+        termux-open https://github.com/decipher3114/Revancify/issues/new
+    else
+        exit
+    fi
+}
+
 
 if [ "$appname" = "YouTube" ]
 then
