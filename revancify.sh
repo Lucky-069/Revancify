@@ -2,6 +2,31 @@
 
 cd ~/storage/Revancify
 
+tput sc
+echo "Checking for update..."
+sleep 1
+
+
+if [ "$(git pull)" != "Already up to date." ]
+then
+    sleep 1
+    tput rc; tput cd
+    cp ./revancify.sh ~/../usr/bin/revancify &&
+    echo Revancify updated...
+    sleep 1
+    echo Run this script again
+    sleep 1
+    tput cnorm
+    cd ~
+    exit
+else
+    echo ""
+    echo "Script already up to date."
+    sleep 1
+    tput rc; tput cd
+fi
+
+
 revive(){
     clear && echo "Script terminated" && tput cnorm && cd ~ && exit
 }
@@ -157,29 +182,6 @@ else
     exit
 fi
 
-tput sc
-echo "Checking for update..."
-sleep 1
-
-
-if [ "$(git pull)" != "Already up to date." ]
-then
-    sleep 1
-    tput rc; tput cd
-    cp ./revancify.sh ~/../usr/bin/revancify &&
-    echo Revancify updated...
-    sleep 1
-    echo Run this script again
-    sleep 1
-    tput cnorm
-    cd ~
-    exit
-else
-    echo ""
-    echo "Script already up to date."
-    sleep 1
-    tput rc; tput cd
-fi
 
 arch=$(getprop ro.product.cpu.abi | cut -d"-" -f1)
 if [ -e ./aapt2 ]
