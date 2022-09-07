@@ -44,29 +44,6 @@ intro()
     tput cm 8 0
 }
 
-
-if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/tput ] && [ $(find ~/../usr/lib/ -name "wheel" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "requests" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "bs4" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "lxml" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "cchardet" | wc -l) != "0" ] && [ -e ~/../usr/bin/revancify ] 
-then
-    intro
-    internet
-else
-    echo "Installing dependencies..."
-    sleep 1
-    pkg update -y &&
-    pkg install python openjdk-17 wget ncurses-utils libxml2 libxslt -y &&
-    pip install --upgrade pip &&
-    pip install requests wheel bs4 cython cchardet lxml &&
-    cp ./revancify.sh ~/../usr/bin/revancify &&
-    sed -i 's/# allow-external-apps = true/allow-external-apps = true/g' ~/.termux/termux.properties
-    sleep 1
-    echo "Dependencies installed successfully."
-    sleep 1
-    echo "Run this script again"
-    cd ~ 
-    exit
-fi
-
-
 anim()
 {
     echo "Fetching latest version info"
@@ -114,35 +91,6 @@ anim()
     tput sc
 }
 
-
-
-
-arch=$(getprop ro.product.cpu.abi | cut -d"-" -f1)
-
-tput sc
-echo "Checking for update..."
-sleep 1
-
-
-if [ "$(git pull)" != "Already up to date." ]
-then
-    sleep 1
-    tput rc; tput cd
-    cp ./revancify.sh ~/../usr/bin/revancify &&
-    echo Revancify updated...
-    sleep 1
-    echo Run this script again
-    sleep 1
-    tput cnorm
-    cd ~
-    exit
-else
-    echo ""
-    echo "Script already up to date."
-    sleep 1
-    tput rc; tput cd
-fi
-
 user_input()
 {
     tput sc
@@ -176,6 +124,63 @@ user_input()
     tput cd
 }
 
+report()
+{
+    read -p "Do you want to report this bug to the developer? [Y/n]" reportopt
+    reportopt=${reportopt:-y}
+    if [ $reportopt = "y" ]
+    then
+        termux-open https://github.com/decipher3114/Revancify/issues/new
+    else
+        exit
+}
+
+if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/tput ] && [ $(find ~/../usr/lib/ -name "wheel" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "requests" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "bs4" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "lxml" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "cchardet" | wc -l) != "0" ] && [ -e ~/../usr/bin/revancify ] 
+then
+    intro
+    internet
+else
+    echo "Installing dependencies..."
+    sleep 1
+    pkg update -y &&
+    pkg install python openjdk-17 wget ncurses-utils libxml2 libxslt -y &&
+    pip install --upgrade pip &&
+    pip install requests wheel bs4 cython cchardet lxml &&
+    cp ./revancify.sh ~/../usr/bin/revancify &&
+    sed -i 's/# allow-external-apps = true/allow-external-apps = true/g' ~/.termux/termux.properties
+    sleep 1
+    echo "Dependencies installed successfully."
+    sleep 1
+    echo "Run this script again"
+    cd ~ 
+    exit
+fi
+
+tput sc
+echo "Checking for update..."
+sleep 1
+
+
+if [ "$(git pull)" != "Already up to date." ]
+then
+    sleep 1
+    tput rc; tput cd
+    cp ./revancify.sh ~/../usr/bin/revancify &&
+    echo Revancify updated...
+    sleep 1
+    echo Run this script again
+    sleep 1
+    tput cnorm
+    cd ~
+    exit
+else
+    echo ""
+    echo "Script already up to date."
+    sleep 1
+    tput rc; tput cd
+fi
+
+arch=$(getprop ro.product.cpu.abi | cut -d"-" -f1)
 if [ -e ./aapt2 ]
 then
     :
@@ -625,6 +630,7 @@ then
             else
                 echo "Mount failed..."
                 echo "Exiting the script"
+                report
                 tput cnorm && cd ~ && exit
         fi
     elif [ "$variant" = "non_root" ]
@@ -699,6 +705,7 @@ then
             else
                 echo "Mount failed..."
                 echo "Exiting the script"
+                report
                 tput cnorm && cd ~ && exit
             fi
         elif [ "$arch" = "armeabi" ]
@@ -725,6 +732,7 @@ then
             else
                 echo "Mount failed..."
                 echo "Exiting the script"
+                report
                 tput cnorm && cd ~ && exit
             fi
         fi
