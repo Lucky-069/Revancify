@@ -171,7 +171,7 @@ else
 fi
 
 
-arch=$(getprop ro.product.cpu.abi | cut -d"-" -f1)
+arch=$(getprop ro.product.cpu.abi | cut -d "-" -f 1)
 if [ -e ./aapt2 ]
 then
     :
@@ -267,7 +267,7 @@ get_components(){
     #check patch
     if ls -l | grep -q revanced-patches
     then
-        patches_available=$(basename revanced-patches* .jar | cut -d'-' -f 3) #get version
+        patches_available=$(basename revanced-patches* .jar | cut -d '-' -f 3) #get version
         if [ "$patches_latest" = "$patches_available" ]
         then
             tput sc
@@ -306,7 +306,7 @@ get_components(){
     #check cli
     if ls -l | grep -q revanced-cli
     then
-        cli_available=$(basename revanced-cli* .jar | cut -d'-' -f 3) #get version
+        cli_available=$(basename revanced-cli* .jar | cut -d '-' -f 3) #get version
         if [ "$cli_latest" = "$cli_available" ]
         then
             tput sc
@@ -345,7 +345,7 @@ get_components(){
     #check integrations
     if ls -l | grep -q revanced-integrations
     then
-        int_available=$(basename revanced-integrations* .apk | cut -d'-' -f 3) #get version
+        int_available=$(basename revanced-integrations* .apk | cut -d '-' -f 3) #get version
         if [ "$int_latest" = "$int_available" ]
         then
             tput sc
@@ -390,7 +390,7 @@ yt_dl()
 {
     if ls -l | grep -q YouTube-
     then
-        yt_available=$(basename YouTube-* .apk | cut -d'-' -f2) #get version
+        yt_available=$(basename YouTube-* .apk | cut -d '-' -f 2) #get version
         if [ "$ytver" = "$yt_available" ];then
             tput sc
             echo "YouTube already on latest version"
@@ -431,7 +431,7 @@ ytm_dl()
 {
     if ls -l | grep -q YouTubeMusic-
     then
-        ytm_available=$(basename YouTubeMusic-* .apk | cut -d'-' -f2) #get version
+        ytm_available=$(basename YouTubeMusic-* .apk | cut -d '-' -f 2) #get version
         if [ "$ytmver" = "$ytm_available" ]
         then
             tput sc
@@ -474,7 +474,7 @@ twitter_dl()
 {
     if ls -l | grep -q Twitter-
     then
-        tw_available=$(basename Twitter-* .apk | cut -d'-' -f2) #get version
+        tw_available=$(basename Twitter-* .apk | cut -d '-' -f 2) #get version
         if [ "$twver" = "$tw_available" ];then
             tput sc
             echo "Twitter already on latest version"
@@ -514,7 +514,7 @@ reddit_dl()
 {
     if ls -l | grep -q Reddit-
     then
-        rd_available=$(basename Reddit-* .apk | cut -d'-' -f2) #get version
+        rd_available=$(basename Reddit-* .apk | cut -d '-' -f 2) #get version
         if [ "$rdver" = "$rd_available" ];then
             tput sc
             echo "Reddit already on latest version"
@@ -554,7 +554,7 @@ tiktok_dl()
 {
     if ls -l | grep -q TikTok-
     then
-        tt_available=$(basename TikTok-* .apk | cut -d'-' -f2) #get version
+        tt_available=$(basename TikTok-* .apk | cut -d '-' -f 2) #get version
         if [ "$ttver" = "$tt_available" ];then
             tput sc
             echo "TikTok already on latest version"
@@ -607,7 +607,7 @@ if [ "$appname" = "YouTube" ]
 then
     if [ "$variant" = "root" ]
     then
-        ytver=$( su -c dumpsys package com.google.android.youtube | grep versionName | cut -d= -f2)
+        ytver=$( su -c dumpsys package com.google.android.youtube | grep versionName | cut -d= -f 2)
         getapp=$( echo "$ytver" | sed 's/\./-/g')
         python fetch.py yt root $getapp & pid=$!
         trap "kill $pid 2> /dev/null" EXIT
@@ -625,7 +625,7 @@ then
         java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTube-* -e custom-branding -e microg-support --keystore ./revanced.keystore -o ./com.google.android.youtube.apk --custom-aapt2-binary ./aapt2 --experimental
         echo "Mounting the apk"
         sleep 1; tput rc; tput cd
-        if su -mm -c 'stockapp=$(pm path com.google.android.youtube | grep base | sed 's/package://g' ); mount | grep com.google.android.youtube | while read -r line; do echo $line | cut -d" " -f3 | xargs -r umount -l; done && mv com.google.android.youtube.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.youtube.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.youtube && exit'
+        if su -mm -c 'stockapp=$(pm path com.google.android.youtube | grep base | sed 's/package://g' ); mount | grep com.google.android.youtube | while read -r line; do echo $line | cut -d " " -f 3 | xargs -r umount -l; done && mv com.google.android.youtube.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.youtube.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.youtube && exit'
             then
                 echo "Mounting successful"
                 tput cnorm && cd ~ && exit
@@ -682,7 +682,7 @@ elif [ "$appname" = "YouTubeMusic" ]
 then
     if [ "$variant" = "root" ]
     then
-        ytmver=$(su -c dumpsys package com.google.android.apps.youtube.music | grep versionName | cut -d= -f2 )
+        ytmver=$(su -c dumpsys package com.google.android.apps.youtube.music | grep versionName | cut -d= -f 2 )
         getapp=$( echo "$ytmver" | sed 's/\./-/g')
         if [ "$arch" = "arm64" ]
         then
@@ -700,7 +700,7 @@ then
             echo Building YouTube Music Revanced...
             java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* -e music-microg-support --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2 --experimental
             echo "Mounting the app"
-            if su -mm -c 'stockapp=$(pm path com.google.android.apps.youtube.music | grep base | sed 's/package://g' ); mount | grep com.google.android.apps.youtube.music | while read -r line; do echo $line | cut -d" " -f3 | xargs -r umount -l; done && mv com.google.android.apps.youtube.music.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.apps.youtube.music && exit'
+            if su -mm -c 'stockapp=$(pm path com.google.android.apps.youtube.music | grep base | sed 's/package://g' ); mount | grep com.google.android.apps.youtube.music | while read -r line; do echo $line | cut -d " " -f 3 | xargs -r umount -l; done && mv com.google.android.apps.youtube.music.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.apps.youtube.music && exit'
             then
                 echo "Mounting successful"
                 tput cnorm && cd ~ && exit
@@ -727,7 +727,7 @@ then
             echo Building YouTube Music Revanced...
             java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* -e music-microg-support --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2 --experimental
             echo "Mounting the app"
-            if su -mm -c 'stockapp=$(pm path com.google.android.apps.youtube.music | grep base | sed 's/package://g' ); mount | grep com.google.android.apps.youtube.music | while read -r line; do echo $line | cut -d" " -f3 | xargs -r umount -l; done && mv com.google.android.apps.youtube.music.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.apps.youtube.music && exit'
+            if su -mm -c 'stockapp=$(pm path com.google.android.apps.youtube.music | grep base | sed 's/package://g' ); mount | grep com.google.android.apps.youtube.music | while read -r line; do echo $line | cut -d " " -f 3 | xargs -r umount -l; done && mv com.google.android.apps.youtube.music.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.apps.youtube.music && exit'
             then
                 echo "Mounting successful"
                 tput cnorm && cd ~ && exit
