@@ -325,7 +325,6 @@ get_components(){
             rm revanced-cli*
             sleep 1
             tput rc; tput cd
-            echo " "
             echo Downloading latest CLI...
             echo ""
             wget -q -c "https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar" -O "revanced-cli-"$cli_latest".jar" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
