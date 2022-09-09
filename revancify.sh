@@ -93,11 +93,12 @@ anim()
 
 branding="--options options.toml"
 options(){
+    tput rc; tput cd
     tput sc
-    read -p "Which app icon you want to use? " iconprompt
     echo "1. Revanced default"
     echo "2. YouTube default"
     echo "3. Custom icon by decipher"
+    read -p "Which app icon you want to use? " iconprompt
     if [ $iconprompt = "1" ]
     then
         sed -i "s/appIconPath = \".*\"/appIconPath = \"null\"/g" options.toml

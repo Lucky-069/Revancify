@@ -1,6 +1,6 @@
 ['custom-branding']
-appName = "YouTube by decipher"
-appIconPath = "icons"
+appName = "YouTube Revanced"
+appIconPath = "null"
 
 [theme]
 theme = "Amoled"
