@@ -95,16 +95,18 @@ branding="--options options.toml"
 options(){
     tput rc; tput cd
     tput sc
+    echo "Which app icon you want to use?"
     echo "1. Revanced default"
     echo "2. YouTube default"
     echo "3. Custom icon by decipher"
-    read -p "Which app icon you want to use? " iconprompt
+    read -p "Your input: " iconprompt
     if [ $iconprompt = "1" ]
     then
         sed -i "s/appIconPath = \".*\"/appIconPath = \"null\"/g" options.toml
+        echo "What app name do you want to use?"
         echo "1. YouTube Revanced"
         echo "2. YouTube"
-        read -p "What app name do you want to use? " nameprompt
+        read -p "Your input: " nameprompt
         if [ $nameprompt = "1" ]
         then
             name="YouTube Revanced"
@@ -127,9 +129,10 @@ options(){
             git clone https://github.com/decipher3114/revanced-icons.git
         fi
         sed -i "s/appIconPath = \".*\"/appIconPath = \"revanced-icons\/youtube\"/g" options.toml
+        echo "What app name do you want to use?"
         echo "1. YouTube Revanced"
         echo "2. YouTube"
-        read -p "What app name do you want to use? " nameprompt
+        read -p "Your input: " nameprompt
         if [ $nameprompt = "1" ]
         then
             name="YouTube Revanced"
