@@ -146,7 +146,7 @@ options(){
         sed -i "s/appName = \".*\"/appName = \"$name\"/g" options.toml
     fi
     tput rc; tput cd
-
+    user_input
 }
 
 user_input()
