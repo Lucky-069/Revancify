@@ -103,6 +103,7 @@ options(){
     if [ $iconprompt = "1" ]
     then
         sed -i "s/appIconPath = \".*\"/appIconPath = \"null\"/g" options.toml
+        tput rc; tput cd
         echo "What app name do you want to use?"
         echo "1. YouTube Revanced"
         echo "2. YouTube"
@@ -126,9 +127,11 @@ options(){
             git pull > /dev/null 2>&1
             cd ..
         else
-            git clone https://github.com/decipher3114/revanced-icons.git
+            echo "Downloading icons..."
+            git clone https://github.com/decipher3114/revanced-icons.git > /dev/null 2>&1
         fi
         sed -i "s/appIconPath = \".*\"/appIconPath = \"revanced-icons\/youtube\"/g" options.toml
+        tput rc; tput cd
         echo "What app name do you want to use?"
         echo "1. YouTube Revanced"
         echo "2. YouTube"
@@ -143,6 +146,7 @@ options(){
         sed -i "s/appName = \".*\"/appName = \"$name\"/g" options.toml
     fi
     tput rc; tput cd
+
 }
 
 user_input()
