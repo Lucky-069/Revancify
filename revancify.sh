@@ -91,15 +91,66 @@ anim()
     tput sc
 }
 
+branding="--options options.toml"
+options(){
+    tput sc
+    read -p "Which app icon you want to use? " iconprompt
+    echo "1. Revanced default"
+    echo "2. YouTube default"
+    echo "3. Custom icon by decipher"
+    if [ $iconprompt = "1" ]
+    then
+        sed -i "s/appIconPath = \".*\"/appIconPath = \"null\"/g" options.toml
+        echo "1. YouTube Revanced"
+        echo "2. YouTube"
+        read -p "What app name do you want to use? " nameprompt
+        if [ $nameprompt = "1" ]
+        then
+            name="YouTube Revanced"
+        elif [ $nameprompt = "2" ]
+        then
+            name="YouTube"
+        fi
+        sed -i "s/appName = \".*\"/appName = \"$name\"/g" options.toml
+    elif [ $iconprompt = "2" ]
+    then
+        branding="-e custom-branding --options.toml"
+    elif [ $iconprompt = "3" ]
+    then
+        if [ -d "revanced-icons" ]
+        then
+            cd revanced-icons
+            git pull > /dev/null 2>&1
+            cd ..
+        else
+            git clone https://github.com/decipher3114/revanced-icons.git
+        fi
+        sed -i "s/appIconPath = \".*\"/appIconPath = \"revanced-icons\/youtube\"/g" options.toml
+        echo "1. YouTube Revanced"
+        echo "2. YouTube"
+        read -p "What app name do you want to use? " nameprompt
+        if [ $nameprompt = "1" ]
+        then
+            name="YouTube Revanced"
+        elif [ $nameprompt = "2" ]
+        then
+            name="YouTube"
+        fi
+        sed -i "s/appName = \".*\"/appName = \"$name\"/g" options.toml
+    fi
+    tput rc; tput cd
+}
+
 user_input()
 {
     tput sc
-    echo "Which app do you want to do patch?"
+    echo "Which do you want to do?"
     echo "1. Patch YouTube"
     echo "2. Patch YouTube Music"
     echo "3. Patch Twitter"
     echo "4. Patch Reddit"
     echo "5. Patch TikTok"
+    echo "6. Edit Patch-options"
     read -p "Your Input: " input
     if [ "$input" -eq "1" ]
     then
@@ -116,6 +167,9 @@ user_input()
     elif [ "$input" -eq "5" ]
     then
         appname="TikTok"
+    elif [ "$input" -eq "6" ]
+    then
+        options
     else
         echo No input given..
         user_input
@@ -123,7 +177,6 @@ user_input()
     tput rc
     tput cd
 }
-
 
 if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/tput ] && [ $(find ~/../usr/lib/ -name "wheel" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "requests" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "bs4" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "lxml" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "cchardet" | wc -l) != "0" ] && [ -e ~/../usr/bin/revancify ] 
 then
@@ -592,8 +645,8 @@ tiktok_dl()
 
 report()
 {
-    read -p "Do you want to report this bug to the developer? [Y/n]" reportopt
-    reportopt=${reportopt:-y}
+    read -p "Do you want to report this bug to the developer? [y/N]" reportopt
+    reportopt=${reportopt:-n}
     if [ $reportopt = "y" ]
     then
         termux-open https://github.com/decipher3114/Revancify/issues/new
@@ -622,7 +675,7 @@ then
         yt_dl &&
         echo "Building Youtube Revanced ..."
         echo ""
-        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTube-* -e custom-branding -e microg-support --keystore ./revanced.keystore -o ./com.google.android.youtube.apk --custom-aapt2-binary ./aapt2 --experimental
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTube-* $branding -e microg-support --keystore ./revanced.keystore -o ./com.google.android.youtube.apk --custom-aapt2-binary ./aapt2 --experimental
         echo "Mounting the apk"
         sleep 1; tput rc; tput cd
         if su -mm -c 'stockapp=$(pm path com.google.android.youtube | grep base | sed 's/package://g' ); grep com.google.android.youtube /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l; done && mv com.google.android.youtube.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.youtube.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.youtube && exit'
@@ -665,7 +718,7 @@ then
         get_components
         yt_dl &&
         echo Building YouTube Revanced
-        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTube-* -e custom-branding --keystore ./revanced.keystore -o ./"YouTubeRevanced-"$ytver".apk" --custom-aapt2-binary ./aapt2 --experimental
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTube-* $branding --keystore ./revanced.keystore -o ./"YouTubeRevanced-"$ytver".apk" --custom-aapt2-binary ./aapt2 --experimental
         mv YouTubeRevanced* /storage/emulated/0/Revancify/ &&
         sleep 1 &&
         echo "YouTube App saved to Revancify folder." &&
