@@ -758,7 +758,7 @@ if [ "$appname" = "YouTube" ]
 then
     [[ ! -f youtube_patches.txt ]] && python3 fetch.py yt patches
     excludeyt=$(while read -r line; do
-        patch=$(echo "$line"| cut -d " " -f 5)
+        patch=$(echo "$line"| cut -d " " -f 2)
         printf -- "-e "
         printf "%s""$patch "
     done < <(grep " off" youtube_patches.txt))
@@ -839,7 +839,7 @@ elif [ "$appname" = "YouTubeMusic" ]
 then
     [[ ! -f youtube_patches.txt ]] && python3 fetch.py yt patches
     excludeytm=$(while read -r line; do
-        patch=$(echo "$line"| cut -d " " -f 5)
+        patch=$(echo "$line"| cut -d " " -f 2)
         printf -- "-e "
         printf "%s""$patch "
     done < <(grep " off" youtubemusic_patches.txt))
@@ -861,7 +861,7 @@ then
             get_components
             ytm_dl &&
             echo Building YouTube Music Revanced...
-            java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* -e music-microg-support -e "$excludeytm" --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2 --experimental
+            java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* -e music-microg-support "$excludeytm" --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2 --experimental
             echo "Mounting the app"
             if su -mm -c 'stockapp=$(pm path com.google.android.apps.youtube.music | grep base | sed 's/package://g' ); grep com.google.android.apps.youtube.music /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l; done && mv com.google.android.apps.youtube.music.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.apps.youtube.music && exit'
             then
