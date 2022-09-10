@@ -213,12 +213,6 @@ ytmpatches()
     user_input
 }
 
-while read -r line
-do
-    patch=$(echo "$line" | cut -d " " -f 2)
-    printf -- "-i "
-    printf "%s" "$patch "
-done < <(grep " on" youtube_patches.txt)
 
 
 user_input()
