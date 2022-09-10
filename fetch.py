@@ -66,7 +66,7 @@ def yt_patches():
         if (((i['compatiblePackages'])[0])['name']) == "com.google.android.youtube" and i['deprecated'] != True:
             a += 1
             with open("youtube_patches.txt", "a") as p:
-                p.write(str(a).zfill(2) + " " + str(i['name']) + " " + "on" + "\n")
+                p.write(str(i['name']) + " " + "on" + "\n")
 
 
 # YouTube Music Non Root
@@ -160,7 +160,7 @@ def ytm_patches():
         if (((i['compatiblePackages'])[0])['name']) == "com.google.android.apps.youtube.music" and i['deprecated'] != True:
             a += 1
             with open("youtubemusic_patches.txt", "a") as p:
-                p.write(str(a).zfill(2) + " " + str(i['name']) + " " + "on" + "\n")
+                p.write(str(i['name']) + " " + "on" + "\n")
 
 
 def twitter():

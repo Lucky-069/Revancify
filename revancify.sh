@@ -160,6 +160,7 @@ ytpatches()
     fi
     echo Updating patches...
     python fetch.py yt patches
+    sed -i '/microg-support/d' youtube_patches.txt
     sleep 1
     cmd=(dialog --separate-output --checklist "Select patches to include" 22 76 16)
     options=()
@@ -169,7 +170,7 @@ ytpatches()
         read -r -a arr <<< "$line"
         options+=("${arr[@]}")
         nums+=("${arr[0]}")
-    done < <(cat youtube_patches.txt)
+    done < <(nl -n rz -w2 -s " " youtube_patches.txt)
     mapfile -t choices < <("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     clear
     for num in "${nums[@]}"
@@ -200,7 +201,7 @@ ytmpatches()
         read -r -a arr <<< "$line"
         options+=("${arr[@]}")
         nums+=("${arr[0]}")
-    done < <(cat youtube_patches.txt)
+    done < <(nl -n rz -w2 -s " " youtube_patches.txt)
     mapfile -t choices < <("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     clear
     for num in "${nums[@]}"
@@ -748,11 +749,11 @@ report()
 if [ "$appname" = "YouTube" ]
 then
     [[ ! -f youtube_patches.txt ]] && python3 fetch.py yt patches
-    includeyt=$(while read -r line; do
+    excludeyt=$(while read -r line; do
         patch=$(echo "$line"| cut -d " " -f 2)
-        printf -- "-i "
+        printf -- "-e "
         printf "%s" "$patch "
-    done < <(grep -v " on" youtube_patches.txt))
+    done < <(grep -v " off" youtube_patches.txt))
     if [ "$variant" = "root" ]
     then
         ytver=$( su -c dumpsys package com.google.android.youtube | grep versionName | cut -d= -f 2)
@@ -770,7 +771,7 @@ then
         yt_dl &&
         echo "Building Youtube Revanced ..."
         echo ""
-        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTube-* $includeyt --keystore ./revanced.keystore -o ./com.google.android.youtube.apk --custom-aapt2-binary ./aapt2 --experimental --exclusive
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTube-* "$excludeyt"--keystore ./revanced.keystore -o ./com.google.android.youtube.apk --custom-aapt2-binary ./aapt2 --experimental --exclusive
         echo "Mounting the apk"
         sleep 1; tput rc; tput cd
         if su -mm -c 'stockapp=$(pm path com.google.android.youtube | grep base | sed 's/package://g' ); grep com.google.android.youtube /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l; done && mv com.google.android.youtube.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.youtube.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.youtube && exit'
@@ -813,7 +814,7 @@ then
         get_components
         yt_dl &&
         echo Building YouTube Revanced
-        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTube-* $includeyt --keystore ./revanced.keystore -o ./"YouTubeRevanced-"$ytver".apk" --custom-aapt2-binary ./aapt2 --experimental --exclusive
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTube-* "$excludeyt"--keystore ./revanced.keystore -o ./"YouTubeRevanced-"$ytver".apk" --custom-aapt2-binary ./aapt2 --experimental --exclusive
         mv YouTubeRevanced* /storage/emulated/0/Revancify/ &&
         sleep 1 &&
         echo "YouTube App saved to Revancify folder." &&
@@ -829,11 +830,11 @@ then
 elif [ "$appname" = "YouTubeMusic" ]
 then
     [[ ! -f youtube_patches.txt ]] && python3 fetch.py yt patches
-    includeytm=$(while read -r line; do
+    excludeytm=$(while read -r line; do
         patch=$(echo "$line"| cut -d " " -f 2)
-        printf -- "-i "
+        printf -- "-e "
         printf "%s" "$patch "
-    done < <(grep -v " on" youtubemusic_patches.txt))
+    done < <(grep -v " off" youtubemusic_patches.txt))
     if [ "$variant" = "root" ]
     then
         ytmver=$(su -c dumpsys package com.google.android.apps.youtube.music | grep versionName | cut -d= -f 2 )
@@ -852,7 +853,7 @@ then
             get_components
             ytm_dl &&
             echo Building YouTube Music Revanced...
-            java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* $includeytm --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2 --experimental
+            java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* "$excludeytm"--keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2 --experimental
             echo "Mounting the app"
             if su -mm -c 'stockapp=$(pm path com.google.android.apps.youtube.music | grep base | sed 's/package://g' ); grep com.google.android.apps.youtube.music /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l; done && mv com.google.android.apps.youtube.music.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.apps.youtube.music && exit'
             then
@@ -879,7 +880,7 @@ then
             get_components
             ytm_dl &&
             echo Building YouTube Music Revanced...
-            java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* $includeytm --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2 --experimental
+            java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* "$excludeytm"--keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2 --experimental
             echo "Mounting the app"
             if su -mm -c 'stockapp=$(pm path com.google.android.apps.youtube.music | grep base | sed 's/package://g' ); grep com.google.android.apps.youtube.music /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l; done && mv com.google.android.apps.youtube.music.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.apps.youtube.music && exit'
             then
@@ -923,7 +924,7 @@ then
             get_components
             ytm_dl &&
             echo Building YouTube Music Revanced...
-            java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* $includeytm --keystore ./revanced.keystore -o ./"YouTubeMusicRevanced-"$ytmver".apk" --custom-aapt2-binary ./aapt2 --experimental
+            java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* "$excludeytm"--keystore ./revanced.keystore -o ./"YouTubeMusicRevanced-"$ytmver".apk" --custom-aapt2-binary ./aapt2 --experimental
             mv YouTubeMusicRevanced* /storage/emulated/0/Revancify/ &&
             sleep 1 &&
             echo "YouTube Music App saved to Revancify folder." &&
@@ -963,7 +964,7 @@ then
             get_components
             ytm_dl &&
             echo Building YouTube Music Revanced...
-            java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* $includeytm --keystore ./revanced.keystore -o ./"YouTubeMusicRevanced-"$ytmver".apk" --custom-aapt2-binary ./aapt2 --experimental
+            java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* "$excludeytm"--keystore ./revanced.keystore -o ./"YouTubeMusicRevanced-"$ytmver".apk" --custom-aapt2-binary ./aapt2 --experimental
             mv YouTubeMusicRevanced-* /storage/emulated/0/Revancify/ &&
             sleep 1 &&
             echo "YouTube Music App saved to Revancify folder." &&
