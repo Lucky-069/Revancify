@@ -159,19 +159,20 @@ ytpatches()
         user_input
     fi
     echo Updating patches...
-    python fetch.py yt patches
+    python3 fetch.py yt patches
     sed -i '/microg-support/d' youtube_patches.txt
     sed -i '/enable-debugging/d' youtube_patches.txt
+    echo "$(nl -n rz -w2 -s " " youtube_patches.txt)" > youtube_patches.txt
     sleep 1
     cmd=(dialog --separate-output --checklist "Select patches to include" 22 76 16)
     options=()
-    nums=()
+    len="$(wc -l < youtube_patches.txt)"
+    mapfile -t nums < <(seq -w 1 $len)
     while read -r line
     do
         read -r -a arr <<< "$line"
         options+=("${arr[@]}")
-        nums+=("${arr[0]}")
-    done < <(nl -n rz -w2 -s " " youtube_patches.txt)
+    done < <(cat youtube_patches.txt)
     mapfile -t choices < <("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     clear
     for num in "${nums[@]}"
@@ -193,21 +194,25 @@ ytmpatches()
         user_input
     fi
     echo Updating Patches...
-    python fetch.py ytm patches
+    python3 fetch.py yt patches
+    sed -i '/microg-support/d' youtube_patches.txt
+    sed -i '/enable-debugging/d' youtube_patches.txt
+    echo "$(nl -n rz -w2 -s " " youtube_patches.txt)" > youtube_patches.txt
+    sleep 1
     cmd=(dialog --separate-output --checklist "Select patches to include" 22 76 16)
     options=()
-    nums=()
+    len="$(wc -l < youtube_patches.txt)"
+    mapfile -t nums < <(seq -w 1 $len)
     while read -r line
     do
         read -r -a arr <<< "$line"
         options+=("${arr[@]}")
-        nums+=("${arr[0]}")
-    done < <(nl -n rz -w2 -s " " youtube_patches.txt)
+    done < <(cat youtube_patches.txt)
     mapfile -t choices < <("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     clear
     for num in "${nums[@]}"
     do
-        echo "${choices[@]}" | grep -q "$num" && sed -i "/$num/s/ off/ on/" youtubemusic_patches.txt
+        echo "${choices[@]}" | grep -q "$num" || sed -i "/$num/s/ on/ off/" youtube_patches.txt
     done
     intro
     user_input
@@ -753,10 +758,10 @@ if [ "$appname" = "YouTube" ]
 then
     [[ ! -f youtube_patches.txt ]] && python3 fetch.py yt patches
     excludeyt=$(while read -r line; do
-        patch=$(echo "$line"| cut -d " " -f 2)
+        patch=$(echo "$line"| cut -d " " -f 5)
         printf -- "-e "
-        printf "%s" "$patch "
-    done < <(grep -v " off" youtube_patches.txt))
+        printf "%s""$patch "
+    done < <(grep " off" youtube_patches.txt))
     if [ "$variant" = "root" ]
     then
         ytver=$( su -c dumpsys package com.google.android.youtube | grep versionName | cut -d= -f 2)
@@ -834,10 +839,10 @@ elif [ "$appname" = "YouTubeMusic" ]
 then
     [[ ! -f youtube_patches.txt ]] && python3 fetch.py yt patches
     excludeytm=$(while read -r line; do
-        patch=$(echo "$line"| cut -d " " -f 2)
+        patch=$(echo "$line"| cut -d " " -f 5)
         printf -- "-e "
-        printf "%s" "$patch "
-    done < <(grep -v " off" youtubemusic_patches.txt))
+        printf "%s""$patch "
+    done < <(grep " off" youtubemusic_patches.txt))
     if [ "$variant" = "root" ]
     then
         ytmver=$(su -c dumpsys package com.google.android.apps.youtube.music | grep versionName | cut -d= -f 2 )
@@ -856,7 +861,7 @@ then
             get_components
             ytm_dl &&
             echo Building YouTube Music Revanced...
-            java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* -e music-microg-support "$excludeytm" --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2 --experimental
+            java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* -e music-microg-support -e "$excludeytm" --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2 --experimental
             echo "Mounting the app"
             if su -mm -c 'stockapp=$(pm path com.google.android.apps.youtube.music | grep base | sed 's/package://g' ); grep com.google.android.apps.youtube.music /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l; done && mv com.google.android.apps.youtube.music.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.apps.youtube.music && exit'
             then
