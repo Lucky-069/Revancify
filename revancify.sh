@@ -149,6 +149,70 @@ options(){
     user_input
 }
 
+ytpatches()
+{
+    read -p "All saved patches will be reset. Do you want to continue? [y/n] " patchprompt
+    if [[ "$patchprompt" =~ [Y,y] ]]
+    then
+        :
+    else
+        user_input
+    fi
+    Updating patches...
+    python fetch.py yt patches
+    sleep 1
+    cmd=(dialog --separate-output --checklist "Select patches to include:" 22 76 16)
+    options=()
+    nums=()
+    while read -r line
+    do
+        read -r -a arr <<< "$line"
+        options+=("${arr[@]}")
+        nums+=("${arr[0]}")
+    done < <(cat youtube_patches.txt)
+    mapfile -t choices < <("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+    clear
+    for num in "${nums[@]}"
+    do
+        echo "${choices[@]}" | grep -q "$num" && sed -i "/$num/s/ off/ on/" youtube_patches.txt || sed -i "/$num/s/ on/ off/" youtube_patches.txt
+    done
+    intro
+    user_input
+}
+
+ytmpatches()
+{
+    read -p "All saved patches will be reset. Do you want to continue? [y/n] " patchprompt
+    if [[ "$patchprompt" =~ [Y,y] ]]
+    then
+        :
+    else
+        user_input
+    fi
+    echo Updating Patches...
+    python fetch.py ytm patches
+    cmd=(dialog --separate-output --checklist "Select patches to include" 22 76 16)
+    options=()
+    nums=()
+    while read -r line
+    do
+        read -r -a arr <<< "$line"
+        options+=("${arr[@]}")
+        nums+=("${arr[0]}")
+    done < <(cat youtube_patches.txt)
+    mapfile -t choices < <("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+    clear
+    for num in "${nums[@]}"
+    do
+        echo "${choices[@]}" | grep -q "$num" && sed -i "/$num/s/ off/ on/" youtubemusic_patches.txt || sed -i "/$num/s/ on/ off/" youtubemusic_patches.txt
+    done
+    intro
+    user_input
+}
+
+
+
+
 user_input()
 {
     tput sc
@@ -186,7 +250,7 @@ user_input()
     tput cd
 }
 
-if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/tput ] && [ $(find ~/../usr/lib/ -name "wheel" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "requests" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "bs4" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "lxml" | wc -l) != "0" ] && [ $(find ~/../usr/lib/ -name "cchardet" | wc -l) != "0" ] && [ -e ~/../usr/bin/revancify ] 
+if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/tput ] && [ "$(find ~/../usr/lib/ -name "wheel" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "requests" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "bs4" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "lxml" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "cchardet" | wc -l)" != "0" ] && [ -e ~/../usr/bin/revancify ] 
 then
     intro
     internet
@@ -210,6 +274,9 @@ fi
 tput sc
 echo "Checking for update..."
 sleep 1
+
+
+
 
 
 if [ "$(git pull)" != "Already up to date." ]
@@ -666,6 +733,12 @@ report()
 
 if [ "$appname" = "YouTube" ]
 then
+    [[ ! -f youtube_patches.txt ]] && python3 fetch.py yt patches
+    include=$(while read -r line; do
+        patch=$(echo "$line"| cut -d " " -f 2)
+        printf -- "-i "
+        printf "%s" "$patch "
+    done < <(grep -v " on" youtube_patches.txt))
     if [ "$variant" = "root" ]
     then
         ytver=$( su -c dumpsys package com.google.android.youtube | grep versionName | cut -d= -f 2)
@@ -709,7 +782,7 @@ then
         tput rc; tput cd
         tput sc
         read -p "Download MicroG [y/n]: " mgprompt
-        if [ "$mgprompt" = "y" ]
+        if [[ "$mgprompt" =~ [Y,y] ]]
         then
             microglink="$(sed -n '6p' latest.txt)"
             wget -q -c $microglink -O "Vanced_MicroG.apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
@@ -741,6 +814,12 @@ then
     fi
 elif [ "$appname" = "YouTubeMusic" ]
 then
+    [[ ! -f youtube_patches.txt ]] && python3 fetch.py yt patches
+    include=$(while read -r line; do
+        patch=$(echo "$line"| cut -d " " -f 2)
+        printf -- "-i "
+        printf "%s" "$patch "
+    done < <(grep -v " on" youtubemusic_patches.txt))
     if [ "$variant" = "root" ]
     then
         ytmver=$(su -c dumpsys package com.google.android.apps.youtube.music | grep versionName | cut -d= -f 2 )
@@ -814,7 +893,7 @@ then
             tput rc; tput cd
             tput sc
             read -p "Download MicroG [y/n]: " mgprompt
-            if [ "$mgprompt" = "y" ]
+            if [[ "$mgprompt" =~ [Y,y] ]]
             then
                 microglink="$(sed -n '6p' latest.txt)"
                 wget -q -c $microglink -O "Vanced_MicroG.apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"

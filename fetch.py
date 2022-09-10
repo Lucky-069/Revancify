@@ -58,6 +58,16 @@ def yt_root():
         f.write('\n'.join([patches_version, cli_version, integrations_version, ytver, ytdllink]))
 
 
+# YouTube patches
+def yt_patches():
+    open("youtube_patches.txt", "w").close()
+    a = 0
+    for i in (requests.get('https://raw.githubusercontent.com/revanced/revanced-patches/main/patches.json')).json():
+        if (((i['compatiblePackages'])[0])['name']) == "com.google.android.youtube" and i['deprecated'] != True:
+            a += 1
+            with open("youtube_patches.txt", "a") as p:
+                p.write(str(a).zfill(2) + " " + str(i['name']) + " " + "on" + "\n")
+
 
 # YouTube Music Non Root
 
@@ -143,6 +153,16 @@ def ytm_root():
     elif arch == "armeabi":
         armeabi()
 
+def ytm_patches():
+    open("youtubemusic_patches.txt", "w").close()
+    a = 0
+    for i in (requests.get('https://raw.githubusercontent.com/revanced/revanced-patches/main/patches.json')).json():
+        if (((i['compatiblePackages'])[0])['name']) == "com.google.android.apps.youtube.music" and i['deprecated'] != True:
+            a += 1
+            with open("youtubemusic_patches.txt", "a") as p:
+                p.write(str(a).zfill(2) + " " + str(i['name']) + " " + "on" + "\n")
+
+
 def twitter():
     for a in ((BeautifulSoup((urlopen(Request(url="https://www.apkmirror.com/apk/twitter-inc/", headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find_all(["a"], class_="fontBlack", text=re.compile("^.*.release*"))):
         twver = ((a.string).split(' ')[1]).replace(".", "-")
@@ -209,3 +229,7 @@ elif appname == "reddit" and variant == "both":
     reddit()
 elif appname == "tiktok" and variant == "both":
     tiktok()
+if appname == "yt" and variant == "patches":
+    yt_patches()
+if appname == "ytm" and variant == "patches":
+    ytm_patches()
