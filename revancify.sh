@@ -181,8 +181,6 @@ ytpatches()
 }
 
 
-
-
 ytmpatches()
 {
     read -p "All saved patches will be reset. Do you want to continue? [y/n] " patchprompt
@@ -225,7 +223,7 @@ user_input()
     echo "4. Patch Reddit"
     echo "5. Patch TikTok"
     echo "6. Edit Patches"
-    echo "6. Edit Patch-options"
+    echo "7. Edit Patch-options"
     read -p "Your Input: " input
     if [ "$input" -eq "1" ]
     then
@@ -244,13 +242,14 @@ user_input()
         appname="TikTok"
     elif [ "$input" -eq "6" ]
     then
-         echo "Which app patches do you want to edit?"
+        echo "Which app patches do you want to edit?"
         echo "1. YouTube"
         echo "2. YouTube Music"
-        if [ "$input" -eq "1" ]
+        read -p "Your Input: " patchedit
+        if [ "$patchedit" -eq "1" ]
         then
             ytpatches
-        elif [ "$input" -eq "2" ]
+        elif [ "$patchedit" -eq "2" ]
         then
             ytmpatches
         fi
