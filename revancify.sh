@@ -241,6 +241,18 @@ user_input()
         appname="TikTok"
     elif [ "$input" -eq "6" ]
     then
+         echo "Which app patches do you want to edit?"
+        echo "1. YouTube"
+        echo "2. YouTube Music"
+        if [ "$input" -eq "1" ]
+        then
+            ytpatches
+        elif [ "$input" -eq "2" ]
+        then
+            ytmpatches
+        fi
+    elif [ "$input" -eq "7" ]
+    then
         options
     else
         echo No input given..
