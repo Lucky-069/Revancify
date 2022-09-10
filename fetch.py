@@ -31,12 +31,8 @@ def yt_non_root():
     ytpage2= "".join(["https://apkmirror.com", ((BeautifulSoup((urlopen(Request(url=ytpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["a"], { 'class' : re.compile("accent_bg btn btn-flat downloadButton")})['href'])])
 
     ytdllink = "".join(["https://apkmirror.com", (((BeautifulSoup((urlopen(Request(url=ytpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(rel="nofollow"))['href'])])
-    
-    mgpage1 = "https://www.apkmirror.com/apk/team-vanced/microg-youtube-vanced/microg-youtube-vanced-0-2-24-220220-release/vanced-microg-0-2-24-220220-android-apk-download/"
 
-    mgpage2= "".join(["https://apkmirror.com", ((((BeautifulSoup((urlopen(Request(url=mgpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["svg"], class_="icon download-button-icon")).parent)['href'])])
-
-    mgdllink = "".join(["https://apkmirror.com", (((BeautifulSoup((urlopen(Request(url=mgpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(rel="nofollow"))['href'])])
+    mgdllink = "https://github.com/TeamVanced/VancedMicroG/releases/download/v0.2.24.220220-220220001/microg.apk"
 
     with open("latest.txt", "w") as f:
         f.write('\n'.join([patches_version, cli_version, integrations_version, ytver, ytdllink, mgdllink]))
@@ -85,11 +81,7 @@ def ytm_non_root():
 
         ytmdllink = "".join(["https://apkmirror.com", (((BeautifulSoup((urlopen(Request(url=ytmpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(rel="nofollow"))['href'])])
 
-        mgpage1 = "https://www.apkmirror.com/apk/team-vanced/microg-youtube-vanced/microg-youtube-vanced-0-2-24-220220-release/vanced-microg-0-2-24-220220-android-apk-download/"
-
-        mgpage2= "".join(["https://apkmirror.com", ((((BeautifulSoup((urlopen(Request(url=mgpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["svg"], class_="icon download-button-icon")).parent)['href'])])
-
-        mgdllink = "".join(["https://apkmirror.com", (((BeautifulSoup((urlopen(Request(url=mgpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(rel="nofollow"))['href'])])
+        mgdllink = "https://github.com/TeamVanced/VancedMicroG/releases/download/v0.2.24.220220-220220001/microg.apk"
 
         with open("latest.txt", "w") as f:
             f.write('\n'.join([patches_version, cli_version, integrations_version, ytmver, ytmdllink, mgdllink]))
@@ -109,7 +101,7 @@ def ytm_non_root():
 
         mgpage2= "".join(["https://apkmirror.com", ((((BeautifulSoup((urlopen(Request(url=mgpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["svg"], class_="icon download-button-icon")).parent)['href'])])
 
-        mgdllink = "".join(["https://apkmirror.com", (((BeautifulSoup((urlopen(Request(url=mgpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(rel="nofollow"))['href'])])
+        mgdllink = "https://github.com/TeamVanced/VancedMicroG/releases/download/v0.2.24.220220-220220001/microg.apk"
 
         with open("latest.txt", "w") as f:
             f.write('\n'.join([patches_version, cli_version, integrations_version, ytmver, ytmdllink, mgdllink]))
