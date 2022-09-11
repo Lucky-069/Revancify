@@ -1,7 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-cd ~/storage/Revancify || echo "Revancify directory non found !!"
-
 revive(){
     clear && echo "Script terminated" && tput cnorm && cd ~ && exit
 }
@@ -19,7 +17,7 @@ else
     pkg install python openjdk-17 wget ncurses-utils libxml2 libxslt dialog -y &&
     pip install --upgrade pip &&
     pip install requests wheel bs4 cython cchardet lxml &&
-    cp ./revancify.sh ~/../usr/bin/revancify &&
+    echo "#!/data/data/com.termux/files/usr/bin/bash"\n"cd ~/storage/Revancify/ && bash revancify.sh" > /data/data/com.termux/files/usr/bin/revancify &&
     sed -i 's/# allow-external-apps = true/allow-external-apps = true/g' ~/.termux/termux.properties
     sleep 1
     echo "Dependencies installed successfully."
@@ -65,8 +63,8 @@ if [ "$(git pull)" != "Already up to date." ]
 then
     sleep 1
     tput rc; tput cd
-    cp ./revancify.sh ~/../usr/bin/revancify &&
     echo Revancify updated...
+    printf "#!/data/data/com.termux/files/usr/bin/bash"\n"cd ~/storage/Revancify/ && bash revancify.sh" > /data/data/com.termux/files/usr/bin/revancify
     sleep 1
     echo Run this script again
     sleep 1
