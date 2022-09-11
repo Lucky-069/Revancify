@@ -690,7 +690,7 @@ then
         tput rc; tput cd
         getlink=$(sed -n '5p' latest.txt)
         get_components
-        app_dl TikTok "$appver" "$getlink" &&
+        app_dl YouTubeMusic "$appver" "$getlink" &&
         echo "Building YouTube Music Revanced..."
         java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* -e music-microg-support $excludeytm --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2 --experimental
         echo "Mounting the app"
@@ -743,7 +743,7 @@ then
         appver=$(sed -n '4p' latest.txt | sed 's/-/\./g')
         getlink="$(sed -n '5p' latest.txt)"
         get_components
-        app_dl YouTube-Music "$appver" "$getlink" &&
+        app_dl YouTubeMusic "$appver" "$getlink" &&
         echo "Building YouTube Music Revanced..."
         java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* $excludeytm --keystore ./revanced.keystore -o ./YouTubeMusicRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental
         mv YouTubeMusicRevanced* /storage/emulated/0/Revancify/ &&
