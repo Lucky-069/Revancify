@@ -835,7 +835,7 @@ then
     fi
 elif [ "$appname" = "YouTubeMusic" ]
 then
-    [[ ! -f youtube_patches.txt ]] && python3 fetch.py yt patches
+    [[ ! -f youtubemusic_patches.txt ]] && python3 fetch.py ytm patches
     excludeytm=$(while read -r line; do
         patch=$(echo "$line"| cut -d " " -f 2)
         printf -- " -e "
