@@ -37,7 +37,7 @@ cd storage/Revancify && bash revancify.sh
 ## Method 2:  
 if command 1 fails, use this command, this will delete and reinitialize the repo.
 ```
-cd storage && rm -rf Revancify && git clone https://github.com/decipher3114/Revancify && cd Revancify && bash revancify.sh
+cd storage && rm -rf Revancify && rm ~/../usr/bin/revancify && git clone https://github.com/decipher3114/Revancify && cd Revancify && bash revancify.sh
 ```
 # Uninstallation
 1. Open Termux.  
