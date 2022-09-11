@@ -194,25 +194,24 @@ ytmpatches()
         user_input
     fi
     echo Updating Patches...
-    python3 fetch.py yt patches
-    sed -i '/microg-support/d' youtube_patches.txt
-    sed -i '/enable-debugging/d' youtube_patches.txt
-    echo "$(nl -n rz -w2 -s " " youtube_patches.txt)" > youtube_patches.txt
+    python3 fetch.py ytm patches
+    sed -i '/music-microg-support/d' youtubemusic_patches.txt
+    echo "$(nl -n rz -w2 -s " " youtubemusic_patches.txt)" > youtubemusic_patches.txt
     sleep 1
     cmd=(dialog --separate-output --checklist "Select patches to include" 22 76 16)
     options=()
-    len="$(wc -l < youtube_patches.txt)"
+    len="$(wc -l < youtubemusic_patches.txt)"
     mapfile -t nums < <(seq -w 1 $len)
     while read -r line
     do
         read -r -a arr <<< "$line"
         options+=("${arr[@]}")
-    done < <(cat youtube_patches.txt)
+    done < <(cat youtubemusic_patches.txt)
     mapfile -t choices < <("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     clear
     for num in "${nums[@]}"
     do
-        echo "${choices[@]}" | grep -q "$num" || sed -i "/$num/s/ on/ off/" youtube_patches.txt
+        echo "${choices[@]}" | grep -q "$num" || sed -i "/$num/s/ on/ off/" youtubemusic_patches.txt
     done
     intro
     user_input
