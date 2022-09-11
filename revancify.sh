@@ -151,7 +151,8 @@ options(){
 
 ytpatches()
 {
-    read -p "All saved patches will be reset. Do you want to continue? [y/n] " patchprompt
+    echo "All saved patches will be reset."
+    read -p "Do you want to continue? [y/n] " patchprompt
     if [[ "$patchprompt" =~ [Y,y] ]]
     then
         :
@@ -186,7 +187,8 @@ ytpatches()
 
 ytmpatches()
 {
-    read -p "All saved patches will be reset. Do you want to continue? [y/n] " patchprompt
+    echo "All saved patches will be reset. "
+    read -p "Do you want to continue? [y/n] " patchprompt
     if [[ "$patchprompt" =~ [Y,y] ]]
     then
         :
