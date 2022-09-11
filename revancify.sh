@@ -7,42 +7,78 @@ revive(){
 }
 trap revive SIGINT
 
-
 clear
 
-internet()
-{
-    if wget -q --spider http://google.com
-    then
-        :
-    else
-        echo "Oops, No internet"
-        sleep 1
-        echo "Connect to internet and try again."
-        cd ~
-        tput cnorm
-        exit
-    fi
-}
+if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/dialog ] && [ -e ~/../usr/bin/tput ] && [ "$(find ~/../usr/lib/ -name "wheel" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "requests" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "bs4" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "lxml" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "cchardet" | wc -l)" != "0" ] && [ -e ~/../usr/bin/revancify ] 
+then
+    :
+else
+    echo "Installing dependencies..."
+    sleep 1
+    pkg update -y &&
+    pkg install python openjdk-17 wget ncurses-utils libxml2 libxslt dialog -y &&
+    pip install --upgrade pip &&
+    pip install requests wheel bs4 cython cchardet lxml &&
+    cp ./revancify.sh ~/../usr/bin/revancify &&
+    sed -i 's/# allow-external-apps = true/allow-external-apps = true/g' ~/.termux/termux.properties
+    sleep 1
+    echo "Dependencies installed successfully."
+    sleep 1
+    echo "Run this script again"
+    cd ~ || :
+    exit
+fi
 
-intro()
-{
-    tput civis
-    tput cs 7 $LINES
-    leave1=$(($(($(tput cols) - 34)) / 2))
-    tput cm 0 $leave1
-    echo "█▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█"
-    tput cm 1 $leave1
-    echo "█▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░"
+if wget -q --spider http://google.com
+then
+    :
+else
+    echo "Oops, No internet"
+    sleep 1
+    echo "Connect to internet and try again."
+    cd ~ || :
+    tput cnorm
+    exit
+fi
+
+tput civis
+tput cs 7 $LINES
+leave1=$(($(($(tput cols) - 34)) / 2))
+tput cm 0 $leave1
+echo "█▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█"
+tput cm 1 $leave1
+echo "█▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░"
+echo ""
+leave2=$(($(($(tput cols) - 40)) / 2))
+tput cm 3 $leave2
+echo "█▄▄ █▄█    █▀▄ █▀▀ █▀▀ █ █▀█ █░█ █▀▀ █▀█"
+tput cm 4 $leave2
+echo "█▄█ ░█░    █▄▀ ██▄ █▄▄ █ █▀▀ █▀█ ██▄ █▀▄"
+echo ""
+tput cm 8 0
+
+tput sc
+echo "Checking for update..."
+sleep 1
+
+if [ "$(git pull)" != "Already up to date." ]
+then
+    sleep 1
+    tput rc; tput cd
+    cp ./revancify.sh ~/../usr/bin/revancify &&
+    echo Revancify updated...
+    sleep 1
+    echo Run this script again
+    sleep 1
+    tput cnorm
+    cd ~ || :
+    exit
+else
     echo ""
-    leave2=$(($(($(tput cols) - 40)) / 2))
-    tput cm 3 $leave2
-    echo "█▄▄ █▄█    █▀▄ █▀▀ █▀▀ █ █▀█ █░█ █▀▀ █▀█"
-    tput cm 4 $leave2
-    echo "█▄█ ░█░    █▄▀ ██▄ █▄▄ █ █▀▀ █▀█ ██▄ █▀▄"
-    echo ""
-    tput cm 8 0
-}
+    echo "Script already up to date."
+    sleep 1
+    tput rc; tput cd
+fi
 
 anim()
 {
@@ -91,7 +127,6 @@ anim()
     tput sc
 }
 
-branding="--options options.toml"
 options(){
     tput rc; tput cd
     tput sc
@@ -99,8 +134,8 @@ options(){
     echo "1. Revanced default"
     echo "2. YouTube default"
     echo "3. Custom icon by decipher"
-    read -p "Your input: " iconprompt
-    if [ $iconprompt = "1" ]
+    read -r -p "Your input: " iconprompt
+    if [ "$iconprompt" = "1" ]
     then
         sed -i "s/appIconPath = \".*\"/appIconPath = \"null\"/g" options.toml
         tput rc; tput cd
@@ -108,38 +143,32 @@ options(){
         echo "1. YouTube Revanced"
         echo "2. YouTube"
         read -p "Your input: " nameprompt
-        if [ $nameprompt = "1" ]
+        if [ "$nameprompt" = "1" ]
         then
             name="YouTube Revanced"
-        elif [ $nameprompt = "2" ]
+        elif [ "$nameprompt" = "2" ]
         then
             name="YouTube"
         fi
         sed -i "s/appName = \".*\"/appName = \"$name\"/g" options.toml
-    elif [ $iconprompt = "2" ]
+    elif [ "$iconprompt" = "2" ]
     then
-        branding="-e custom-branding --options.toml"
-    elif [ $iconprompt = "3" ]
+        sed -i 's/custom-branding off/custom-branding on/'
+    elif [ "$iconprompt" = "3" ]
     then
-        if [ -d "revanced-icons" ]
-        then
-            cd revanced-icons
-            git pull > /dev/null 2>&1
-            cd ..
-        else
-            echo "Downloading icons..."
-            git clone https://github.com/decipher3114/revanced-icons.git > /dev/null 2>&1
-        fi
+        cd revanced-icons /dev/null 2>&1 || git clone https://github.com/decipher3114/revanced-icons.git > /dev/null 2>&1
+        git pull > /dev/null 2>&1
+        cd .. || :
         sed -i "s/appIconPath = \".*\"/appIconPath = \"revanced-icons\/youtube\"/g" options.toml
         tput rc; tput cd
         echo "What app name do you want to use?"
         echo "1. YouTube Revanced"
         echo "2. YouTube"
         read -p "Your input: " nameprompt
-        if [ $nameprompt = "1" ]
+        if [ "$nameprompt" = "1" ]
         then
             name="YouTube Revanced"
-        elif [ $nameprompt = "2" ]
+        elif [ "$nameprompt" = "2" ]
         then
             name="YouTube"
         fi
@@ -164,8 +193,7 @@ ytpatches()
     sed -i '/microg-support/d' youtube_patches.txt
     sed -i '/enable-debugging/d' youtube_patches.txt
     echo "$(nl -n rz -w2 -s " " youtube_patches.txt)" > youtube_patches.txt
-    sleep 1
-    cmd=(dialog --keep-tite --separate-output --checklist "Select patches to include" 22 76 16)
+    cmd=(dialog --keep-tite --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 22 90 20)
     options=()
     len="$(wc -l < youtube_patches.txt)"
     mapfile -t nums < <(seq -w 1 $len)
@@ -199,8 +227,7 @@ ytmpatches()
     python3 fetch.py ytm patches
     sed -i '/music-microg-support/d' youtubemusic_patches.txt
     echo "$(nl -n rz -w2 -s " " youtubemusic_patches.txt)" > youtubemusic_patches.txt
-    sleep 1
-    cmd=(dialog --keep-tite --separate-output --checklist "Select patches to include" 22 76 16)
+    cmd=(dialog --keep-tite--ok-label "Save" --no-cancel  --separate-output --checklist "Select patches to include" 22 90 20)
     options=()
     len="$(wc -l < youtubemusic_patches.txt)"
     mapfile -t nums < <(seq -w 1 $len)
@@ -273,53 +300,6 @@ user_input()
     tput cd
 }
 
-if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/dialog ] && [ -e ~/../usr/bin/tput ] && [ "$(find ~/../usr/lib/ -name "wheel" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "requests" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "bs4" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "lxml" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "cchardet" | wc -l)" != "0" ] && [ -e ~/../usr/bin/revancify ] 
-then
-    intro
-    internet
-else
-    echo "Installing dependencies..."
-    sleep 1
-    pkg update -y &&
-    pkg install python openjdk-17 wget ncurses-utils libxml2 libxslt dialog -y &&
-    pip install --upgrade pip &&
-    pip install requests wheel bs4 cython cchardet lxml &&
-    cp ./revancify.sh ~/../usr/bin/revancify &&
-    sed -i 's/# allow-external-apps = true/allow-external-apps = true/g' ~/.termux/termux.properties
-    sleep 1
-    echo "Dependencies installed successfully."
-    sleep 1
-    echo "Run this script again"
-    cd ~ 
-    exit
-fi
-
-tput sc
-echo "Checking for update..."
-sleep 1
-
-
-
-
-
-if [ "$(git pull)" != "Already up to date." ]
-then
-    sleep 1
-    tput rc; tput cd
-    cp ./revancify.sh ~/../usr/bin/revancify &&
-    echo Revancify updated...
-    sleep 1
-    echo Run this script again
-    sleep 1
-    tput cnorm
-    cd ~
-    exit
-else
-    echo ""
-    echo "Script already up to date."
-    sleep 1
-    tput rc; tput cd
-fi
 
 
 arch=$(getprop ro.product.cpu.abi | cut -d "-" -f 1)
@@ -368,7 +348,7 @@ then
             sleep 1
             echo "Install YouTube from PlayStore and run this script again."
             tput cnorm
-            cd ~
+            cd ~ || :
             exit
         fi
     elif [ "$appname" = "YouTubeMusic" ] 
@@ -389,7 +369,7 @@ then
             sleep 1
             echo "Install YouTube Music from PlayStore and run this script again."
             tput cnorm
-            cd ~
+            cd ~ || :
             exit
             
         fi
@@ -422,7 +402,7 @@ get_components(){
             echo "Latest Patches already exixts."
             echo ""
             sleep 1
-            wget -q -c "https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar" --show-progress
+            wget -q -c https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar --show-progress
             sleep 1
             tput rc; tput cd
         else
@@ -435,7 +415,7 @@ get_components(){
             tput rc; tput cd
             echo "Downloading latest Patches..."
             echo " "
-            wget -q -c "https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar" --show-progress 
+            wget -q -c https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar --show-progress 
             sleep 1
             tput rc; tput cd
         fi
@@ -444,7 +424,7 @@ get_components(){
         echo ""
         echo Downloading latest patches file...
         echo ""
-        wget -q -c "https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar" --show-progress 
+        wget -q -c https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar --show-progress 
         sleep 1
         tput rc; tput cd
     fi
@@ -458,7 +438,7 @@ get_components(){
             echo "Latest CLI already exists"
             echo ""
             sleep 1
-            wget -q -c "https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar" -O "revanced-cli-"$cli_latest".jar" --show-progress 
+            wget -q -c https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar -O revanced-cli-"$cli_latest".jar --show-progress 
             sleep 1
             tput rc; tput cd
         else
@@ -471,7 +451,7 @@ get_components(){
             tput rc; tput cd
             echo Downloading latest CLI...
             echo ""
-            wget -q -c "https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar" -O "revanced-cli-"$cli_latest".jar" --show-progress 
+            wget -q -c https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar -O revanced-cli-"$cli_latest".jar --show-progress 
             sleep 1
             tput rc; tput cd
         fi
@@ -480,7 +460,7 @@ get_components(){
         echo ""
         echo Downloading latest CLI...
         echo ""
-        wget -q -c "https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar" -O "revanced-cli-"$cli_latest".jar" --show-progress 
+        wget -q -c https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar -O revanced-cli-"$cli_latest".jar --show-progress 
         sleep 1
         tput rc; tput cd
     fi
@@ -494,7 +474,7 @@ get_components(){
             echo "Latest Integrations already exists"
             echo ""
             sleep 1
-            wget -q -c "https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk" -O "revanced-integrations-"$int_latest".apk" --show-progress  
+            wget -q -c https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk -O revanced-integrations-"$int_latest".apk --show-progress  
             sleep 1
             tput rc; tput cd
         else
@@ -507,7 +487,7 @@ get_components(){
             tput rc; tput cd
             echo "Downloading latest Integrations apk..."
             echo ""
-            wget -q -c "https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk" -O "revanced-integrations-"$int_latest".apk" --show-progress  
+            wget -q -c https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk -O revanced-integrations-"$int_latest".apk --show-progress  
             echo ""
             sleep 1
             tput rc; tput cd
@@ -517,7 +497,7 @@ get_components(){
         echo ""
         echo Downloading latest Integrations apk...
         echo ""
-        wget -q -c "https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk" -O revanced-integrations-$int_latest.apk --show-progress
+        wget -q -c https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk -O revanced-integrations-"$int_latest".apk --show-progress
         sleep 1
         tput rc; tput cd
     fi
@@ -614,7 +594,6 @@ then
         read -p "Download MicroG [y/n]: " mgprompt
         if [[ "$mgprompt" =~ [Y,y] ]]
         then
-            microglink="$(sed -n '6p' latest.txt)"
             wget -q -c "https://github.com/TeamVanced/VancedMicroG/releases/download/v0.2.24.220220-220220001/microg.apk" -O "Vanced_MicroG.apk" --show-progress
             echo ""
             mv "Vanced_MicroG.apk" /storage/emulated/0/Revancify
@@ -714,7 +693,6 @@ then
         read -p "Download MicroG [y/n]: " mgprompt
         if [[ "$mgprompt" =~ [Y,y] ]]
         then
-            microglink="$(sed -n '6p' latest.txt)"
             wget -q -c "https://github.com/TeamVanced/VancedMicroG/releases/download/v0.2.24.220220-220220001/microg.apk" -O "Vanced_MicroG.apk" --show-progress
             echo ""
             mv "Vanced_MicroG.apk" /storage/emulated/0/Revancify
@@ -798,5 +776,5 @@ then
     echo "Thanks for using Revancify..." &&
     termux-open /storage/emulated/0/Revancify/TikTokRevanced-"$appver".apk
 fi
-cd ~
+cd ~ || :
 tput cnorm
