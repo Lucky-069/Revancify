@@ -2,13 +2,8 @@ import requests
 import lxml
 from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
-import cchardet
 import re
 import sys
-
-appname = sys.argv[1]
-variant = sys.argv[2]
-
 
 requests_session = requests.Session()
 patches_version = (((requests_session.get('https://api.github.com/repos/revanced/revanced-patches/releases/latest')).json())['name']).replace("v","")
@@ -16,208 +11,78 @@ cli_version = (((requests_session.get('https://api.github.com/repos/revanced/rev
 integrations_version = (((requests_session.get('https://api.github.com/repos/revanced/revanced-integrations/releases/latest')).json())['name']).replace("v","")
 
 
+if sys.argv[1] == "yt":
+    if sys.argv[2] == "non_root":
+        for i in (requests.get('https://raw.githubusercontent.com/revanced/revanced-patches/main/patches.json')).json():
+            if i['name'] == 'swipe-controls':
+                appver = ((((i['compatiblePackages'])[0])['versions'])[-1])
+                break
+    elif sys.argv[2] == "root":
+        appver = (sys.argv[3])
+    elif sys.argv[2] == "patches":
+        open("youtube_patches.txt", "w").close()
+        for i in (requests.get('https://raw.githubusercontent.com/revanced/revanced-patches/main/patches.json')).json():
+            if (((i['compatiblePackages'])[0])['name']) == "com.google.android.youtube" and i['deprecated'] != True:
+                with open("youtube_patches.txt", "a") as p:
+                    p.write(str(i['name']) + " " + "on" + "\n")
+        sys.exit()
 
-# YouTube NonRoot
+    appurl = "".join(["https://www.apkmirror.com/apk/google-inc/youtube/youtube-", appver.replace(".","-"), "-release/"])
 
-def yt_non_root():
-    for i in (requests.get('https://raw.githubusercontent.com/revanced/revanced-patches/main/patches.json')).json():
-        if i['name'] == 'swipe-controls':
-            ytver = ((((i['compatiblePackages'])[0])['versions'])[-1]).replace(".","-")
-            break
-    yturl = "".join(["https://www.apkmirror.com/apk/google-inc/youtube/youtube-", ytver, "-release/"])
+    apppage1= "".join(["https://apkmirror.com", ((((BeautifulSoup((urlopen(Request(url=appurl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["span"], text="APK")).parent).find(["a"], class_="accent_color")['href'])])
 
-    ytpage1= "".join(["https://apkmirror.com", ((((BeautifulSoup((urlopen(Request(url=yturl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["span"], text="APK")).parent).find(["a"], class_="accent_color")['href'])])
+elif sys.argv[1] == "ytm":
+    if sys.argv[2] == "non_root":
+        for i in (requests.get('https://raw.githubusercontent.com/revanced/revanced-patches/main/patches.json')).json():
+            if i['name'] == 'compact-header':
+                appver = ((((i['compatiblePackages'])[0])['versions'])[-1])
+                break
+    elif sys.argv[2] == "root":
+        appver = sys.argv[4]
+    elif sys.argv[2] == "patches":
+        open("youtubemusic_patches.txt", "w").close()
+        for i in (requests.get('https://raw.githubusercontent.com/revanced/revanced-patches/main/patches.json')).json():
+            if (((i['compatiblePackages'])[0])['name']) == "com.google.android.apps.youtube.music" and i['deprecated'] != True:
+                with open("youtubemusic_patches.txt", "a") as p:
+                    p.write(str(i['name']) + " " + "on" + "\n")
+        sys.exit()
 
-    ytpage2= "".join(["https://apkmirror.com", ((BeautifulSoup((urlopen(Request(url=ytpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["a"], { 'class' : re.compile("accent_bg btn btn-flat downloadButton")})['href'])])
+    appurl = "".join(["https://www.apkmirror.com/apk/google-inc/youtube-music/youtube-music-", appver.replace(".","-"), "-release/"])
 
-    ytdllink = "".join(["https://apkmirror.com", (((BeautifulSoup((urlopen(Request(url=ytpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(rel="nofollow"))['href'])])
-
-    mgdllink = "https://github.com/TeamVanced/VancedMicroG/releases/download/v0.2.24.220220-220220001/microg.apk"
-
-    with open("latest.txt", "w") as f:
-        f.write('\n'.join([patches_version, cli_version, integrations_version, ytver, ytdllink, mgdllink]))
-
-
-# YouTube Root
-
-def yt_root():
-    ytver = (sys.argv[3]).replace(".","-")
-    yturl = "".join(["https://www.apkmirror.com/apk/google-inc/youtube/youtube-", ytver, "-release/"])
-
-    ytpage1= "".join(["https://apkmirror.com", ((((BeautifulSoup((urlopen(Request(url=yturl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["span"], text="APK")).parent).find(["a"], class_="accent_color")['href'])])
-
-    ytpage2= "".join(["https://apkmirror.com", ((BeautifulSoup((urlopen(Request(url=ytpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["a"], { 'class' : re.compile("accent_bg btn btn-flat downloadButton")})['href'])])
-
-    ytdllink = "".join(["https://apkmirror.com", (((BeautifulSoup((urlopen(Request(url=ytpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(rel="nofollow"))['href'])])
-
-    with open("latest.txt", "w") as f:
-        f.write('\n'.join([patches_version, cli_version, integrations_version, ytver, ytdllink]))
-
-
-# YouTube patches
-def yt_patches():
-    open("youtube_patches.txt", "w").close()
-    for i in (requests.get('https://raw.githubusercontent.com/revanced/revanced-patches/main/patches.json')).json():
-        if (((i['compatiblePackages'])[0])['name']) == "com.google.android.youtube" and i['deprecated'] != True:
-            with open("youtube_patches.txt", "a") as p:
-                p.write(str(i['name']) + " " + "on" + "\n")
+    if sys.argv[3] == "arm64":
+        apppage1 = "".join(["https://www.apkmirror.com", (((((BeautifulSoup((urlopen(Request(url=appurl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["div"], text="arm64-v8a")).parent).find(["a"], class_="accent_color"))['href'])])
+    elif sys.argv[3] == "armeabi":
+        apppage1 = "".join(["https://www.apkmirror.com", (((((BeautifulSoup((urlopen(Request(url=appurl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["div"], text="armeabi-v7a")).parent).find(["a"], class_="accent_color"))['href'])])
 
 
-# YouTube Music Non Root
-
-def ytm_non_root():
-    arch = sys.argv[3]
-    for i in (requests.get('https://raw.githubusercontent.com/revanced/revanced-patches/main/patches.json')).json():
-        if i['name'] == 'compact-header':
-            ytmver = ((((i['compatiblePackages'])[0])['versions'])[-1]).replace(".","-")
-            break
-    # arch = arm64
-    def arm64():
-        ytmurl = "".join(["https://www.apkmirror.com/apk/google-inc/youtube-music/youtube-music-", ytmver, "-release/"])
-
-        ytmpage1 = "".join(["https://www.apkmirror.com", (((((BeautifulSoup((urlopen(Request(url=ytmurl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["div"], text="arm64-v8a")).parent).find(["a"], class_="accent_color"))['href'])])
-
-        ytmpage2 = "".join(["https://www.apkmirror.com", ((BeautifulSoup((urlopen(Request(url=ytmpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["a"], { 'class' : re.compile("accent_bg btn btn-flat downloadButton")})['href'])])
-
-        ytmdllink = "".join(["https://apkmirror.com", (((BeautifulSoup((urlopen(Request(url=ytmpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(rel="nofollow"))['href'])])
-
-        mgdllink = "https://github.com/TeamVanced/VancedMicroG/releases/download/v0.2.24.220220-220220001/microg.apk"
-
-        with open("latest.txt", "w") as f:
-            f.write('\n'.join([patches_version, cli_version, integrations_version, ytmver, ytmdllink, mgdllink]))
-
-
-    # arch = armeabi
-    def armeabi():
-        ytmurl = "".join(["https://www.apkmirror.com/apk/google-inc/youtube-music/youtube-music-", ytmver, "-release/"])
-
-        ytmpage1 = "".join(["https://www.apkmirror.com", (((((BeautifulSoup((urlopen(Request(url=ytmurl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["div"], text="armeabi-v7a")).parent).find(["a"], class_="accent_color"))['href'])])
-
-        ytmpage2 = "".join(["https://www.apkmirror.com", ((BeautifulSoup((urlopen(Request(url=ytmpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["a"], { 'class' : re.compile("accent_bg btn btn-flat downloadButton")})['href'])])
-
-        ytmdllink = "".join(["https://apkmirror.com", (((BeautifulSoup((urlopen(Request(url=ytmpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(rel="nofollow"))['href'])])
-
-        mgpage1 = "https://www.apkmirror.com/apk/team-vanced/microg-youtube-vanced/microg-youtube-vanced-0-2-24-220220-release/vanced-microg-0-2-24-220220-android-apk-download/"
-
-        mgpage2= "".join(["https://apkmirror.com", ((((BeautifulSoup((urlopen(Request(url=mgpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["svg"], class_="icon download-button-icon")).parent)['href'])])
-
-        mgdllink = "https://github.com/TeamVanced/VancedMicroG/releases/download/v0.2.24.220220-220220001/microg.apk"
-
-        with open("latest.txt", "w") as f:
-            f.write('\n'.join([patches_version, cli_version, integrations_version, ytmver, ytmdllink, mgdllink]))
-
-
-    if arch == "arm64":
-        arm64()
-    elif arch == "armeabi":
-        armeabi()
-
-def ytm_root():
-    arch = sys.argv[3]
-    ytmver = sys.argv[4]
-    def arm64():
-        ytmurl = "".join(["https://www.apkmirror.com/apk/google-inc/youtube-music/youtube-music-", ytmver, "-release/"])
-
-        ytmpage1 = "".join(["https://www.apkmirror.com", (((((BeautifulSoup((urlopen(Request(url=ytmurl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["div"], text="arm64-v8a")).parent).find(["a"], class_="accent_color"))['href'])])
-
-        ytmpage2 = "".join(["https://www.apkmirror.com", ((BeautifulSoup((urlopen(Request(url=ytmpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["a"], { 'class' : re.compile("accent_bg btn btn-flat downloadButton")})['href'])])
-
-        ytmdllink = "".join(["https://apkmirror.com", (((BeautifulSoup((urlopen(Request(url=ytmpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(rel="nofollow"))['href'])])
-
-        with open("latest.txt", "w") as f:
-            f.write('\n'.join([patches_version, cli_version, integrations_version, ytmver, ytmdllink]))
-
-    def armeabi():
-        ytmurl = "".join(["https://www.apkmirror.com/apk/google-inc/youtube-music/youtube-music-", ytmver, "-release/"])
-
-        ytmpage1 = "".join(["https://www.apkmirror.com", (((((BeautifulSoup((urlopen(Request(url=ytmurl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["div"], text="armeabi-v7a")).parent).find(["a"], class_="accent_color"))['href'])])
-
-        ytmpage2 = "".join(["https://www.apkmirror.com", ((BeautifulSoup((urlopen(Request(url=ytmpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["a"], { 'class' : re.compile("accent_bg btn btn-flat downloadButton")})['href'])])
-
-        ytmdllink = "".join(["https://apkmirror.com", (((BeautifulSoup((urlopen(Request(url=ytmpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(rel="nofollow"))['href'])])
-
-        with open("latest.txt", "w") as f:
-            f.write('\n'.join([patches_version, cli_version, integrations_version, ytmver, ytmdllink]))
-    if arch == "arm64":
-        arm64()
-    elif arch == "armeabi":
-        armeabi()
-
-def ytm_patches():
-    open("youtubemusic_patches.txt", "w").close()
-    for i in (requests.get('https://raw.githubusercontent.com/revanced/revanced-patches/main/patches.json')).json():
-        if (((i['compatiblePackages'])[0])['name']) == "com.google.android.apps.youtube.music" and i['deprecated'] != True:
-            with open("youtubemusic_patches.txt", "a") as p:
-                p.write(str(i['name']) + " " + "on" + "\n")
-
-
-def twitter():
+elif sys.argv[1] == "twitter":
     for a in ((BeautifulSoup((urlopen(Request(url="https://www.apkmirror.com/apk/twitter-inc/", headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find_all(["a"], class_="fontBlack", text=re.compile("^.*.release*"))):
-        twver = ((a.string).split(' ')[1]).replace(".", "-")
+        appver = ((a.string).split(' ')[1])
         break
-    twurl = "".join(["https://www.apkmirror.com/apk/twitter-inc/twitter/twitter-", twver, "-release/"])
+    appurl = "".join(["https://www.apkmirror.com/apk/twitter-inc/twitter/twitter-", appver.replace(".","-"), "-release/"])
 
-    twpage1= "".join(["https://apkmirror.com", ((((BeautifulSoup((urlopen(Request(url=twurl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["span"], text="APK")).parent).find(["a"], class_="accent_color")['href'])])
+    apppage1= "".join(["https://apkmirror.com", ((((BeautifulSoup((urlopen(Request(url=appurl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["span"], text="APK")).parent).find(["a"], class_="accent_color")['href'])])
 
-    twpage2= "".join(["https://apkmirror.com", ((BeautifulSoup((urlopen(Request(url=twpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["a"], { 'class' : re.compile("accent_bg btn btn-flat downloadButton")})['href'])])
-
-    twdllink = "".join(["https://apkmirror.com", (((BeautifulSoup((urlopen(Request(url=twpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(rel="nofollow"))['href'])])
-
-    with open("latest.txt", "w") as f:
-        f.write('\n'.join([patches_version, cli_version, integrations_version, twver, twdllink]))
-
-
-def reddit():
+elif sys.argv[1] == "reddit":
     for a in ((BeautifulSoup((urlopen(Request(url="https://www.apkmirror.com/apk/redditinc/", headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find_all(["a"], class_="fontBlack")): 
-        rdver = ((a.string).split(' ')[1]).replace(".", "-")
+        appver = ((a.string).split(' ')[1])
         break
-    rdurl = "".join(["https://www.apkmirror.com/apk/reddditinc/reddit/reddit-", rdver, "-release/"])
+    appurl = "".join(["https://www.apkmirror.com/apk/reddditinc/reddit/reddit-", appver.replace(".","-"), "-release/"])
 
-    rdpage1= "".join(["https://apkmirror.com", ((((BeautifulSoup((urlopen(Request(url=rdurl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["span"], text="APK")).parent).find(["a"], class_="accent_color")['href'])])
-
-    rdpage2= "".join(["https://apkmirror.com", ((BeautifulSoup((urlopen(Request(url=rdpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["a"], { 'class' : re.compile("accent_bg btn btn-flat downloadButton")})['href'])])
-
-    rddllink = "".join(["https://apkmirror.com", (((BeautifulSoup((urlopen(Request(url=rdpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(rel="nofollow"))['href'])])
-
-    with open("latest.txt", "w") as f:
-        f.write('\n'.join([patches_version, cli_version, integrations_version, rdver, rddllink]))
-
-
-def tiktok():
-    for a in ((BeautifulSoup((urlopen(Request(url="https://www.apkmirror.com/uploads/?appcategory=tik-tok/",headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find_all(["a"], class_="fontBlack")):
-        ttver = ((a.string).split(' ')[1]).replace(".", "-")
+    apppage1= "".join(["https://apkmirror.com", ((((BeautifulSoup((urlopen(Request(url=appurl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["span"], text="APK")).parent).find(["a"], class_="accent_color")['href'])])
+elif sys.argv[1] == "tiktok":
+    for a in ((BeautifulSoup((urlopen(Request(url="https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok/",headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find_all(["a"], class_="fontBlack")):
+        appver = ((a.string).split(' ')[1])
         break
 
-    tturl = "".join(["https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok/tik-tok-", ttver, "-release/"])
+    appurl = "".join(["https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok/tik-tok-", appver.replace(".","-"), "-release/"])
 
-    ttpage1= "".join(["https://apkmirror.com", ((((BeautifulSoup((urlopen(Request(url=tturl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["span"], text="APK")).parent).find(["a"], class_="accent_color")['href'])])
+    apppage1= "".join(["https://apkmirror.com", ((((BeautifulSoup((urlopen(Request(url=appurl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["span"], text="APK")).parent).find(["a"], class_="accent_color")['href'])])
 
-    ttpage2= "".join(["https://apkmirror.com", ((BeautifulSoup((urlopen(Request(url=ttpage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["a"], { 'class' : re.compile("accent_bg btn btn-flat downloadButton")})['href'])])
+apppage2= "".join(["https://apkmirror.com", ((BeautifulSoup((urlopen(Request(url=apppage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["a"], { 'class' : re.compile("accent_bg btn btn-flat downloadButton")})['href'])])
 
-    ttdllink = "".join(["https://apkmirror.com", (((BeautifulSoup((urlopen(Request(url=ttpage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(rel="nofollow"))['href'])])
+appdllink = "".join(["https://apkmirror.com", (((BeautifulSoup((urlopen(Request(url=apppage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(rel="nofollow"))['href'])])
 
-    with open("latest.txt", "w") as f:
-            f.write('\n'.join([patches_version, cli_version, integrations_version, ttver, ttdllink]))
+with open("latest.txt", "w") as f:
+        f.write('\n'.join([patches_version, cli_version, integrations_version, appver, appdllink]))
 
-
-
-
-
-if appname == "yt" and variant == "non_root":
-    yt_non_root()
-elif appname == "yt" and variant == "root":
-    yt_root()
-elif appname == "ytm" and variant == "non_root":
-    ytm_non_root()
-elif appname == "ytm" and variant == "root":
-    ytm_root()
-elif appname == "twitter" and variant == "both":
-    twitter()
-elif appname == "reddit" and variant == "both":
-    reddit()
-elif appname == "tiktok" and variant == "both":
-    tiktok()
-if appname == "yt" and variant == "patches":
-    yt_patches()
-if appname == "ytm" and variant == "patches":
-    ytm_patches()
