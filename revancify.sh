@@ -159,7 +159,7 @@ ytpatches()
         user_input
     fi
     echo Updating patches...
-    python3 fetch.py yt patches
+    python3 fetch.py ytpatches
     sed -i '/microg-support/d' youtube_patches.txt
     sed -i '/enable-debugging/d' youtube_patches.txt
     echo "$(nl -n rz -w2 -s " " youtube_patches.txt)" > youtube_patches.txt
@@ -194,7 +194,7 @@ ytmpatches()
         user_input
     fi
     echo Updating Patches...
-    python3 fetch.py ytm patches
+    python3 fetch.py ytmpatches
     sed -i '/music-microg-support/d' youtubemusic_patches.txt
     echo "$(nl -n rz -w2 -s " " youtubemusic_patches.txt)" > youtubemusic_patches.txt
     sleep 1
@@ -424,7 +424,7 @@ get_components(){
             echo "Latest Patches already exixts."
             echo ""
             sleep 1
-            wget -q -c "https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+            wget -q -c "https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar" --show-progress
             sleep 1
             tput rc; tput cd
         else
@@ -438,7 +438,7 @@ get_components(){
             tput rc; tput cd
             echo "Downloading latest Patches..."
             echo " "
-            wget -q -c "https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+            wget -q -c "https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar" --show-progress 
             sleep 1
             tput rc; tput cd
         fi
@@ -448,7 +448,7 @@ get_components(){
         echo ""
         echo Downloading latest patches file...
         echo ""
-        wget -q -c "https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+        wget -q -c "https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar" --show-progress 
         sleep 1
         tput rc; tput cd
     fi
@@ -463,7 +463,7 @@ get_components(){
             echo "Latest CLI already exists"
             echo ""
             sleep 1
-            wget -q -c "https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar" -O "revanced-cli-"$cli_latest".jar" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+            wget -q -c "https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar" -O "revanced-cli-"$cli_latest".jar" --show-progress 
             sleep 1
             tput rc; tput cd
         else
@@ -477,7 +477,7 @@ get_components(){
             tput rc; tput cd
             echo Downloading latest CLI...
             echo ""
-            wget -q -c "https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar" -O "revanced-cli-"$cli_latest".jar" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+            wget -q -c "https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar" -O "revanced-cli-"$cli_latest".jar" --show-progress 
             sleep 1
             tput rc; tput cd
         fi
@@ -487,7 +487,7 @@ get_components(){
         echo ""
         echo Downloading latest CLI...
         echo ""
-        wget -q -c "https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar" -O "revanced-cli-"$cli_latest".jar" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+        wget -q -c "https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar" -O "revanced-cli-"$cli_latest".jar" --show-progress 
         sleep 1
         tput rc; tput cd
     fi
@@ -502,7 +502,7 @@ get_components(){
             echo "Latest Integrations already exists"
             echo ""
             sleep 1
-            wget -q -c "https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk" -O "revanced-integrations-"$int_latest".apk" --show-progress  --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+            wget -q -c "https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk" -O "revanced-integrations-"$int_latest".apk" --show-progress  
             sleep 1
             tput rc; tput cd
         else
@@ -516,7 +516,7 @@ get_components(){
             tput rc; tput cd
             echo "Downloading latest Integrations apk..."
             echo ""
-            wget -q -c "https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk" -O "revanced-integrations-"$int_latest".apk" --show-progress  --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+            wget -q -c "https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk" -O "revanced-integrations-"$int_latest".apk" --show-progress  
             echo ""
             sleep 1
             tput rc; tput cd
@@ -527,7 +527,7 @@ get_components(){
         echo ""
         echo Downloading latest Integrations apk...
         echo ""
-        wget -q -c "https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk" -O revanced-integrations-$int_latest.apk --show-progress  --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+        wget -q -c "https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk" -O revanced-integrations-$int_latest.apk --show-progress
         sleep 1
         tput rc; tput cd
     fi
@@ -579,7 +579,7 @@ app_dl()
 
 if [ "$appname" = "YouTube" ]
 then
-    [[ ! -f youtube_patches.txt ]] && python3 fetch.py yt patches
+    [[ ! -f youtube_patches.txt ]] && python3 fetch.py ytpatches
     excludeyt=$(while read -r line; do
         patch=$(echo "$line"| cut -d " " -f 2)
         printf -- " -e "
@@ -588,8 +588,7 @@ then
     if [ "$variant" = "root" ]
     then
         appver=$( su -c dumpsys package com.google.android.youtube | grep versionName | cut -d= -f 2)
-        getapp=${appver//./-}
-        python fetch.py yt root $getapp & pid=$!
+        python fetch.py yt root "$appver" & pid=$!
         trap 'kill $pid 2> /dev/null' EXIT
         while kill -0 $pid 2> /dev/null; do
             anim
@@ -630,7 +629,7 @@ then
         if [[ "$mgprompt" =~ [Y,y] ]]
         then
             microglink="$(sed -n '6p' latest.txt)"
-            wget -q -c "$microglink" -O "Vanced_MicroG.apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+            wget -q -c "https://github.com/TeamVanced/VancedMicroG/releases/download/v0.2.24.220220-220220001/microg.apk" -O "Vanced_MicroG.apk" --show-progress
             echo ""
             mv "Vanced_MicroG.apk" /storage/emulated/0/Revancify
             echo MicroG App saved to Revancify folder.
@@ -639,7 +638,7 @@ then
             :
         fi
         tput rc; tput cd
-        appver=$(sed -n '4p' latest.txt | sed 's/-/\./g')
+        appver=$(sed -n '4p' latest.txt)
         getlink="$(sed -n '5p' latest.txt)"
         get_components
         app_dl YouTube "$appver" "$getlink" &&
@@ -659,7 +658,7 @@ then
     fi
 elif [ "$appname" = "YouTubeMusic" ]
 then
-    [[ ! -f youtubemusic_patches.txt ]] && python3 fetch.py ytm patches
+    [[ ! -f youtubemusic_patches.txt ]] && python3 fetch.py ytmpatches
     excludeytm=$(while read -r line; do
         patch=$(echo "$line"| cut -d " " -f 2)
         printf -- " -e "
@@ -668,10 +667,9 @@ then
     if [ "$variant" = "root" ]
     then
         appver=$(su -c dumpsys package com.google.android.apps.youtube.music | grep versionName | cut -d= -f 2 )
-        getapp="${appver//./-}"
         if [ "$arch" = "arm64" ]
         then
-            python fetch.py ytm root arm64 $getapp & pid=$!
+            python fetch.py ytm root arm64 "$appver" & pid=$!
             trap 'kill $pid 2> /dev/null' EXIT
             while kill -0 $pid 2> /dev/null; do
                 anim
@@ -679,7 +677,7 @@ then
             trap - EXIT
         elif [ "$arch" = "armeabi" ]
         then
-            python fetch.py ytm root armeabi $getapp & pid=$!
+            python fetch.py ytm root armeabi "$appver" & pid=$!
             trap 'kill $pid 2> /dev/null' EXIT
             while kill -0 $pid 2> /dev/null; do
                 anim
@@ -732,7 +730,7 @@ then
         if [[ "$mgprompt" =~ [Y,y] ]]
         then
             microglink="$(sed -n '6p' latest.txt)"
-            wget -q -c $microglink -O "Vanced_MicroG.apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+            wget -q -c "https://github.com/TeamVanced/VancedMicroG/releases/download/v0.2.24.220220-220220001/microg.apk" -O "Vanced_MicroG.apk" --show-progress
             echo ""
             mv "Vanced_MicroG.apk" /storage/emulated/0/Revancify
             echo MicroG App saved to Revancify folder.
@@ -761,7 +759,7 @@ then
     trap - EXIT
     sleep 1
     tput rc; tput cd
-    appver=$(sed -n '4p' latest.txt | sed 's/-/\./g' )
+    appver=$(sed -n '4p' latest.txt)
     getlink="$(sed -n '5p' latest.txt)"
     get_components
     app_dl Twitter "$appver" "$getlink" &&
@@ -782,7 +780,7 @@ then
     trap - EXIT
     sleep 1
     tput rc; tput cd
-    appver=$(sed -n '4p' latest.txt | sed 's/-/\./g' )
+    appver=$(sed -n '4p' latest.txt)
     getlink="$(sed -n '5p' latest.txt)"
     get_components
     app_dl Reddit "$appver" "$getlink" &&
@@ -803,7 +801,7 @@ then
     trap - EXIT
     sleep 1
     tput rc; tput cd
-    appver=$(sed -n '4p' latest.txt | sed 's/-/\./g' )
+    appver=$(sed -n '4p' latest.txt)
     getlink="$(sed -n '5p' latest.txt)"
     get_components
     app_dl TikTok "$appver" "$getlink" &&
