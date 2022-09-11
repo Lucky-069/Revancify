@@ -23,7 +23,7 @@ else
     echo "Dependencies installed successfully."
     sleep 1
     echo "Run this script again"
-    cd ~ || :
+    cd ~
     exit
 fi
 
@@ -34,7 +34,7 @@ else
     echo "Oops, No internet"
     sleep 1
     echo "Connect to internet and try again."
-    cd ~ || :
+    cd ~
     tput cnorm
     exit
 fi
@@ -69,7 +69,7 @@ then
     echo Run this script again
     sleep 1
     tput cnorm
-    cd ~ || :
+    cd ~
     exit
 else
     echo ""
@@ -346,7 +346,7 @@ then
             sleep 1
             echo "Install YouTube from PlayStore and run this script again."
             tput cnorm
-            cd ~ || :
+            cd ~
             exit
         fi
     elif [ "$appname" = "YouTubeMusic" ] 
@@ -367,7 +367,7 @@ then
             sleep 1
             echo "Install YouTube Music from PlayStore and run this script again."
             tput cnorm
-            cd ~ || :
+            cd ~
             exit
             
         fi
@@ -774,5 +774,5 @@ then
     echo "Thanks for using Revancify..." &&
     termux-open /storage/emulated/0/Revancify/TikTokRevanced-"$appver".apk
 fi
-cd ~ || :
+cd ~
 tput cnorm
