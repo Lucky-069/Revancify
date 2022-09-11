@@ -164,7 +164,6 @@ ytpatches()
     sed -i '/enable-debugging/d' youtube_patches.txt
     echo "$(nl -n rz -w2 -s " " youtube_patches.txt)" > youtube_patches.txt
     sleep 1
-    tput rc; tput cd
     cmd=(dialog --keep-tite --separate-output --checklist "Select patches to include" 22 76 16)
     options=()
     len="$(wc -l < youtube_patches.txt)"
@@ -174,6 +173,7 @@ ytpatches()
         read -r -a arr <<< "$line"
         options+=("${arr[@]}")
     done < <(cat youtube_patches.txt)
+    tput rc; tput cd
     mapfile -t choices < <("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     for num in "${nums[@]}"
     do
@@ -198,7 +198,6 @@ ytmpatches()
     sed -i '/music-microg-support/d' youtubemusic_patches.txt
     echo "$(nl -n rz -w2 -s " " youtubemusic_patches.txt)" > youtubemusic_patches.txt
     sleep 1
-    tput rc; tput cd
     cmd=(dialog --keep-tite --separate-output --checklist "Select patches to include" 22 76 16)
     options=()
     len="$(wc -l < youtubemusic_patches.txt)"
@@ -208,8 +207,8 @@ ytmpatches()
         read -r -a arr <<< "$line"
         options+=("${arr[@]}")
     done < <(cat youtubemusic_patches.txt)
+    tput rc; tput cd
     mapfile -t choices < <("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
-    clear
     for num in "${nums[@]}"
     do
         echo "${choices[@]}" | grep -q "$num" || sed -i "/$num/s/ on/ off/" youtubemusic_patches.txt
