@@ -159,12 +159,12 @@ ytpatches()
         user_input
     fi
     echo Updating patches...
-    python3 fetch.py ytpatches
+    python3 fetch.py yt patches
     sed -i '/microg-support/d' youtube_patches.txt
     sed -i '/enable-debugging/d' youtube_patches.txt
     echo "$(nl -n rz -w2 -s " " youtube_patches.txt)" > youtube_patches.txt
     sleep 1
-    cmd=(dialog --separate-output --checklist "Select patches to include" 22 76 16)
+    cmd=(dialog --keep-tite --separate-output --checklist "Select patches to include" 22 76 16)
     options=()
     len="$(wc -l < youtube_patches.txt)"
     mapfile -t nums < <(seq -w 1 $len)
@@ -174,12 +174,11 @@ ytpatches()
         options+=("${arr[@]}")
     done < <(cat youtube_patches.txt)
     mapfile -t choices < <("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
-    clear
     for num in "${nums[@]}"
     do
         echo "${choices[@]}" | grep -q "$num" || sed -i "/$num/s/ on/ off/" youtube_patches.txt
     done
-    intro
+    tput rc; tput cd
     user_input
 }
 
@@ -194,7 +193,7 @@ ytmpatches()
         user_input
     fi
     echo Updating Patches...
-    python3 fetch.py ytmpatches
+    python3 fetch.py ytm patches
     sed -i '/music-microg-support/d' youtubemusic_patches.txt
     echo "$(nl -n rz -w2 -s " " youtubemusic_patches.txt)" > youtubemusic_patches.txt
     sleep 1
@@ -213,7 +212,7 @@ ytmpatches()
     do
         echo "${choices[@]}" | grep -q "$num" || sed -i "/$num/s/ on/ off/" youtubemusic_patches.txt
     done
-    intro
+    tput rc; tput cd
     user_input
 }
 
@@ -221,7 +220,6 @@ ytmpatches()
 
 user_input()
 {
-    tput sc
     echo "Which do you want to do?"
     echo "1. Patch YouTube"
     echo "2. Patch YouTube Music"
@@ -346,7 +344,6 @@ then
         su -c cp mountytm.sh /data/adb/service.d/
         su -c chmod +x /data/adb/service.d/mountytm.sh
     fi
-    tput sc
     echo "SU Status: Root"
     echo ""
     sleep 1
@@ -397,7 +394,6 @@ then
 else
     variant="non_root"
     mkdir -p /storage/emulated/0/Revancify
-    tput sc
     echo "SU Status: Non Root"
     sleep 1
     tput rc; tput ed
@@ -420,7 +416,6 @@ get_components(){
         patches_available=$(basename revanced-patches* .jar | cut -d '-' -f 3) #get version
         if [ "$patches_latest" = "$patches_available" ]
         then
-            tput sc
             echo "Latest Patches already exixts."
             echo ""
             sleep 1
@@ -428,7 +423,6 @@ get_components(){
             sleep 1
             tput rc; tput cd
         else
-            tput sc
             echo "Patches update available"
             sleep 1
             tput rc; tput cd
@@ -443,7 +437,6 @@ get_components(){
             tput rc; tput cd
         fi
     else
-        tput sc
         echo "No patches found in local storage"
         echo ""
         echo Downloading latest patches file...
@@ -459,7 +452,6 @@ get_components(){
         cli_available=$(basename revanced-cli* .jar | cut -d '-' -f 3) #get version
         if [ "$cli_latest" = "$cli_available" ]
         then
-            tput sc
             echo "Latest CLI already exists"
             echo ""
             sleep 1
@@ -467,7 +459,6 @@ get_components(){
             sleep 1
             tput rc; tput cd
         else
-            tput sc
             echo "CLI update available"
             sleep 1
             tput rc; tput cd
@@ -482,7 +473,6 @@ get_components(){
             tput rc; tput cd
         fi
     else
-        tput sc
         echo "No CLI found locally"
         echo ""
         echo Downloading latest CLI...
@@ -498,7 +488,6 @@ get_components(){
         int_available=$(basename revanced-integrations* .apk | cut -d '-' -f 3) #get version
         if [ "$int_latest" = "$int_available" ]
         then
-            tput sc
             echo "Latest Integrations already exists"
             echo ""
             sleep 1
@@ -506,7 +495,6 @@ get_components(){
             sleep 1
             tput rc; tput cd
         else
-            tput sc
             echo "Integrations update available"
             sleep 1
             tput rc; tput cd
@@ -522,7 +510,6 @@ get_components(){
             tput rc; tput cd
         fi
     else
-        tput sc
         echo "No Integrations found locally"
         echo ""
         echo Downloading latest Integrations apk...
@@ -541,7 +528,6 @@ app_dl()
     then
         app_available=$(basename "$1"-* .apk | cut -d '-' -f 2) #get version
         if [ "$2" = "$app_available" ];then
-            tput sc
             echo "$1 already on latest version"
             echo ""
             sleep 1
@@ -549,7 +535,6 @@ app_dl()
             sleep 1
             tput rc; tput ed
         else
-            tput sc
             echo "$1 update available"
             sleep 1
             tput rc; tput ed
@@ -564,7 +549,6 @@ app_dl()
             tput rc; tput ed
         fi
     else
-        tput sc
         echo "No $1 apk found locally"
         echo " "
         echo "Downloading latest $1 apk..."
@@ -579,7 +563,7 @@ app_dl()
 
 if [ "$appname" = "YouTube" ]
 then
-    [[ ! -f youtube_patches.txt ]] && python3 fetch.py ytpatches
+    [[ ! -f youtube_patches.txt ]] && python3 fetch.py yt patches
     excludeyt=$(while read -r line; do
         patch=$(echo "$line"| cut -d " " -f 2)
         printf -- " -e "
@@ -608,11 +592,11 @@ then
                 echo "Mounting successful"
                 tput cnorm && cd ~ && exit
             
-            else
-                echo "Mount failed..."
-                echo "Exiting the script"
-                report
-                tput cnorm && cd ~ && exit
+        else
+            echo "Mount failed..."
+            echo "Exiting the script"
+            report
+            tput cnorm && cd ~ && exit
         fi
     elif [ "$variant" = "non_root" ]
     then
@@ -624,7 +608,6 @@ then
         trap - EXIT
         sleep 1
         tput rc; tput cd
-        tput sc
         read -p "Download MicroG [y/n]: " mgprompt
         if [[ "$mgprompt" =~ [Y,y] ]]
         then
@@ -658,7 +641,7 @@ then
     fi
 elif [ "$appname" = "YouTubeMusic" ]
 then
-    [[ ! -f youtubemusic_patches.txt ]] && python3 fetch.py ytmpatches
+    [[ ! -f youtubemusic_patches.txt ]] && python3 fetch.py ytm patches
     excludeytm=$(while read -r line; do
         patch=$(echo "$line"| cut -d " " -f 2)
         printf -- " -e "
@@ -725,7 +708,6 @@ then
         fi
         sleep 1
         tput rc; tput cd
-        tput sc
         read -p "Download MicroG [y/n]: " mgprompt
         if [[ "$mgprompt" =~ [Y,y] ]]
         then
