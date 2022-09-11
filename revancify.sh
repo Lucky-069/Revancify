@@ -17,7 +17,7 @@ else
     pkg install python openjdk-17 wget ncurses-utils libxml2 libxslt dialog -y &&
     pip install --upgrade pip &&
     pip install requests wheel bs4 cython cchardet lxml &&
-    echo "#!/data/data/com.termux/files/usr/bin/bash"\n"cd ~/storage/Revancify/ && bash revancify.sh" > /data/data/com.termux/files/usr/bin/revancify &&
+    echo "#!/data/data/com.termux/files/usr/bin/bash"'\n'"cd ~/storage/Revancify/ && bash revancify.sh" > /data/data/com.termux/files/usr/bin/revancify &&
     sed -i 's/# allow-external-apps = true/allow-external-apps = true/g' ~/.termux/termux.properties
     sleep 1
     echo "Dependencies installed successfully."
@@ -64,7 +64,7 @@ then
     sleep 1
     tput rc; tput cd
     echo Revancify updated...
-    printf "#!/data/data/com.termux/files/usr/bin/bash"\n"cd ~/storage/Revancify/ && bash revancify.sh" > /data/data/com.termux/files/usr/bin/revancify
+    printf "#!/data/data/com.termux/files/usr/bin/bash"'\n'"cd ~/storage/Revancify/ && bash revancify.sh" > /data/data/com.termux/files/usr/bin/revancify
     sleep 1
     echo Run this script again
     sleep 1
@@ -140,7 +140,7 @@ options(){
         echo "What app name do you want to use?"
         echo "1. YouTube Revanced"
         echo "2. YouTube"
-        read -p "Your input: " nameprompt
+        read -r -p "Your input: " nameprompt
         if [ "$nameprompt" = "1" ]
         then
             name="YouTube Revanced"
@@ -162,7 +162,7 @@ options(){
         echo "What app name do you want to use?"
         echo "1. YouTube Revanced"
         echo "2. YouTube"
-        read -p "Your input: " nameprompt
+        read -r -p "Your input: " nameprompt
         if [ "$nameprompt" = "1" ]
         then
             name="YouTube Revanced"
@@ -179,7 +179,7 @@ options(){
 ytpatches()
 {
     echo "All saved patches will be reset."
-    read -p "Do you want to continue? [y/n] " patchprompt
+    read -r -p "Do you want to continue? [y/n] " patchprompt
     if [[ "$patchprompt" =~ [Y,y] ]]
     then
         :
@@ -214,7 +214,7 @@ ytpatches()
 ytmpatches()
 {
     echo "All saved patches will be reset. "
-    read -p "Do you want to continue? [y/n] " patchprompt
+    read -r -p "Do you want to continue? [y/n] " patchprompt
     if [[ "$patchprompt" =~ [Y,y] ]]
     then
         :
@@ -256,7 +256,7 @@ user_input()
     echo "5. Patch TikTok"
     echo "6. Edit Patches"
     echo "7. Edit Patch-options"
-    read -p "Your Input: " input
+    read -r -p "Your Input: " input
     if [ "$input" -eq "1" ]
     then
         appname="YouTube"
@@ -278,7 +278,7 @@ user_input()
         echo "Which app patches do you want to edit?"
         echo "1. YouTube"
         echo "2. YouTube Music"
-        read -p "Your Input: " patchedit
+        read -r -p "Your Input: " patchedit
         tput rc; tput cd
         if [ "$patchedit" -eq "1" ]
         then
@@ -589,7 +589,7 @@ then
         trap - EXIT
         sleep 1
         tput rc; tput cd
-        read -p "Download MicroG [y/n]: " mgprompt
+        read -r -p "Download MicroG [y/n]: " mgprompt
         if [[ "$mgprompt" =~ [Y,y] ]]
         then
             wget -q -c "https://github.com/TeamVanced/VancedMicroG/releases/download/v0.2.24.220220-220220001/microg.apk" -O "Vanced_MicroG.apk" --show-progress
@@ -688,7 +688,7 @@ then
         fi
         sleep 1
         tput rc; tput cd
-        read -p "Download MicroG [y/n]: " mgprompt
+        read -r -p "Download MicroG [y/n]: " mgprompt
         if [[ "$mgprompt" =~ [Y,y] ]]
         then
             wget -q -c "https://github.com/TeamVanced/VancedMicroG/releases/download/v0.2.24.220220-220220001/microg.apk" -O "Vanced_MicroG.apk" --show-progress
