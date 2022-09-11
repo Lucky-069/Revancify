@@ -1,6 +1,5 @@
 ['custom-branding']
 appName = "YouTube Revanced"
-appIconPath = "null"
 
 [theme]
 theme = "Amoled"
