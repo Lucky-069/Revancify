@@ -415,7 +415,7 @@ get_components(){
     int_latest=$(sed -n '3p' latest.txt)
 
     #check patch
-    if ls -l | grep -q revanced-patches
+    if ls ./revanced-patches-* > /dev/null 2>&1
     then
         patches_available=$(basename revanced-patches* .jar | cut -d '-' -f 3) #get version
         if [ "$patches_latest" = "$patches_available" ]
@@ -454,7 +454,7 @@ get_components(){
     fi
 
     #check cli
-    if ls -l | grep -q revanced-cli
+    if ls -l ./revanced-cli-* > /dev/null 2>&1
     then
         cli_available=$(basename revanced-cli* .jar | cut -d '-' -f 3) #get version
         if [ "$cli_latest" = "$cli_available" ]
@@ -493,7 +493,7 @@ get_components(){
     fi
 
     #check integrations
-    if ls -l | grep -q revanced-integrations
+    if ls ./revanced-integrations-* > /dev/null 2>&1
     then
         int_available=$(basename revanced-integrations* .apk | cut -d '-' -f 3) #get version
         if [ "$int_latest" = "$int_available" ]
