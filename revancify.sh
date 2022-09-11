@@ -1,6 +1,6 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-cd ~/storage/Revancify
+cd ~/storage/Revancify || echo "Revancify directory non found !!"
 
 revive(){
     clear && echo "Script terminated" && tput cnorm && cd ~ && exit
@@ -527,231 +527,55 @@ get_components(){
         echo ""
         echo Downloading latest Integrations apk...
         echo ""
-        wget -q -c "https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk" -O "revanced-integrations-"$int_latest".apk" --show-progress  --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+        wget -q -c "https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk" -O revanced-integrations-$int_latest.apk --show-progress  --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
         sleep 1
         tput rc; tput cd
     fi
 }
 
 
-
-#Check and Get Youtube
-yt_dl()
+# App Downloader
+app_dl()
 {
-    if ls -l | grep -q YouTube-
+    if ls ./"$1"-* > /dev/null 2>&1
     then
-        yt_available=$(basename YouTube-* .apk | cut -d '-' -f 2) #get version
-        if [ "$ytver" = "$yt_available" ];then
+        app_available=$(basename "$1"-* .apk | cut -d '-' -f 2) #get version
+        if [ "$2" = "$app_available" ];then
             tput sc
-            echo "YouTube already on latest version"
+            echo "$1 already on latest version"
             echo ""
             sleep 1
-            wget -q -c $getlink -O "YouTube-"$ytver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+            wget -q -c "$3" -O "$1"-"$2".apk --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
             sleep 1
-            tput rc; tput cd
+            tput rc; tput ed
         else
             tput sc
-            echo "YouTube update available"
+            echo "$1 update available"
             sleep 1
-            tput rc; tput cd
-            echo Removing previous YouTube apk
-            rm YouTube-*.apk
+            tput rc; tput ed
+            echo "Removing previous $1 apk..."
+            rm $1-*.apk
             sleep 1
-            tput rc; tput cd
-            echo "Downloading latest YouTube apk..."
+            tput rc; tput ed
+            echo "Downloading latest $1 apk..."
             echo " "
-            wget -q -c $getlink -O "YouTube-"$ytver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+            wget -q -c "$3" -O "$1"-"$2".apk --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
             sleep 1
-            tput rc; tput cd
+            tput rc; tput ed
         fi
     else
         tput sc
-        echo "No YouTube apk found locally"
+        echo "No $1 apk found locally"
         echo " "
-        echo "Downloading latest YouTube apk..."
+        echo "Downloading latest $1 apk..."
         echo " "
-        wget -q -c $getlink -O "YouTube-"$ytver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+        wget -q -c "$3" -O "$1"-"$2".apk --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
         sleep 1
-        tput rc; tput cd
+        tput rc; tput ed
     fi
 }
 
-#Check and Get Youtube Music
-ytm_dl()
-{
-    if ls -l | grep -q YouTubeMusic-
-    then
-        ytm_available=$(basename YouTubeMusic-* .apk | cut -d '-' -f 2) #get version
-        if [ "$ytmver" = "$ytm_available" ]
-        then
-            tput sc
-            echo "YouTube Music already on latest version"
-            echo ""
-            sleep 1
-            wget -q -c $getlink -O "YouTubeMusic-"$ytmver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
-            sleep 1
-            tput rc; tput cd
-        else
-            tput sc
-            echo "YouTube Music update available"
-            sleep 1
-            tput rc; tput cd
-            echo Removing previous YouTube Music apk
-            rm YouTubeMusic-*.apk
-            sleep 1
-            tput rc; tput cd
-            echo "Downloading latest YouTube Music apk..."
-            echo ""
-            wget -q -c $getlink -O "YouTubeMusic-"$ytmver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
-            sleep 1
-            tput rc; tput cd
-        fi
-    else
-        tput sc
-        echo "No YouTube Music apk found locally"
-        echo " "
-        echo "Downloading latest YouTube Music apk..."
-        echo " "
-        wget -q -c $getlink -O "YouTubeMusic-"$ytmver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
-        sleep 1
-        tput rc; tput cd
-    fi
-}
-
-
-#Check and Get Youtube
-twitter_dl()
-{
-    if ls -l | grep -q Twitter-
-    then
-        tw_available=$(basename Twitter-* .apk | cut -d '-' -f 2) #get version
-        if [ "$twver" = "$tw_available" ];then
-            tput sc
-            echo "Twitter already on latest version"
-            echo ""
-            sleep 1
-            wget -q -c $getlink -O "Twitter-"$twver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
-            sleep 1
-            tput rc; tput cd
-        else
-            tput sc
-            echo "Twitter update available"
-            sleep 1
-            tput rc; tput cd
-            echo Removing previous Twitter apk
-            rm Twitter-*.apk
-            sleep 1
-            tput rc; tput cd
-            echo "Downloading latest Twitter apk..."
-            echo " "
-            wget -q -c $getlink -O "Twitter-"$twver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
-            sleep 1
-            tput rc; tput cd
-        fi
-    else
-        tput sc
-        echo "No Twitter apk found locally"
-        echo " "
-        echo "Downloading latest Twitter apk..."
-        echo " "
-        wget -q -c $getlink -O "Twitter-"$twver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
-        sleep 1
-        tput rc; tput cd
-    fi
-}
-
-reddit_dl()
-{
-    if ls -l | grep -q Reddit-
-    then
-        rd_available=$(basename Reddit-* .apk | cut -d '-' -f 2) #get version
-        if [ "$rdver" = "$rd_available" ];then
-            tput sc
-            echo "Reddit already on latest version"
-            echo ""
-            sleep 1
-            wget -q -c $getlink -O "Reddit-"$rdver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
-            sleep 1
-            tput rc; tput cd
-        else
-            tput sc
-            echo "Reddit update available"
-            sleep 1
-            tput rc; tput cd
-            echo Removing previous Reddit apk
-            rm Reddit-*.apk
-            sleep 1
-            tput rc; tput cd
-            echo "Downloading latest Reddit apk..."
-            echo " "
-            wget -q -c $getlink -O "Reddit-"$rdver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
-            sleep 1
-            tput rc; tput cd
-        fi
-    else
-        tput sc
-        echo "No Reddit apk found locally"
-        echo " "
-        echo "Downloading latest Reddit apk..."
-        echo " "
-        wget -q -c $getlink -O "Reddit-"$rdver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
-        sleep 1
-        tput rc; tput cd
-    fi
-}
-
-tiktok_dl()
-{
-    if ls -l | grep -q TikTok-
-    then
-        tt_available=$(basename TikTok-* .apk | cut -d '-' -f 2) #get version
-        if [ "$ttver" = "$tt_available" ];then
-            tput sc
-            echo "TikTok already on latest version"
-            echo ""
-            sleep 1
-            wget -q -c $getlink -O "TikTok-"$ttver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
-            sleep 1
-            tput rc; tput cd
-        else
-            tput sc
-            echo "TikTok update available"
-            sleep 1
-            tput rc; tput cd
-            echo Removing previous TikTok apk
-            rm TikTok-*.apk
-            sleep 1
-            tput rc; tput cd
-            echo "Downloading latest TikTok apk..."
-            echo " "
-            wget -q -c $getlink -O "TikTok-"$ttver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
-            sleep 1
-            tput rc; tput cd
-        fi
-    else
-        tput sc
-        echo "No TikTok apk found locally"
-        echo " "
-        echo "Downloading latest TikTok apk..."
-        echo " "
-        wget -q -c $getlink -O "TikTok-"$ttver".apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
-        sleep 1
-        tput rc; tput cd
-    fi
-}
-
-report()
-{
-    read -p "Do you want to report this bug to the developer? [y/N]" reportopt
-    reportopt=${reportopt:-n}
-    if [ $reportopt = "y" ]
-    then
-        termux-open https://github.com/decipher3114/Revancify/issues/new
-    else
-        exit
-    fi
-}
-
+#Build apps
 
 if [ "$appname" = "YouTube" ]
 then
@@ -763,10 +587,10 @@ then
     done < <(grep " off" youtube_patches.txt))
     if [ "$variant" = "root" ]
     then
-        ytver=$( su -c dumpsys package com.google.android.youtube | grep versionName | cut -d= -f 2)
-        getapp=$( echo "$ytver" | sed 's/\./-/g')
+        appver=$( su -c dumpsys package com.google.android.youtube | grep versionName | cut -d= -f 2)
+        getapp=${appver//./-}
         python fetch.py yt root $getapp & pid=$!
-        trap "kill $pid 2> /dev/null" EXIT
+        trap 'kill $pid 2> /dev/null' EXIT
         while kill -0 $pid 2> /dev/null; do
             anim
         done
@@ -775,7 +599,7 @@ then
         tput rc; tput cd
         getlink="$(sed -n '5p' latest.txt)"
         get_components
-        yt_dl &&
+        app_dl YouTube "$appver" "$getlink" &&
         echo "Building Youtube Revanced ..."
         java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTube-* -e microg-support $excludeyt --keystore ./revanced.keystore -o ./com.google.android.youtube.apk --custom-aapt2-binary ./aapt2 --experimental
         echo "Mounting the apk"
@@ -794,7 +618,7 @@ then
     elif [ "$variant" = "non_root" ]
     then
         python fetch.py yt non_root & pid=$!
-        trap "kill $pid 2> /dev/null" EXIT
+        trap 'kill $pid 2> /dev/null' EXIT
         while kill -0 $pid 2> /dev/null; do
             anim
         done
@@ -806,7 +630,7 @@ then
         if [[ "$mgprompt" =~ [Y,y] ]]
         then
             microglink="$(sed -n '6p' latest.txt)"
-            wget -q -c $microglink -O "Vanced_MicroG.apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+            wget -q -c "$microglink" -O "Vanced_MicroG.apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
             echo ""
             mv "Vanced_MicroG.apk" /storage/emulated/0/Revancify
             echo MicroG App saved to Revancify folder.
@@ -815,17 +639,17 @@ then
             :
         fi
         tput rc; tput cd
-        ytver=$(sed -n '4p' latest.txt | sed 's/-/\./g')
+        appver=$(sed -n '4p' latest.txt | sed 's/-/\./g')
         getlink="$(sed -n '5p' latest.txt)"
         get_components
-        yt_dl &&
+        app_dl YouTube "$appver" "$getlink" &&
         echo "Building YouTube Revanced..."
-        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTube-* $excludeyt --keystore ./revanced.keystore -o ./"YouTubeRevanced-"$ytver".apk" --custom-aapt2-binary ./aapt2 --experimental
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTube-* $excludeyt --keystore ./revanced.keystore -o ./YouTubeRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental
         mv YouTubeRevanced* /storage/emulated/0/Revancify/ &&
         sleep 1 &&
         echo "YouTube App saved to Revancify folder." &&
         echo "Thanks for using Revancify..." &&
-        termux-open /storage/emulated/0/Revancify/"YouTubeRevanced-"$ytver".apk"
+        termux-open /storage/emulated/0/Revancify/YouTubeRevanced-"$appver".apk
         if [ "$mgprompt" = "y" ]
         then
             termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
@@ -843,210 +667,153 @@ then
     done < <(grep " off" youtubemusic_patches.txt))
     if [ "$variant" = "root" ]
     then
-        ytmver=$(su -c dumpsys package com.google.android.apps.youtube.music | grep versionName | cut -d= -f 2 )
-        getapp=$( echo "$ytmver" | sed 's/\./-/g')
+        appver=$(su -c dumpsys package com.google.android.apps.youtube.music | grep versionName | cut -d= -f 2 )
+        getapp="${appver//./-}"
         if [ "$arch" = "arm64" ]
         then
             python fetch.py ytm root arm64 $getapp & pid=$!
-            trap "kill $pid 2> /dev/null" EXIT
+            trap 'kill $pid 2> /dev/null' EXIT
             while kill -0 $pid 2> /dev/null; do
                 anim
             done
             trap - EXIT
-            sleep 1
-            tput rc; tput cd
-            getlink=$(sed -n '5p' latest.txt)
-            get_components
-            ytm_dl &&
-            echo "Building YouTube Music Revanced..."
-            java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* -e music-microg-support $excludeytm --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2 --experimental
-            echo "Mounting the app"
-            if su -mm -c 'stockapp=$(pm path com.google.android.apps.youtube.music | grep base | sed 's/package://g' ); grep com.google.android.apps.youtube.music /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l; done && mv com.google.android.apps.youtube.music.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.apps.youtube.music && exit'
-            then
-                echo "Mounting successful"
-                tput cnorm && cd ~ && exit
-            
-            else
-                echo "Mount failed..."
-                echo "Exiting the script"
-                report
-                tput cnorm && cd ~ && exit
-            fi
         elif [ "$arch" = "armeabi" ]
         then
             python fetch.py ytm root armeabi $getapp & pid=$!
-            trap "kill $pid 2> /dev/null" EXIT
+            trap 'kill $pid 2> /dev/null' EXIT
             while kill -0 $pid 2> /dev/null; do
                 anim
             done
             trap - EXIT
-            sleep 1
-            tput rc; tput cd
-            getlink="$(sed -n '5p' latest.txt)"
-            get_components
-            ytm_dl &&
-            echo "Building YouTube Music Revanced..."
-            java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* -e music-microg-support $excludeytm --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2 --experimental
-            echo "Mounting the app"
-            if su -mm -c 'stockapp=$(pm path com.google.android.apps.youtube.music | grep base | sed 's/package://g' ); grep com.google.android.apps.youtube.music /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l; done && mv com.google.android.apps.youtube.music.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.apps.youtube.music && exit'
-            then
-                echo "Mounting successful"
-                tput cnorm && cd ~ && exit
-            
-            else
-                echo "Mount failed..."
-                echo "Exiting the script"
-                report
-                tput cnorm && cd ~ && exit
-            fi
         fi
+        sleep 1
+        tput rc; tput cd
+        getlink=$(sed -n '5p' latest.txt)
+        get_components
+        app_dl TikTok "$appver" "$getlink" &&
+        echo "Building YouTube Music Revanced..."
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* -e music-microg-support $excludeytm --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2 --experimental
+        echo "Mounting the app"
+        if su -mm -c 'stockapp=$(pm path com.google.android.apps.youtube.music | grep base | sed 's/package://g' ); grep com.google.android.apps.youtube.music /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l; done && mv com.google.android.apps.youtube.music.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.apps.youtube.music && exit'
+        then
+            echo "Mounting successful"
+            tput cnorm && cd ~ && exit
+        
+        else
+            echo "Mount failed..."
+            echo "Exiting the script"
+            report
+            tput cnorm && cd ~ && exit
+        fi
+    fi
     elif [ "$variant" = "non_root" ]
     then
         if [ "$arch" = "arm64" ]
         then
             python fetch.py ytm non_root arm64 & pid=$!
-            trap "kill $pid 2> /dev/null" EXIT
+            trap 'kill $pid 2> /dev/null' EXIT
             while kill -0 $pid 2> /dev/null; do
                 anim
             done
             trap - EXIT
-            sleep 1
-            tput rc; tput cd
-            tput sc
-            read -p "Download MicroG [y/n]: " mgprompt
-            if [[ "$mgprompt" =~ [Y,y] ]]
-            then
-                microglink="$(sed -n '6p' latest.txt)"
-                wget -q -c $microglink -O "Vanced_MicroG.apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
-                echo ""
-                mv "Vanced_MicroG.apk" /storage/emulated/0/Revancify
-                echo MicroG App saved to Revancify folder.
-            else
-                :
-            fi
-            tput rc; tput cd
-            ytmver=$(sed -n '4p' latest.txt | sed 's/-/\./g')
-            getlink="$(sed -n '5p' latest.txt)"
-            get_components
-            ytm_dl &&
-            echo "Building YouTube Music Revanced..."
-            java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* $excludeytm --keystore ./revanced.keystore -o ./"YouTubeMusicRevanced-"$ytmver".apk" --custom-aapt2-binary ./aapt2 --experimental
-            mv YouTubeMusicRevanced* /storage/emulated/0/Revancify/ &&
-            sleep 1 &&
-            echo "YouTube Music App saved to Revancify folder." &&
-            echo "Thanks for using Revancify..." &&
-            termux-open /storage/emulated/0/Revancify/"YouTubeMusicRevanced-"$ytmver".apk"
-            if [ "$mgprompt" = "y" ]
-            then
-                termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
-            else
-                :
-            fi
         elif [ "$arch" = "armeabi" ]
         then
             python fetch.py ytm non_root armeabi & pid=$!
-            trap "kill $pid 2> /dev/null" EXIT
+            trap 'kill $pid 2> /dev/null' EXIT
             while kill -0 $pid 2> /dev/null; do
                 anim
             done
             trap - EXIT
-            sleep 1
-            tput rc; tput cd
-            tput sc
-            read -p "Download MicroG [y/n]: " mgprompt
-            if [ "$mgprompt" = "y" ]
-            then
-                microglink="$(sed -n '6p' latest.txt)"
-                wget -q -c $microglink -O "Vanced_MicroG.apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
-                echo ""
-                mv "Vanced_MicroG.apk" /storage/emulated/0/Revancify
-                echo MicroG App saved to Revancify folder.
-            else
-                :
-            fi
-            tput rc; tput cd
-            ytmver=$(sed -n '4p' latest.txt | sed 's/-/\./g')
-            getlink="$(sed -n '5p' latest.txt)"
-            get_components
-            ytm_dl &&
-            echo "Building YouTube Music Revanced..."
-            java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* $excludeytm --keystore ./revanced.keystore -o ./"YouTubeMusicRevanced-"$ytmver".apk" --custom-aapt2-binary ./aapt2 --experimental
-            mv YouTubeMusicRevanced-* /storage/emulated/0/Revancify/ &&
-            sleep 1 &&
-            echo "YouTube Music App saved to Revancify folder." &&
-            echo "Thanks for using Revancify..."
-            termux-open /storage/emulated/0/Revancify/"YouTubeMusicRevanced-"$ytmver".apk"
-            if [ "$mgprompt" = "y" ]
-            then
-                termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
-            else
-                :
-            fi
         fi
-    fi
+        sleep 1
+        tput rc; tput cd
+        tput sc
+        read -p "Download MicroG [y/n]: " mgprompt
+        if [[ "$mgprompt" =~ [Y,y] ]]
+        then
+            microglink="$(sed -n '6p' latest.txt)"
+            wget -q -c $microglink -O "Vanced_MicroG.apk" --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+            echo ""
+            mv "Vanced_MicroG.apk" /storage/emulated/0/Revancify
+            echo MicroG App saved to Revancify folder.
+        else
+            :
+        fi
+        tput rc; tput cd
+        appver=$(sed -n '4p' latest.txt | sed 's/-/\./g')
+        getlink="$(sed -n '5p' latest.txt)"
+        get_components
+        app_dl YouTube-Music "$appver" "$getlink" &&
+        echo "Building YouTube Music Revanced..."
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* $excludeytm --keystore ./revanced.keystore -o ./YouTubeMusicRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental
+        mv YouTubeMusicRevanced* /storage/emulated/0/Revancify/ &&
+        sleep 1 &&
+        echo "YouTube Music App saved to Revancify folder." &&
+        echo "Thanks for using Revancify..." &&
+        termux-open /storage/emulated/0/Revancify/YouTubeMusicRevanced-"$appver".apk
 elif [ "$appname" = "Twitter" ]
 then
     python fetch.py twitter both & pid=$!
-    trap "kill $pid 2> /dev/null" EXIT
+    trap 'kill $pid 2> /dev/null' EXIT
     while kill -0 $pid 2> /dev/null; do
         anim
     done
     trap - EXIT
     sleep 1
     tput rc; tput cd
-    twver=$(sed -n '4p' latest.txt | sed 's/-/\./g' )
+    appver=$(sed -n '4p' latest.txt | sed 's/-/\./g' )
     getlink="$(sed -n '5p' latest.txt)"
     get_components
-    twitter_dl &&
+    app_dl Twitter "$appver" "$getlink" &&
     echo Building Twitter Revanced
-    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./Twitter-* --keystore ./revanced.keystore -o ./"TwitterRevanced-"$twver".apk" --custom-aapt2-binary ./aapt2 --experimental
+    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./Twitter-* --keystore ./revanced.keystore -o ./TwitterRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental
     mv TwitterRevanced* /storage/emulated/0/Revancify/ &&
     sleep 1 &&
     echo "Twitter App saved to Revancify folder." &&
     echo "Thanks for using Revancify..." &&
-    termux-open /storage/emulated/0/Revancify/"TwitterRevanced-"$twver".apk"
+    termux-open /storage/emulated/0/Revancify/TwitterRevanced-"$appver".apk
 elif [ "$appname" = "Reddit" ]
 then
     python fetch.py reddit both & pid=$!
-    trap "kill $pid 2> /dev/null" EXIT
+    trap 'kill $pid 2> /dev/null' EXIT
     while kill -0 $pid 2> /dev/null; do
         anim
     done
     trap - EXIT
     sleep 1
     tput rc; tput cd
-    rdver=$(sed -n '4p' latest.txt | sed 's/-/\./g' )
+    appver=$(sed -n '4p' latest.txt | sed 's/-/\./g' )
     getlink="$(sed -n '5p' latest.txt)"
     get_components
-    reddit_dl &&
+    app_dl Reddit "$appver" "$getlink" &&
     echo Building Reddit Revanced
-    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./Reddit-* -r --keystore ./revanced.keystore -o ./"RedditRevanced-"$rdver".apk" --custom-aapt2-binary ./aapt2 --experimental
+    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./Reddit-* -r --keystore ./revanced.keystore -o ./RedditRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental
     mv RedditRevanced* /storage/emulated/0/Revancify/ &&
     sleep 1 &&
     echo "Reddit App saved to Revancify folder." &&
     echo "Thanks for using Revancify..." &&
-    termux-open /storage/emulated/0/Revancify/"RedditRevanced-"$rdver".apk"
+    termux-open /storage/emulated/0/Revancify/RedditRevanced-"$appver".apk
 elif [ "$appname" = "TikTok" ]
 then
     python fetch.py tiktok both & pid=$!
-    trap "kill $pid 2> /dev/null" EXIT
+    trap 'kill $pid 2> /dev/null' EXIT
     while kill -0 $pid 2> /dev/null; do
         anim
     done
     trap - EXIT
     sleep 1
     tput rc; tput cd
-    ttver=$(sed -n '4p' latest.txt | sed 's/-/\./g' )
+    appver=$(sed -n '4p' latest.txt | sed 's/-/\./g' )
     getlink="$(sed -n '5p' latest.txt)"
     get_components
-    tiktok_dl &&
+    app_dl TikTok "$appver" "$getlink" &&
     echo Building TikTok Revanced
-    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./TikTok-* -r --keystore ./revanced.keystore -o ./"TikTokRevanced-"$ttver".apk" --custom-aapt2-binary ./aapt2 --experimental
+    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./TikTok-* -r --keystore ./revanced.keystore -o ./TikTokRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental
     mv TikTokRevanced* /storage/emulated/0/Revancify/ &&
     sleep 1 &&
     echo "TikTok App saved to Revancify folder." &&
     echo "Thanks for using Revancify..." &&
-    termux-open /storage/emulated/0/Revancify/"TikTokRevanced-"$ttver".apk"
+    termux-open /storage/emulated/0/Revancify/TikTokRevanced-"$appver".apk
 fi
 cd ~
 tput cnorm
