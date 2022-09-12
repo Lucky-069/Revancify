@@ -336,7 +336,6 @@ else
     echo "SU Status: Non Root"
     sleep 1
     tput rc; tput ed
-
 fi
 
 get_components(){
