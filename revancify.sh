@@ -536,7 +536,7 @@ then
             report
             tput cnorm && cd ~ && exit
         fi
-    elif [ "$variant" = "non_root" ]
+    elif [ "$variant" = "non root" ]
     then
         python fetch.py yt non_root & pid=$!
         trap 'kill $pid 2> /dev/null' EXIT
