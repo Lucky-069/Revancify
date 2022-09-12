@@ -159,8 +159,8 @@ ytpatches()
     done < <(cut -d " " -f 1 youtube_patches.txt)
     if grep -q "custom-branding on" youtube_patches.txt
     then
-        appname=$(dialog --no-shadow --no-lines --no-ok --begin 0 $(($(($(tput cols) - 44)) / 2)) --infobox "   █▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n   █▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░\n \n█▄▄ █▄█    █▀▄ █▀▀ █▀▀ █ █▀█ █░█ █▀▀ █▀█\n█▄█ ░█░    █▄▀ ██▄ █▄▄ █ █▀▀ █▀█ ██▄ █▀▄" 8 44 --and-widget --no-items --no-lines --no-shadow --menu 'Choose Appname' 10 40 5 "YouTube Revanced" "YouTube" 2>&1 >/dev/tty)
-        sed -i "s/appName = \".*\"/appName = \"YouTube Revanced\"/g" options.toml
+        appnameoptions=$(dialog --no-shadow --no-lines --no-ok --begin 0 $(($(($(tput cols) - 44)) / 2)) --infobox "   █▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n   █▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░\n \n█▄▄ █▄█    █▀▄ █▀▀ █▀▀ █ █▀█ █░█ █▀▀ █▀█\n█▄█ ░█░    █▄▀ ██▄ █▄▄ █ █▀▀ █▀█ ██▄ █▀▄" 8 44 --and-widget --no-items --no-lines --no-shadow --menu 'Choose Appname' 10 40 5 "YouTube Revanced" "YouTube" 2>&1 >/dev/tty)
+        sed -i "s/appName = \".*\"/appName = \"$appnameoptions\"/g" options.toml
         appicon=$(dialog --no-shadow --no-lines --no-ok --begin 0 $(($(($(tput cols) - 44)) / 2)) --infobox "   █▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n   █▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░\n \n█▄▄ █▄█    █▀▄ █▀▀ █▀▀ █ █▀█ █░█ █▀▀ █▀█\n█▄█ ░█░    █▄▀ ██▄ █▄▄ █ █▀▀ █▀█ ██▄ █▀▄" 8 44 --and-widget --no-items --no-lines --no-shadow --menu 'Choose Appicon' 10 40 5 "YouTube Revanced Default" "Custom icon by decipher" 2>&1 >/dev/tty)
         if [ "$appicon" = "YouTube Revanced Default" ]
         then
@@ -190,7 +190,7 @@ ytmpatches()
     python3 fetch.py ytm patches
     sed -i '/music-microg-support/d' youtubemusic_patches.txt
     echo "$(nl -n rz -w2 -s " " youtubemusic_patches.txt)" > youtubemusic_patches.txt
-    cmd=(dialog --title 'YouTube Music Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 40 90 20)
+    cmd=(dialog --no-shadow --no-lines --no-ok --begin 0 $(($(($(tput cols) - 44)) / 2)) --infobox "   █▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n   █▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░\n \n█▄▄ █▄█    █▀▄ █▀▀ █▀▀ █ █▀█ █░█ █▀▀ █▀█\n█▄█ ░█░    █▄▀ ██▄ █▄▄ █ █▀▀ █▀█ ██▄ █▀▄" 8 44 --and-widget --title 'YouTube Music Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 60 10)
     options=()
     while read -r line
     do
@@ -221,19 +221,19 @@ user_input()
     read -r -p "Your Input: " input
     if [ "$input" -eq "1" ]
     then
-        appname="YouTube"
+        options="YouTube"
     elif [ "$input" -eq "2" ]
     then
-        appname="YouTubeMusic"
+        options="YouTubeMusic"
     elif [ "$input" -eq "3" ]
     then
-        appname="Twitter"
+        options="Twitter"
     elif [ "$input" -eq "4" ]
     then
-        appname="Reddit"
+        options="Reddit"
     elif [ "$input" -eq "5" ]
     then
-        appname="TikTok"
+        options="TikTok"
     elif [ "$input" -eq "6" ]
     then
         tput rc; tput cd
@@ -287,7 +287,7 @@ then
     echo ""
     sleep 1
     tput rc; tput cd
-    if [ "$appname" = "YouTube" ]
+    if [ "$options" = "YouTube" ]
     then
         echo "Checking if YouTube is installed..."
         if su -c dumpsys package com.google.android.youtube | grep -q path
@@ -307,7 +307,7 @@ then
             cd ~
             exit
         fi
-    elif [ "$appname" = "YouTubeMusic" ] 
+    elif [ "$options" = "YouTubeMusic" ] 
     then
         echo "Checking if YouTube Music is installed..."
         if su -c dumpsys package com.google.android.apps.youtube.music | grep -q path
@@ -500,7 +500,7 @@ app_dl()
 
 #Build apps
 
-if [ "$appname" = "YouTube" ]
+if [ "$options" = "YouTube" ]
 then
     [[ ! -f youtube_patches.txt ]] && python3 fetch.py yt patches
     excludeyt=$(while read -r line; do
@@ -577,7 +577,7 @@ then
             :
         fi
     fi
-elif [ "$appname" = "YouTubeMusic" ]
+elif [ "$options" = "YouTubeMusic" ]
 then
     [[ ! -f youtubemusic_patches.txt ]] && python3 fetch.py ytm patches
     excludeytm=$(while read -r line; do
@@ -668,7 +668,7 @@ then
         echo "YouTube Music App saved to Revancify folder." &&
         echo "Thanks for using Revancify..." &&
         termux-open /storage/emulated/0/Revancify/YouTubeMusicRevanced-"$appver".apk
-elif [ "$appname" = "Twitter" ]
+elif [ "$options" = "Twitter" ]
 then
     python fetch.py twitter both & pid=$!
     trap 'kill $pid 2> /dev/null' EXIT
@@ -689,7 +689,7 @@ then
     echo "Twitter App saved to Revancify folder." &&
     echo "Thanks for using Revancify..." &&
     termux-open /storage/emulated/0/Revancify/TwitterRevanced-"$appver".apk
-elif [ "$appname" = "Reddit" ]
+elif [ "$options" = "Reddit" ]
 then
     python fetch.py reddit both & pid=$!
     trap 'kill $pid 2> /dev/null' EXIT
@@ -710,7 +710,7 @@ then
     echo "Reddit App saved to Revancify folder." &&
     echo "Thanks for using Revancify..." &&
     termux-open /storage/emulated/0/Revancify/RedditRevanced-"$appver".apk
-elif [ "$appname" = "TikTok" ]
+elif [ "$options" = "TikTok" ]
 then
     python fetch.py tiktok both & pid=$!
     trap 'kill $pid 2> /dev/null' EXIT
