@@ -331,7 +331,7 @@ then
         fi
     fi
 else
-    variant="non root"
+    variant="non_root"
     mkdir -p /storage/emulated/0/Revancify
     echo "SU Status: Non Root"
     sleep 1
@@ -536,7 +536,7 @@ then
             report
             tput cnorm && cd ~ && exit
         fi
-    elif [ "$variant" = "non root" ]
+    elif [ "$variant" = "non_root" ]
     then
         python fetch.py yt non_root & pid=$!
         trap 'kill $pid 2> /dev/null' EXIT
@@ -583,7 +583,7 @@ then
         patch=$(echo "$line"| cut -d " " -f 1)
         printf -- " -e "
         printf "%s""$patch"
-    done < <(grep " on" youtubemusic_patches.txt))
+        done < <(grep " on" youtubemusic_patches.txt))
     if [ "$variant" = "root" ]
     then
         appver=$(su -c dumpsys package com.google.android.apps.youtube.music | grep versionName | cut -d= -f 2 )
