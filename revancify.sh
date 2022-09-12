@@ -145,7 +145,7 @@ ytpatches()
     python3 fetch.py yt patches
     sed -i '/microg-support/d' youtube_patches.txt
     sed -i '/enable-debugging/d' youtube_patches.txt
-    cmd=(dialog --no-shadow --no-lines --no-ok --begin 0 $(($(($(tput cols) - 44)) / 2)) --infobox "   █▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n   █▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░\n \n█▄▄ █▄█    █▀▄ █▀▀ █▀▀ █ █▀█ █░█ █▀▀ █▀█\n█▄█ ░█░    █▄▀ ██▄ █▄▄ █ █▀▀ █▀█ ██▄ █▀▄" 8 44 --and-widget --title 'YouTube Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 60 10)
+    cmd=(dialog --title 'YouTube Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 40 10)
     options=()
     while read -r line
     do
@@ -159,9 +159,9 @@ ytpatches()
     done < <(cut -d " " -f 1 youtube_patches.txt)
     if grep -q "custom-branding on" youtube_patches.txt
     then
-        appnameoptions=$(dialog --no-shadow --no-lines --no-ok --begin 0 $(($(($(tput cols) - 44)) / 2)) --infobox "   █▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n   █▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░\n \n█▄▄ █▄█    █▀▄ █▀▀ █▀▀ █ █▀█ █░█ █▀▀ █▀█\n█▄█ ░█░    █▄▀ ██▄ █▄▄ █ █▀▀ █▀█ ██▄ █▀▄" 8 44 --and-widget --no-items --no-lines --no-shadow --menu 'Choose Appname' 10 40 5 "YouTube Revanced" "YouTube" 2>&1 >/dev/tty)
+        appnameoptions=$(dialog --no-items --no-lines --no-shadow --menu 'Choose Appname' 10 40 5 "YouTube Revanced" "YouTube" 2>&1 >/dev/tty)
         sed -i "s/appName = \".*\"/appName = \"$appnameoptions\"/g" options.toml
-        appicon=$(dialog --no-shadow --no-lines --no-ok --begin 0 $(($(($(tput cols) - 44)) / 2)) --infobox "   █▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n   █▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░\n \n█▄▄ █▄█    █▀▄ █▀▀ █▀▀ █ █▀█ █░█ █▀▀ █▀█\n█▄█ ░█░    █▄▀ ██▄ █▄▄ █ █▀▀ █▀█ ██▄ █▀▄" 8 44 --and-widget --no-items --no-lines --no-shadow --menu 'Choose Appicon' 10 40 5 "YouTube Revanced Default" "Custom icon by decipher" 2>&1 >/dev/tty)
+        appicon=$(dialog --no-items --no-lines --no-shadow --menu 'Choose Appicon' 10 40 5 "YouTube Revanced Default" "Custom icon by decipher" 2>&1 >/dev/tty)
         if [ "$appicon" = "YouTube Revanced Default" ]
         then
             sed -i "s/appIconPath = \".*\"/appIconPath = \"null\"/g" options.toml
@@ -190,7 +190,7 @@ ytmpatches()
     echo "Updating Patches..."
     python3 fetch.py ytm patches
     sed -i '/music-microg-support/d' youtubemusic_patches.txt
-    cmd=(dialog --no-shadow --no-lines --no-ok --begin 0 $(($(($(tput cols) - 44)) / 2)) --infobox "   █▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n   █▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░\n \n█▄▄ █▄█    █▀▄ █▀▀ █▀▀ █ █▀█ █░█ █▀▀ █▀█\n█▄█ ░█░    █▄▀ ██▄ █▄▄ █ █▀▀ █▀█ ██▄ █▀▄" 8 44 --and-widget --title 'YouTube Music Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 60 10)
+    cmd=(dialog --title 'YouTube Music Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 40 10)
     options=()
     while read -r line
     do
