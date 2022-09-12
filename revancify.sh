@@ -253,7 +253,7 @@ ytmpatches()
 
 user_input()
 {
-    echo "Which do you want to do?"
+    echo "What do you want to do?"
     echo "1. Patch YouTube"
     echo "2. Patch YouTube Music"
     echo "3. Patch Twitter"
@@ -299,8 +299,7 @@ user_input()
         echo No input given..
         user_input
     fi
-    tput rc
-    tput cd
+    tput rc; tput cd
 }
 
 
