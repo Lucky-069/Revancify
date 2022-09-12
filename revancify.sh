@@ -732,5 +732,5 @@ then
     echo "Thanks for using Revancify..." &&
     termux-open /storage/emulated/0/Revancify/TikTokRevanced-"$appver".apk
 fi
-cd ~
+cd ~ || exit
 tput cnorm
