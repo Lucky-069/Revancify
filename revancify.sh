@@ -167,6 +167,7 @@ ytpatches()
             sed -i "s/appIconPath = \".*\"/appIconPath = \"null\"/g" options.toml
         elif [ "$appicon" = "Custom icon by decipher" ]
         then
+            cd revanced-icons > /dev/null 2>&1 || git clone https://github.com/decipher3114/revanced-icons.git > /dev/null 2>&1
             sed -i "s/appIconPath = \".*\"/appIconPath = \"revanced-icons\/youtube\"/g" options.toml
         fi
     fi
