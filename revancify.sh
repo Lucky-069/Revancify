@@ -17,7 +17,7 @@ else
     pkg install python openjdk-17 wget ncurses-utils libxml2 libxslt dialog -y &&
     pip install --upgrade pip &&
     pip install requests wheel bs4 cython cchardet lxml &&
-    echo "#!/data/data/com.termux/files/usr/bin/bash"'\n'"cd ~/storage/Revancify/ && bash revancify.sh" > /data/data/com.termux/files/usr/bin/revancify &&
+    printf "#!/data/data/com.termux/files/usr/bin/bash"'\n'"cd ~/storage/Revancify/ && bash revancify.sh" > /data/data/com.termux/files/usr/bin/revancify &&
     sed -i 's/# allow-external-apps = true/allow-external-apps = true/g' ~/.termux/termux.properties
     sleep 1
     echo "Dependencies installed successfully."
@@ -39,23 +39,28 @@ else
     exit
 fi
 
-tput civis
-tput cs 7 $LINES
-leave1=$(($(($(tput cols) - 34)) / 2))
-tput cm 0 $leave1
-echo "█▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█"
-tput cm 1 $leave1
-echo "█▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░"
-echo ""
-leave2=$(($(($(tput cols) - 40)) / 2))
-tput cm 3 $leave2
-echo "█▄▄ █▄█    █▀▄ █▀▀ █▀▀ █ █▀█ █░█ █▀▀ █▀█"
-tput cm 4 $leave2
-echo "█▄█ ░█░    █▄▀ ██▄ █▄▄ █ █▀▀ █▀█ ██▄ █▀▄"
-echo ""
-tput cm 8 0
+intro()
+{
+    tput civis
+    tput cs 7 $LINES
+    leave1=$(($(($(tput cols) - 34)) / 2))
+    tput cm 0 $leave1
+    echo "█▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█"
+    tput cm 1 $leave1
+    echo "█▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░"
+    echo ""
+    leave2=$(($(($(tput cols) - 40)) / 2))
+    tput cm 3 $leave2
+    echo "█▄▄ █▄█    █▀▄ █▀▀ █▀▀ █ █▀█ █░█ █▀▀ █▀█"
+    tput cm 4 $leave2
+    echo "█▄█ ░█░    █▄▀ ██▄ █▄▄ █ █▀▀ █▀█ ██▄ █▀▄"
+    echo ""
+    tput cm 8 0
+    tput sc
+}
 
-tput sc
+intro
+
 echo "Checking for update..."
 sleep 1
 
@@ -206,7 +211,7 @@ ytpatches()
     do
         echo "${choices[@]}" | grep -q "$num" || sed -i "/$num/s/ on/ off/" youtube_patches.txt
     done
-    tput sc
+    intro
     user_input
 }
 
@@ -240,7 +245,7 @@ ytmpatches()
     do
         echo "${choices[@]}" | grep -q "$num" || sed -i "/$num/s/ on/ off/" youtubemusic_patches.txt
     done
-    tput sc
+    intro
     user_input
 }
 
