@@ -145,36 +145,27 @@ ytpatches()
     python3 fetch.py yt patches
     sed -i '/microg-support/d' youtube_patches.txt
     sed -i '/enable-debugging/d' youtube_patches.txt
-    echo "$(nl -n rz -w2 -s " " youtube_patches.txt)" > youtube_patches.txt
-    cmd=(dialog --clear --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 22 90 20)
+    cmd=(dialog --title 'YouTube Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 40 90 20)
     options=()
-    len="$(wc -l < youtube_patches.txt)"
-    mapfile -t nums < <(seq -w 1 "$len")
     while read -r line
     do
         read -r -a arr <<< "$line"
         options+=("${arr[@]}")
     done < <(cat youtube_patches.txt)
     mapfile -t choices < <("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
-    for num in "${nums[@]}"
+    while read -r line
     do
-        echo "${choices[@]}" | grep -q "$num" || sed -i "/$num/s/ on/ off/" youtube_patches.txt
-    done
+        echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtube_patches.txt
+    done < <(cut -d " " -f 1 youtube_patches.txt)
     if grep -q "custom-branding on" youtube_patches.txt
     then
-        appname=$(dialog --clear --menu 'Choose Appname' 10 40 5 1 "YouTube Revanced" 2 "YouTube" 2>&1 >/dev/tty)
-        if [ "$appname" -eq 1 ]
-        then
-            sed -i "s/appName = \".*\"/appName = \"YouTube Revanced\"/g" options.toml
-        elif [ "$appname" -eq 2 ]
-        then
-            sed -i "s/appName = \".*\"/appName = \"YouTube\"/g" options.toml
-        fi
-        appicon=$(dialog --clear --menu 'Choose Appicon' 10 40 5 1 "YouTube Revanced Default" 2 "Custom icon by decipher" 2>&1 >/dev/tty)
-        if [ "$appicon" -eq 1 ]
+        appname=$(dialog --no-items --no-lines --no-shadow --menu 'Choose Appname' 10 40 5 "YouTube Revanced" "YouTube" 2>&1 >/dev/tty)
+        sed -i "s/appName = \".*\"/appName = \"YouTube Revanced\"/g" options.toml
+        appicon=$(dialog --no-items --no-lines --no-shadow --menu 'Choose Appicon' 10 40 5 "YouTube Revanced Default" "Custom icon by decipher" 2>&1 >/dev/tty)
+        if [ "$appicon" = "YouTube Revanced Default" ]
         then
             sed -i "s/appIconPath = \".*\"/appIconPath = \"null\"/g" options.toml
-        elif [ "$appicon" -eq 2 ]
+        elif [ "$appicon" = "Custom icon by decipher" ]
         then
             sed -i "s/appIconPath = \".*\"/appIconPath = \"revanced-icons\/youtube\"/g" options.toml
         fi
@@ -199,21 +190,18 @@ ytmpatches()
     python3 fetch.py ytm patches
     sed -i '/music-microg-support/d' youtubemusic_patches.txt
     echo "$(nl -n rz -w2 -s " " youtubemusic_patches.txt)" > youtubemusic_patches.txt
-    cmd=(dialog --clear --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 22 90 20)
+    cmd=(dialog --title 'YouTube Music Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 40 90 20)
     options=()
-    len="$(wc -l < youtubemusic_patches.txt)"
-    mapfile -t nums < <(seq -w 1 $len)
     while read -r line
     do
         read -r -a arr <<< "$line"
         options+=("${arr[@]}")
     done < <(cat youtubemusic_patches.txt)
-    tput rc; tput cd
     mapfile -t choices < <("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
-    for num in "${nums[@]}"
+    while read -r line
     do
-        echo "${choices[@]}" | grep -q "$num" || sed -i "/$num/s/ on/ off/" youtubemusic_patches.txt
-    done
+        echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtube_patches.txt
+    done < <(cut -d " " -f 1 youtube_patches.txt)
     clear
     intro
     user_input
