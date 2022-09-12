@@ -331,7 +331,7 @@ then
         fi
     fi
 else
-    variant="non_root"
+    variant="non root"
     mkdir -p /storage/emulated/0/Revancify
     echo "SU Status: Non Root"
     sleep 1
