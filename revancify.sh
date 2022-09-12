@@ -504,7 +504,7 @@ if [ "$options" = "YouTube" ]
 then
     [[ ! -f youtube_patches.txt ]] && python3 fetch.py yt patches
     includeyt=$(while read -r line; do
-        patch=$(echo "$line"| cut -d " " -f 2)
+        patch=$(echo "$line"| cut -d " " -f 1)
         printf -- " -i "
         printf "%s""$patch"
     done < <(grep " on" youtube_patches.txt))
@@ -581,7 +581,7 @@ elif [ "$options" = "YouTubeMusic" ]
 then
     [[ ! -f youtubemusic_patches.txt ]] && python3 fetch.py ytm patches
     includeytm=$(while read -r line; do
-        patch=$(echo "$line"| cut -d " " -f 2)
+        patch=$(echo "$line"| cut -d " " -f 1)
         printf -- " -e "
         printf "%s""$patch"
     done < <(grep " on" youtubemusic_patches.txt))
@@ -590,7 +590,7 @@ then
         appver=$(su -c dumpsys package com.google.android.apps.youtube.music | grep versionName | cut -d= -f 2 )
         if [ "$arch" = "arm64" ]
         then
-            python fetch.py ytm root arm64 "$appver" & pid=$!
+            python fetch.py ytm root arm64 "$appver" & pid=$
             trap 'kill $pid 2> /dev/null' EXIT
             while kill -0 $pid 2> /dev/null; do
                 anim
