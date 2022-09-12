@@ -199,13 +199,12 @@ ytpatches()
     cmd=(dialog --clear --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 22 90 20)
     options=()
     len="$(wc -l < youtube_patches.txt)"
-    mapfile -t nums < <(seq -w 1 $len)
+    mapfile -t nums < <(seq -w 1 "$len")
     while read -r line
     do
         read -r -a arr <<< "$line"
         options+=("${arr[@]}")
     done < <(cat youtube_patches.txt)
-    tput rc; tput cd
     mapfile -t choices < <("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     for num in "${nums[@]}"
     do
@@ -250,7 +249,7 @@ ytmpatches()
     python3 fetch.py ytm patches
     sed -i '/music-microg-support/d' youtubemusic_patches.txt
     echo "$(nl -n rz -w2 -s " " youtubemusic_patches.txt)" > youtubemusic_patches.txt
-    cmd=(dialog --keep-tite--ok-label "Save" --no-cancel  --separate-output --checklist "Select patches to include" 22 90 20)
+    cmd=(dialog --clear --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 22 90 20)
     options=()
     len="$(wc -l < youtubemusic_patches.txt)"
     mapfile -t nums < <(seq -w 1 $len)
@@ -265,6 +264,7 @@ ytmpatches()
     do
         echo "${choices[@]}" | grep -q "$num" || sed -i "/$num/s/ on/ off/" youtubemusic_patches.txt
     done
+    clear
     intro
     user_input
 }
