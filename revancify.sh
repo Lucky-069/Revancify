@@ -145,7 +145,7 @@ ytpatches()
     python3 fetch.py yt patches
     sed -i '/microg-support/d' youtube_patches.txt
     sed -i '/enable-debugging/d' youtube_patches.txt
-    cmd=(dialog --no-shadow --no-lines --no-ok --begin 0 $(($(($(tput cols) - 44)) / 2)) --infobox "   █▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n   █▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░\n \n█▄▄ █▄█    █▀▄ █▀▀ █▀▀ █ █▀█ █░█ █▀▀ █▀█\n█▄█ ░█░    █▄▀ ██▄ █▄▄ █ █▀▀ █▀█ ██▄ █▀▄" 8 44 --and-widget --title 'YouTube Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 40 90 20)
+    cmd=(dialog --no-shadow --no-lines --no-ok --begin 0 $(($(($(tput cols) - 44)) / 2)) --infobox "   █▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n   █▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░\n \n█▄▄ █▄█    █▀▄ █▀▀ █▀▀ █ █▀█ █░█ █▀▀ █▀█\n█▄█ ░█░    █▄▀ ██▄ █▄▄ █ █▀▀ █▀█ ██▄ █▀▄" 8 44 --and-widget --title 'YouTube Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 60 10)
     options=()
     while read -r line
     do
