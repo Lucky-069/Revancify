@@ -213,7 +213,6 @@ ytpatches()
     done
     if grep -q "custom-branding on" youtube_patches.txt
     then
-        clear
         appname=$(dialog --clear --menu 'Choose Appname' 10 40 5 1 "YouTube Revanced" 2 "YouTube" 2>&1 >/dev/tty)
         if [ "$appname" -eq 1 ]
         then
@@ -222,7 +221,7 @@ ytpatches()
         then
             sed -i "s/appName = \".*\"/appName = \"YouTube\"/g" options.toml
         fi
-        appicon=$(appname=$(dialog --clear --menu 'Choose Appicon' 10 40 5 1 "YouTube Revanced Default" 2 "Custom icon by decipher" 2>&1 >/dev/tty))
+        appicon=$(dialog --clear --menu 'Choose Appicon' 10 40 5 1 "YouTube Revanced Default" 2 "Custom icon by decipher" 2>&1 >/dev/tty)
         if [ "$appicon" -eq 1 ]
         then
             sed -i "s/appIconPath = \".*\"/appIconPath = \"null\"/g" options.toml
@@ -231,7 +230,7 @@ ytpatches()
             sed -i "s/appIconPath = \".*\"/appIconPath = \"revanced-icons\/youtube\"/g" options.toml
         fi
     fi
-
+    clear
     intro
     user_input
 }
