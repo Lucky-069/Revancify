@@ -1,0 +1,2 @@
+#!/bin/bash
+dialog --no-shadow --no-lines --no-ok --begin 0 $(($(($(tput cols) - 44)) / 2)) --infobox "   █▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n   █▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░\n \n█▄▄ █▄█    █▀▄ █▀▀ █▀▀ █ █▀█ █░█ █▀▀ █▀█\n█▄█ ░█░    █▄▀ ██▄ █▄▄ █ █▀▀ █▀█ ██▄ █▀▄" 8 44 --and-widget --no-items --no-lines --no-shadow --menu 'Choose Appname' 10 40 5 "YouTube Revanced" "YouTube"
