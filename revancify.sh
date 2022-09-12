@@ -130,56 +130,6 @@ anim()
     tput sc
 }
 
-options(){
-    tput rc; tput cd
-    tput sc
-    echo "Which app icon you want to use?"
-    echo "1. Revanced default"
-    echo "2. YouTube default"
-    echo "3. Custom icon by decipher"
-    read -r -p "Your input: " iconprompt
-    if [ "$iconprompt" = "1" ]
-    then
-        sed -i "s/appIconPath = \".*\"/appIconPath = \"null\"/g" options.toml
-        tput rc; tput cd
-        echo "What app name do you want to use?"
-        echo "1. YouTube Revanced"
-        echo "2. YouTube"
-        read -r -p "Your input: " nameprompt
-        if [ "$nameprompt" = "1" ]
-        then
-            name="YouTube Revanced"
-        elif [ "$nameprompt" = "2" ]
-        then
-            name="YouTube"
-        fi
-        sed -i "s/appName = \".*\"/appName = \"$name\"/g" options.toml
-    elif [ "$iconprompt" = "2" ]
-    then
-        sed -i 's/custom-branding off/custom-branding on/'
-    elif [ "$iconprompt" = "3" ]
-    then
-        cd revanced-icons /dev/null 2>&1 || git clone https://github.com/decipher3114/revanced-icons.git > /dev/null 2>&1
-        git pull > /dev/null 2>&1
-        cd .. || :
-        sed -i "s/appIconPath = \".*\"/appIconPath = \"revanced-icons\/youtube\"/g" options.toml
-        tput rc; tput cd
-        echo "What app name do you want to use?"
-        echo "1. YouTube Revanced"
-        echo "2. YouTube"
-        read -r -p "Your input: " nameprompt
-        if [ "$nameprompt" = "1" ]
-        then
-            name="YouTube Revanced"
-        elif [ "$nameprompt" = "2" ]
-        then
-            name="YouTube"
-        fi
-        sed -i "s/appName = \".*\"/appName = \"$name\"/g" options.toml
-    fi
-    tput rc; tput cd
-    user_input
-}
 
 ytpatches()
 {
@@ -280,7 +230,6 @@ user_input()
     echo "4. Patch Reddit"
     echo "5. Patch TikTok"
     echo "6. Edit Patches"
-    echo "7. Edit Patch-options"
     read -r -p "Your Input: " input
     if [ "$input" -eq "1" ]
     then
@@ -312,9 +261,6 @@ user_input()
         then
             ytmpatches
         fi
-    elif [ "$input" -eq "7" ]
-    then
-        options
     else
         echo No input given..
         user_input
@@ -589,7 +535,7 @@ then
         get_components
         app_dl YouTube "$appver" "$getlink" &&
         echo "Building Youtube Revanced ..."
-        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTube-* -e microg-support $excludeyt --keystore ./revanced.keystore -o ./com.google.android.youtube.apk --custom-aapt2-binary ./aapt2 --experimental
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTube-* -e microg-support $excludeyt --keystore ./revanced.keystore -o ./com.google.android.youtube.apk --custom-aapt2-binary ./aapt2 --experimental --options options.toml
         echo "Mounting the apk"
         sleep 1; tput rc; tput cd
         if su -mm -c 'stockapp=$(pm path com.google.android.youtube | grep base | sed 's/package://g' ); grep com.google.android.youtube /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l; done && mv com.google.android.youtube.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.youtube.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.youtube && exit'
@@ -630,7 +576,7 @@ then
         get_components
         app_dl YouTube "$appver" "$getlink" &&
         echo "Building YouTube Revanced..."
-        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTube-* $excludeyt --keystore ./revanced.keystore -o ./YouTubeRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTube-* $excludeyt --keystore ./revanced.keystore -o ./YouTubeRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental --options options.toml
         mv YouTubeRevanced* /storage/emulated/0/Revancify/ &&
         sleep 1 &&
         echo "YouTube App saved to Revancify folder." &&
