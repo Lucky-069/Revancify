@@ -286,7 +286,6 @@ user_input
         fi
         if [ "$options" = "YouTube" ]
         then
-            echo "Checking if YouTube is installed..."
             if su -c dumpsys package com.google.android.youtube | grep -q path
             then
                 :
@@ -302,7 +301,6 @@ user_input
             fi
         elif [ "$options" = "YouTubeMusic" ] 
         then
-            echo "Checking if YouTube Music is installed..."
             if su -c dumpsys package com.google.android.apps.youtube.music | grep -q path
             then
                 :
