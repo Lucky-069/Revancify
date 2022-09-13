@@ -67,7 +67,7 @@ sleep 1
 if [ "$(git pull)" != "Already up to date." ]
 then
     sleep 1
-    tput rc; tput cd
+    tput rc; tput ed
     echo Revancify updated...
     printf "#!/data/data/com.termux/files/usr/bin/bash"'\n'"cd ~/storage/Revancify/ && bash revancify.sh" > /data/data/com.termux/files/usr/bin/revancify
     sleep 1
@@ -80,7 +80,7 @@ else
     echo ""
     echo "Script already up to date."
     sleep 1
-    tput rc; tput cd
+    tput rc; tput ed
 fi
 
 anim()
@@ -236,12 +236,12 @@ user_input()
         options="TikTok"
     elif [ "$input" -eq "6" ]
     then
-        tput rc; tput cd
+        tput rc; tput ed
         echo "Which app patches do you want to edit?"
         echo "1. YouTube"
         echo "2. YouTube Music"
         read -r -p "Your Input: " patchedit
-        tput rc; tput cd
+        tput rc; tput ed
         if [ "$patchedit" -eq "1" ]
         then
             ytpatches
@@ -253,7 +253,7 @@ user_input()
         echo No input given..
         user_input
     fi
-    tput rc; tput cd
+    tput rc; tput ed
 }
 
 
@@ -306,7 +306,7 @@ user_input
                 :
             else
                 sleep 1
-                tput rc; tput cd
+                tput rc; tput ed
                 echo "Oh No, YouTube Music is not installed"
                 echo ""
                 sleep 1
@@ -344,20 +344,20 @@ get_components(){
             sleep 1
             wget -q -c https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar --show-progress
             sleep 1
-            tput rc; tput cd
+            tput rc; tput ed
         else
             echo "Patches update available."
             sleep 1
-            tput rc; tput cd
+            tput rc; tput ed
             echo "Removing previous Patches..."
             rm revanced-patches*
             sleep 1
-            tput rc; tput cd
+            tput rc; tput ed
             echo "Downloading latest Patches..."
             echo " "
             wget -q -c https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar --show-progress 
             sleep 1
-            tput rc; tput cd
+            tput rc; tput ed
         fi
     else
         echo "No patches found in local storage"
@@ -366,7 +366,7 @@ get_components(){
         echo ""
         wget -q -c https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar --show-progress 
         sleep 1
-        tput rc; tput cd
+        tput rc; tput ed
     fi
 
     #check cli
@@ -380,20 +380,20 @@ get_components(){
             sleep 1
             wget -q -c https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar -O revanced-cli-"$cli_latest".jar --show-progress 
             sleep 1
-            tput rc; tput cd
+            tput rc; tput ed
         else
             echo "CLI update available"
             sleep 1
-            tput rc; tput cd
+            tput rc; tput ed
             echo Removing previous CLI
             rm revanced-cli*
             sleep 1
-            tput rc; tput cd
+            tput rc; tput ed
             echo Downloading latest CLI...
             echo ""
             wget -q -c https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar -O revanced-cli-"$cli_latest".jar --show-progress 
             sleep 1
-            tput rc; tput cd
+            tput rc; tput ed
         fi
     else
         echo "No CLI found locally"
@@ -402,7 +402,7 @@ get_components(){
         echo ""
         wget -q -c https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar -O revanced-cli-"$cli_latest".jar --show-progress 
         sleep 1
-        tput rc; tput cd
+        tput rc; tput ed
     fi
 
     #check integrations
@@ -416,21 +416,21 @@ get_components(){
             sleep 1
             wget -q -c https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk -O revanced-integrations-"$int_latest".apk --show-progress  
             sleep 1
-            tput rc; tput cd
+            tput rc; tput ed
         else
             echo "Integrations update available"
             sleep 1
-            tput rc; tput cd
+            tput rc; tput ed
             echo removing previous Integrations
             rm revanced-integrations*
             sleep 1
-            tput rc; tput cd
+            tput rc; tput ed
             echo "Downloading latest Integrations apk..."
             echo ""
             wget -q -c https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk -O revanced-integrations-"$int_latest".apk --show-progress  
             echo ""
             sleep 1
-            tput rc; tput cd
+            tput rc; tput ed
         fi
     else
         echo "No Integrations found locally"
@@ -439,7 +439,7 @@ get_components(){
         echo ""
         wget -q -c https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk -O revanced-integrations-"$int_latest".apk --show-progress
         sleep 1
-        tput rc; tput cd
+        tput rc; tput ed
     fi
 }
 
@@ -502,7 +502,7 @@ then
         done
         trap - EXIT
         sleep 1
-        tput rc; tput cd
+        tput rc; tput ed
         getlink="$(sed -n '5p' latest.txt)"
         get_components
         app_dl YouTube "$appver" "$getlink" &&
@@ -529,7 +529,7 @@ then
         done
         trap - EXIT
         sleep 1
-        tput rc; tput cd
+        tput rc; tput ed
         read -r -p "Download MicroG [y/n]: " mgprompt
         if [[ "$mgprompt" =~ [Y,y] ]]
         then
@@ -541,7 +541,7 @@ then
         else
             :
         fi
-        tput rc; tput cd
+        tput rc; tput ed
         appver=$(sed -n '4p' latest.txt)
         getlink="$(sed -n '5p' latest.txt)"
         get_components
@@ -589,7 +589,7 @@ then
             trap - EXIT
         fi
         sleep 1
-        tput rc; tput cd
+        tput rc; tput ed
         getlink=$(sed -n '5p' latest.txt)
         get_components
         app_dl YouTubeMusic "$appver" "$getlink" &&
@@ -628,7 +628,7 @@ then
             trap - EXIT
         fi
         sleep 1
-        tput rc; tput cd
+        tput rc; tput ed
         read -r -p "Download MicroG [y/n]: " mgprompt
         if [[ "$mgprompt" =~ [Y,y] ]]
         then
@@ -639,7 +639,7 @@ then
         else
             :
         fi
-        tput rc; tput cd
+        tput rc; tput ed
         appver=$(sed -n '4p' latest.txt | sed 's/-/\./g')
         getlink="$(sed -n '5p' latest.txt)"
         get_components
@@ -660,7 +660,7 @@ then
     done
     trap - EXIT
     sleep 1
-    tput rc; tput cd
+    tput rc; tput ed
     appver=$(sed -n '4p' latest.txt)
     getlink="$(sed -n '5p' latest.txt)"
     get_components
@@ -681,7 +681,7 @@ then
     done
     trap - EXIT
     sleep 1
-    tput rc; tput cd
+    tput rc; tput ed
     appver=$(sed -n '4p' latest.txt)
     getlink="$(sed -n '5p' latest.txt)"
     get_components
@@ -702,7 +702,7 @@ then
     done
     trap - EXIT
     sleep 1
-    tput rc; tput cd
+    tput rc; tput ed
     appver=$(sed -n '4p' latest.txt)
     getlink="$(sed -n '5p' latest.txt)"
     get_components
