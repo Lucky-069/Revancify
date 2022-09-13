@@ -269,74 +269,61 @@ fi
 
 user_input
 
-# variant
-if su -c exit > /dev/null 2>&1
-then
-    variant="root"
-    su -c 'mkdir -p /data/adb/revanced'
-    if su -c ls /data/adb/service.d | grep -q mountyt.sh && su -c ls /data/adb/service.d | grep -q mountytm.sh
+{
+    # variant
+    if su -c exit > /dev/null 2>&1
     then
-        :
+        variant="root"
+        su -c 'mkdir -p /data/adb/revanced'
+        if su -c ls /data/adb/service.d | grep -q mountyt.sh && su -c ls /data/adb/service.d | grep -q mountytm.sh
+        then
+            :
+        else
+            su -c cp mountyt.sh /data/adb/service.d/
+            su -c chmod +x /data/adb/service.d/mountyt.sh
+            su -c cp mountytm.sh /data/adb/service.d/
+            su -c chmod +x /data/adb/service.d/mountytm.sh
+        fi
+        if [ "$options" = "YouTube" ]
+        then
+            echo "Checking if YouTube is installed..."
+            if su -c dumpsys package com.google.android.youtube | grep -q path
+            then
+                :
+            else
+                sleep 1
+                echo "Oh No, YouTube is not installed"
+                echo ""
+                sleep 1
+                echo "Install YouTube from PlayStore and run this script again."
+                tput cnorm
+                cd ~
+                exit
+            fi
+        elif [ "$options" = "YouTubeMusic" ] 
+        then
+            echo "Checking if YouTube Music is installed..."
+            if su -c dumpsys package com.google.android.apps.youtube.music | grep -q path
+            then
+                :
+            else
+                sleep 1
+                tput rc; tput cd
+                echo "Oh No, YouTube Music is not installed"
+                echo ""
+                sleep 1
+                echo "Install YouTube Music from PlayStore and run this script again."
+                tput cnorm
+                cd ~
+                exit
+                
+            fi
+        fi
     else
-        su -c cp mountyt.sh /data/adb/service.d/
-        su -c chmod +x /data/adb/service.d/mountyt.sh
-        su -c cp mountytm.sh /data/adb/service.d/
-        su -c chmod +x /data/adb/service.d/mountytm.sh
+        variant="non_root"
+        mkdir -p /storage/emulated/0/Revancify
     fi
-    echo "SU Status: Root"
-    echo ""
-    sleep 1
-    tput rc; tput cd
-    if [ "$options" = "YouTube" ]
-    then
-        echo "Checking if YouTube is installed..."
-        if su -c dumpsys package com.google.android.youtube | grep -q path
-        then
-            sleep 1
-            echo ""
-            echo "YouTube is installed"
-            sleep 1
-            tput rc; tput cd
-        else
-            sleep 1
-            echo "Oh No, YouTube is not installed"
-            echo ""
-            sleep 1
-            echo "Install YouTube from PlayStore and run this script again."
-            tput cnorm
-            cd ~
-            exit
-        fi
-    elif [ "$options" = "YouTubeMusic" ] 
-    then
-        echo "Checking if YouTube Music is installed..."
-        if su -c dumpsys package com.google.android.apps.youtube.music | grep -q path
-        then
-            sleep 1
-            echo ""
-            echo "YouTube Music is installed"
-            sleep 1
-            tput rc; tput cd
-        else
-            sleep 1
-            tput rc; tput cd
-            echo "Oh No, YouTube Music is not installed"
-            echo ""
-            sleep 1
-            echo "Install YouTube Music from PlayStore and run this script again."
-            tput cnorm
-            cd ~
-            exit
-            
-        fi
-    fi
-else
-    variant="non_root"
-    mkdir -p /storage/emulated/0/Revancify
-    echo "SU Status: Non Root"
-    sleep 1
-    tput rc; tput ed
-fi
+}
 
 get_components(){
     #get patches version
