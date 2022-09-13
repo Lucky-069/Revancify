@@ -346,7 +346,7 @@ get_components(){
             sleep 1
             tput rc; tput cd
         else
-            echo "Patches update available"
+            echo "Patches update available."
             sleep 1
             tput rc; tput cd
             echo "Removing previous Patches..."
@@ -375,7 +375,7 @@ get_components(){
         cli_available=$(basename revanced-cli* .jar | cut -d '-' -f 3) #get version
         if [ "$cli_latest" = "$cli_available" ]
         then
-            echo "Latest CLI already exists"
+            echo "Latest CLI already exists."
             echo ""
             sleep 1
             wget -q -c https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar -O revanced-cli-"$cli_latest".jar --show-progress 
@@ -411,7 +411,7 @@ get_components(){
         int_available=$(basename revanced-integrations* .apk | cut -d '-' -f 3) #get version
         if [ "$int_latest" = "$int_available" ]
         then
-            echo "Latest Integrations already exists"
+            echo "Latest Integrations already exists."
             echo ""
             sleep 1
             wget -q -c https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk -O revanced-integrations-"$int_latest".apk --show-progress  
@@ -451,7 +451,7 @@ app_dl()
     then
         app_available=$(basename "$1"-* .apk | cut -d '-' -f 2) #get version
         if [ "$2" = "$app_available" ];then
-            echo "$1 already on latest version"
+            echo "Latest $1 apk already exists. "
             echo ""
             sleep 1
             wget -q -c "$3" -O "$1"-"$2".apk --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
