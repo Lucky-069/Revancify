@@ -12,18 +12,18 @@ then
     :
 else
     echo "Installing dependencies..."
-    sleep 1
+    sleep 0.5s
     pkg update -y &&
     pkg install python openjdk-17 wget ncurses-utils libxml2 libxslt dialog -y &&
     pip install --upgrade pip &&
     pip install requests wheel bs4 cython cchardet lxml &&
     printf "#!/data/data/com.termux/files/usr/bin/bash"'\n'"cd ~/storage/Revancify/ && bash revancify.sh" > /data/data/com.termux/files/usr/bin/revancify &&
     sed -i 's/# allow-external-apps = true/allow-external-apps = true/g' ~/.termux/termux.properties
-    sleep 1
+    sleep 0.5s
     echo "Dependencies installed successfully."
-    sleep 1
+    sleep 0.5s
     echo "Run this script again"
-    cd ~
+    cd ~ || exit
     exit
 fi
 
@@ -32,9 +32,9 @@ then
     :
 else
     echo "Oops, No internet"
-    sleep 1
+    sleep 0.5s
     echo "Connect to internet and try again."
-    cd ~
+    cd ~ || exit
     tput cnorm
     exit
 fi
@@ -62,24 +62,24 @@ intro()
 intro
 
 echo "Checking for update..."
-sleep 1
+sleep 0.5s
 
 if [ "$(git pull)" != "Already up to date." ]
 then
-    sleep 1
+    sleep 0.5s
     tput rc; tput ed
     echo Revancify updated...
     printf "#!/data/data/com.termux/files/usr/bin/bash"'\n'"cd ~/storage/Revancify/ && bash revancify.sh" > /data/data/com.termux/files/usr/bin/revancify
-    sleep 1
+    sleep 0.5s
     echo Run this script again
-    sleep 1
+    sleep 0.5s
     tput cnorm
-    cd ~
+    cd ~ || exit
     exit
 else
     echo ""
     echo "Script already up to date."
-    sleep 1
+    sleep 0.5s
     tput rc; tput ed
 fi
 
@@ -91,37 +91,37 @@ anim()
     echo ""
     tput sc
     echo "█░░░░░░░░░"
-    sleep 0.1
+    sleep 0.1s
     tput rc
     echo "░█░░░░░░░░"
-    sleep 0.1
+    sleep 0.1s
     tput rc
     echo "░░█░░░░░░░"
-    sleep 0.1
+    sleep 0.1s
     tput rc
     echo "░░░█░░░░░░"
-    sleep 0.1
+    sleep 0.1s
     tput rc
     echo "░░░░█░░░░░"
-    sleep 0.1
+    sleep 0.1s
     tput rc
     echo "░░░░░█░░░░"
-    sleep 0.1
+    sleep 0.1s
     tput rc
     echo "░░░░░░█░░░"
-    sleep 0.1
+    sleep 0.1s
     tput rc
     echo "░░░░░░░█░░"
-    sleep 0.1
+    sleep 0.1s
     tput rc
     echo "░░░░░░░░█░"
-    sleep 0.1
+    sleep 0.1s
     tput rc
     echo "░░░░░░░░░█"
-    sleep 0.1
+    sleep 0.1s
     tput rc
     echo "░░░░░░░░░░"
-    sleep 0.1
+    sleep 0.1s
     tput rc
     tput cuu1
     tput cuu1
@@ -146,13 +146,13 @@ ytpatches()
     sed -i '/microg-support/d' youtube_patches.txt
     sed -i '/enable-debugging/d' youtube_patches.txt
     cmd=(dialog --title 'YouTube Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 40 10)
-    options=()
+    patches=()
     while read -r line
     do
         read -r -a arr <<< "$line"
-        options+=("${arr[@]}")
+        patches+=("${arr[@]}")
     done < <(cat youtube_patches.txt)
-    mapfile -t choices < <("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+    mapfile -t choices < <("${cmd[@]}" "${patches[@]}" 2>&1 >/dev/tty)
     while read -r line
     do
         echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtube_patches.txt
@@ -167,7 +167,7 @@ ytpatches()
             sed -i "s/appIconPath = \".*\"/appIconPath = \"null\"/g" options.toml
         elif [ "$appicon" = "Custom icon by decipher" ]
         then
-            cd revanced-icons > /dev/null 2>&1 || git clone https://github.com/decipher3114/revanced-icons.git > /dev/null 2>&1
+            [ -d revanced-icons ] || git clone https://github.com/decipher3114/revanced-icons.git >/dev/null 2>&1
             sed -i "s/appIconPath = \".*\"/appIconPath = \"revanced-icons\/youtube\"/g" options.toml
         fi
     fi
@@ -191,13 +191,13 @@ ytmpatches()
     python3 fetch.py ytm patches
     sed -i '/music-microg-support/d' youtubemusic_patches.txt
     cmd=(dialog --title 'YouTube Music Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 40 10)
-    options=()
+    patches=()
     while read -r line
     do
         read -r -a arr <<< "$line"
-        options+=("${arr[@]}")
+        patches+=("${arr[@]}")
     done < <(cat youtubemusic_patches.txt)
-    mapfile -t choices < <("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+    mapfile -t choices < <("${cmd[@]}" "${patches[@]}" 2>&1 >/dev/tty)
     while read -r line
     do
         echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtubemusic_patches.txt
@@ -290,13 +290,13 @@ user_input
             then
                 :
             else
-                sleep 1
+                sleep 0.5s
                 echo "Oh No, YouTube is not installed"
                 echo ""
-                sleep 1
+                sleep 0.5s
                 echo "Install YouTube from PlayStore and run this script again."
                 tput cnorm
-                cd ~
+                cd ~ || exit 
                 exit
             fi
         elif [ "$options" = "YouTubeMusic" ] 
@@ -305,14 +305,14 @@ user_input
             then
                 :
             else
-                sleep 1
+                sleep 0.5s
                 tput rc; tput ed
                 echo "Oh No, YouTube Music is not installed"
                 echo ""
-                sleep 1
+                sleep 0.5s
                 echo "Install YouTube Music from PlayStore and run this script again."
                 tput cnorm
-                cd ~
+                cd ~ || exit
                 exit
                 
             fi
@@ -341,22 +341,22 @@ get_components(){
         then
             echo "Latest Patches already exixts."
             echo ""
-            sleep 1
+            sleep 0.5s
             wget -q -c https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar --show-progress
-            sleep 1
+            sleep 0.5s
             tput rc; tput ed
         else
             echo "Patches update available."
-            sleep 1
+            sleep 0.5s
             tput rc; tput ed
             echo "Removing previous Patches..."
             rm revanced-patches*
-            sleep 1
+            sleep 0.5s
             tput rc; tput ed
             echo "Downloading latest Patches..."
             echo " "
             wget -q -c https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar --show-progress 
-            sleep 1
+            sleep 0.5s
             tput rc; tput ed
         fi
     else
@@ -365,7 +365,7 @@ get_components(){
         echo Downloading latest patches file...
         echo ""
         wget -q -c https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar --show-progress 
-        sleep 1
+        sleep 0.5s
         tput rc; tput ed
     fi
 
@@ -377,22 +377,22 @@ get_components(){
         then
             echo "Latest CLI already exists."
             echo ""
-            sleep 1
+            sleep 0.5s
             wget -q -c https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar -O revanced-cli-"$cli_latest".jar --show-progress 
-            sleep 1
+            sleep 0.5s
             tput rc; tput ed
         else
             echo "CLI update available"
-            sleep 1
+            sleep 0.5s
             tput rc; tput ed
             echo Removing previous CLI
             rm revanced-cli*
-            sleep 1
+            sleep 0.5s
             tput rc; tput ed
             echo Downloading latest CLI...
             echo ""
             wget -q -c https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar -O revanced-cli-"$cli_latest".jar --show-progress 
-            sleep 1
+            sleep 0.5s
             tput rc; tput ed
         fi
     else
@@ -401,7 +401,7 @@ get_components(){
         echo Downloading latest CLI...
         echo ""
         wget -q -c https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar -O revanced-cli-"$cli_latest".jar --show-progress 
-        sleep 1
+        sleep 0.5s
         tput rc; tput ed
     fi
 
@@ -413,23 +413,23 @@ get_components(){
         then
             echo "Latest Integrations already exists."
             echo ""
-            sleep 1
+            sleep 0.5s
             wget -q -c https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk -O revanced-integrations-"$int_latest".apk --show-progress  
-            sleep 1
+            sleep 0.5s
             tput rc; tput ed
         else
             echo "Integrations update available"
-            sleep 1
+            sleep 0.5s
             tput rc; tput ed
             echo removing previous Integrations
             rm revanced-integrations*
-            sleep 1
+            sleep 0.5s
             tput rc; tput ed
             echo "Downloading latest Integrations apk..."
             echo ""
             wget -q -c https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk -O revanced-integrations-"$int_latest".apk --show-progress  
             echo ""
-            sleep 1
+            sleep 0.5s
             tput rc; tput ed
         fi
     else
@@ -438,7 +438,7 @@ get_components(){
         echo Downloading latest Integrations apk...
         echo ""
         wget -q -c https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk -O revanced-integrations-"$int_latest".apk --show-progress
-        sleep 1
+        sleep 0.5s
         tput rc; tput ed
     fi
 }
@@ -453,22 +453,22 @@ app_dl()
         if [ "$2" = "$app_available" ];then
             echo "Latest $1 apk already exists. "
             echo ""
-            sleep 1
+            sleep 0.5s
             wget -q -c "$3" -O "$1"-"$2".apk --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
-            sleep 1
+            sleep 0.5s
             tput rc; tput ed
         else
             echo "$1 update available"
-            sleep 1
+            sleep 0.5s
             tput rc; tput ed
             echo "Removing previous $1 apk..."
             rm $1-*.apk
-            sleep 1
+            sleep 0.5s
             tput rc; tput ed
             echo "Downloading latest $1 apk..."
             echo " "
             wget -q -c "$3" -O "$1"-"$2".apk --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
-            sleep 1
+            sleep 0.5s
             tput rc; tput ed
         fi
     else
@@ -477,7 +477,7 @@ app_dl()
         echo "Downloading latest $1 apk..."
         echo " "
         wget -q -c "$3" -O "$1"-"$2".apk --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
-        sleep 1
+        sleep 0.5s
         tput rc; tput ed
     fi
 }
@@ -487,11 +487,11 @@ app_dl()
 if [ "$options" = "YouTube" ]
 then
     [[ ! -f youtube_patches.txt ]] && python3 fetch.py yt patches
-    includeyt=$(while read -r line; do
+    excludeyt=$(while read -r line; do
         patch=$(echo "$line"| cut -d " " -f 1)
-        printf -- " -i "
+        printf -- " -e "
         printf "%s""$patch"
-    done < <(grep " on" youtube_patches.txt))
+    done < <(grep " off" youtube_patches.txt))
     if [ "$variant" = "root" ]
     then
         appver=$( su -c dumpsys package com.google.android.youtube | grep versionName | cut -d= -f 2)
@@ -501,13 +501,13 @@ then
             anim
         done
         trap - EXIT
-        sleep 1
+        sleep 0.5s
         tput rc; tput ed
         getlink="$(sed -n '5p' latest.txt)"
         get_components
         app_dl YouTube "$appver" "$getlink" &&
         echo "Building Youtube Revanced ..."
-        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTube-* $includeyt --keystore ./revanced.keystore -o ./com.google.android.youtube.apk --custom-aapt2-binary ./aapt2 --experimental --options options.toml --exclusive
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTube-* $excludeyt --keystore ./revanced.keystore -o ./com.google.android.youtube.apk --custom-aapt2-binary ./aapt2 --experimental --options options.toml --exclusive
         echo "Mounting the app"
         if su -mm -c 'stockapp=$(pm path com.google.android.youtube | grep base | sed 's/package://g' ); grep com.google.android.youtube /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l; done && mv com.google.android.youtube.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.youtube.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.youtube && exit'
             then
@@ -528,7 +528,7 @@ then
             anim
         done
         trap - EXIT
-        sleep 1
+        sleep 0.5s
         tput rc; tput ed
         read -r -p "Download MicroG [y/n]: " mgprompt
         if [[ "$mgprompt" =~ [Y,y] ]]
@@ -537,7 +537,7 @@ then
             echo ""
             mv "Vanced_MicroG.apk" /storage/emulated/0/Revancify
             echo MicroG App saved to Revancify folder.
-            sleep 1
+            sleep 0.5s
         else
             :
         fi
@@ -547,9 +547,9 @@ then
         get_components
         app_dl YouTube "$appver" "$getlink" &&
         echo "Building YouTube Revanced..."
-        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTube-* -i microg-support $includeyt --keystore ./revanced.keystore -o ./YouTubeRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental --options options.toml --exclusive
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTube-* -i microg-support $excludeyt --keystore ./revanced.keystore -o ./YouTubeRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental --options options.toml --exclusive
         mv YouTubeRevanced* /storage/emulated/0/Revancify/ &&
-        sleep 1 &&
+        sleep 0.5s &&
         echo "YouTube App saved to Revancify folder." &&
         echo "Thanks for using Revancify..." &&
         termux-open /storage/emulated/0/Revancify/YouTubeRevanced-"$appver".apk
@@ -563,11 +563,11 @@ then
 elif [ "$options" = "YouTubeMusic" ]
 then
     [[ ! -f youtubemusic_patches.txt ]] && python3 fetch.py ytm patches
-    includeytm=$(while read -r line; do
+    excludeytm=$(while read -r line; do
         patch=$(echo "$line"| cut -d " " -f 1)
         printf -- " -e "
         printf "%s""$patch"
-        done < <(grep " on" youtubemusic_patches.txt))
+        done < <(grep " off" youtubemusic_patches.txt))
     if [ "$variant" = "root" ]
     then
         appver=$(su -c dumpsys package com.google.android.apps.youtube.music | grep versionName | cut -d= -f 2 )
@@ -588,13 +588,13 @@ then
             done
             trap - EXIT
         fi
-        sleep 1
+        sleep 0.5s
         tput rc; tput ed
         getlink=$(sed -n '5p' latest.txt)
         get_components
         app_dl YouTubeMusic "$appver" "$getlink" &&
         echo "Building YouTube Music Revanced..."
-        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* $includeytm --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2 --experimental --exclusive
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* $excludeytm --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2 --experimental --exclusive
         echo "Mounting the app"
         if su -mm -c 'stockapp=$(pm path com.google.android.apps.youtube.music | grep base | sed 's/package://g' ); grep com.google.android.apps.youtube.music /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l; done && mv com.google.android.apps.youtube.music.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.apps.youtube.music && exit'
         then
@@ -627,7 +627,7 @@ then
             done
             trap - EXIT
         fi
-        sleep 1
+        sleep 0.5s
         tput rc; tput ed
         read -r -p "Download MicroG [y/n]: " mgprompt
         if [[ "$mgprompt" =~ [Y,y] ]]
@@ -645,9 +645,9 @@ then
         get_components
         app_dl YouTubeMusic "$appver" "$getlink" &&
         echo "Building YouTube Music Revanced..."
-        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* -i music-microg-support $includeytm --keystore ./revanced.keystore -o ./YouTubeMusicRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental --exclusive
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic* -i music-microg-support $excludeytm --keystore ./revanced.keystore -o ./YouTubeMusicRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental --exclusive
         mv YouTubeMusicRevanced* /storage/emulated/0/Revancify/ &&
-        sleep 1 &&
+        sleep 0.5s &&
         echo "YouTube Music App saved to Revancify folder." &&
         echo "Thanks for using Revancify..." &&
         termux-open /storage/emulated/0/Revancify/YouTubeMusicRevanced-"$appver".apk
@@ -659,7 +659,7 @@ then
         anim
     done
     trap - EXIT
-    sleep 1
+    sleep 0.5s
     tput rc; tput ed
     appver=$(sed -n '4p' latest.txt)
     getlink="$(sed -n '5p' latest.txt)"
@@ -668,7 +668,7 @@ then
     echo Building Twitter Revanced
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./Twitter-* --keystore ./revanced.keystore -o ./TwitterRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental
     mv TwitterRevanced* /storage/emulated/0/Revancify/ &&
-    sleep 1 &&
+    sleep 0.5s &&
     echo "Twitter App saved to Revancify folder." &&
     echo "Thanks for using Revancify..." &&
     termux-open /storage/emulated/0/Revancify/TwitterRevanced-"$appver".apk
@@ -680,7 +680,7 @@ then
         anim
     done
     trap - EXIT
-    sleep 1
+    sleep 0.5s
     tput rc; tput ed
     appver=$(sed -n '4p' latest.txt)
     getlink="$(sed -n '5p' latest.txt)"
@@ -689,7 +689,7 @@ then
     echo Building Reddit Revanced
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./Reddit-* -r --keystore ./revanced.keystore -o ./RedditRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental
     mv RedditRevanced* /storage/emulated/0/Revancify/ &&
-    sleep 1 &&
+    sleep 0.5s &&
     echo "Reddit App saved to Revancify folder." &&
     echo "Thanks for using Revancify..." &&
     termux-open /storage/emulated/0/Revancify/RedditRevanced-"$appver".apk
@@ -701,7 +701,7 @@ then
         anim
     done
     trap - EXIT
-    sleep 1
+    sleep 0.5s
     tput rc; tput ed
     appver=$(sed -n '4p' latest.txt)
     getlink="$(sed -n '5p' latest.txt)"
@@ -710,7 +710,7 @@ then
     echo Building TikTok Revanced
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./TikTok-* -r --keystore ./revanced.keystore -o ./TikTokRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental
     mv TikTokRevanced* /storage/emulated/0/Revancify/ &&
-    sleep 1 &&
+    sleep 0.5s &&
     echo "TikTok App saved to Revancify folder." &&
     echo "Thanks for using Revancify..." &&
     termux-open /storage/emulated/0/Revancify/TikTokRevanced-"$appver".apk
