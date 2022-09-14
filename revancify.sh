@@ -139,6 +139,7 @@ ytpatches()
     then
         :
     else
+        return 0
         user_input
     fi
     echo "Updating patches..."
@@ -185,6 +186,7 @@ ytmpatches()
     then
         :
     else
+        return 0
         user_input
     fi
     echo "Updating Patches..."
@@ -211,6 +213,7 @@ ytmpatches()
 
 user_input()
 {
+    tput rc; tput ed
     echo "What do you want to do?"
     echo "1. Patch YouTube"
     echo "2. Patch YouTube Music"
