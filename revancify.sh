@@ -322,7 +322,6 @@ user_input
         fi
     else
         variant="non_root"
-        mkdir -p /storage/emulated/0/Revancify
     fi
 }
 
@@ -670,6 +669,7 @@ then
     app_dl Twitter "$appver" "$getlink" &&
     echo Building Twitter Revanced
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./Twitter-* --keystore ./revanced.keystore -o ./TwitterRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental
+    mkdir -p /storage/emulated/0/Revancify
     mv TwitterRevanced* /storage/emulated/0/Revancify/ &&
     sleep 0.5s &&
     echo "Twitter App saved to Revancify folder." &&
@@ -691,6 +691,7 @@ then
     app_dl Reddit "$appver" "$getlink" &&
     echo Building Reddit Revanced
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./Reddit-* -r --keystore ./revanced.keystore -o ./RedditRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental
+    mkdir -p /storage/emulated/0/Revancify
     mv RedditRevanced* /storage/emulated/0/Revancify/ &&
     sleep 0.5s &&
     echo "Reddit App saved to Revancify folder." &&
@@ -712,6 +713,7 @@ then
     app_dl TikTok "$appver" "$getlink" &&
     echo Building TikTok Revanced
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./TikTok-* -r --keystore ./revanced.keystore -o ./TikTokRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental
+    mkdir -p /storage/emulated/0/Revancify
     mv TikTokRevanced* /storage/emulated/0/Revancify/ &&
     sleep 0.5s &&
     echo "TikTok App saved to Revancify folder." &&
