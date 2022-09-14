@@ -576,7 +576,7 @@ then
     if [ "$variant" = "root" ]
     then
         appver=$(su -c dumpsys package com.google.android.apps.youtube.music | grep versionName | cut -d= -f 2 )
-        if [ "$arch" = "arm64" ]
+        if [ "$arch" = "arm64-v8a" ]
         then
             python3 fetch.py ytm root arm64 "$appver" & pid=$
             trap 'kill $pid 2> /dev/null' EXIT
@@ -584,7 +584,7 @@ then
                 anim
             done
             trap - EXIT
-        elif [ "$arch" = "armeabi" ]
+        elif [ "$arch" = "armeabi-v7a" ]
         then
             python3 fetch.py ytm root armeabi "$appver" & pid=$!
             trap 'kill $pid 2> /dev/null' EXIT
