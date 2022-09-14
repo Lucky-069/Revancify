@@ -655,6 +655,7 @@ then
         echo "YouTube Music App saved to Revancify folder." &&
         echo "Thanks for using Revancify..." &&
         termux-open /storage/emulated/0/Revancify/YouTubeMusicRevanced-"$appver".apk
+    fi
 elif [ "$options" = "Twitter" ]
 then
     python3 fetch.py twitter & pid=$!
