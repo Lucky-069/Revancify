@@ -572,11 +572,11 @@ then
         patch=$(echo "$line"| cut -d " " -f 1)
         printf -- " -e "
         printf "%s""$patch"
-        done < <(grep " off" youtubemusic_patches.txt))
+    done < <(grep " off" youtubemusic_patches.txt))
     if [ "$variant" = "root" ]
     then
         appver=$(su -c dumpsys package com.google.android.apps.youtube.music | grep versionName | cut -d= -f 2 )
-        if [ "$arch" = "arm64-v8a" ]
+        if [ "$arch" = "arm64" ]
         then
             python3 fetch.py ytm root arm64 "$appver" & pid=$
             trap 'kill $pid 2> /dev/null' EXIT
@@ -584,7 +584,7 @@ then
                 anim
             done
             trap - EXIT
-        elif [ "$arch" = "armeabi-v7a" ]
+        elif [ "$arch" = "armeabi" ]
         then
             python3 fetch.py ytm root armeabi "$appver" & pid=$!
             trap 'kill $pid 2> /dev/null' EXIT
