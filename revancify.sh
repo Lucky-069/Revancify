@@ -139,8 +139,8 @@ ytpatches()
     then
         :
     else
-        return 0
         user_input
+        return 0
     fi
     echo "Updating patches..."
     python3 fetch.py yt patches
@@ -186,8 +186,8 @@ ytmpatches()
     then
         :
     else
-        return 0
         user_input
+        return 0
     fi
     echo "Updating Patches..."
     python3 fetch.py ytm patches
