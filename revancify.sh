@@ -18,6 +18,7 @@ else
     pip install --upgrade pip &&
     pip install requests wheel bs4 cython cchardet lxml &&
     printf "#!/data/data/com.termux/files/usr/bin/bash"'\n'"cd ~/storage/Revancify/ && bash revancify.sh" > /data/data/com.termux/files/usr/bin/revancify &&
+    chmod +x /data/data/com.termux/files/usr/bin/revancify
     sed -i 's/# allow-external-apps = true/allow-external-apps = true/g' ~/.termux/termux.properties
     sleep 0.5s
     echo "Dependencies installed successfully."
@@ -70,6 +71,7 @@ then
     tput rc; tput ed
     echo Revancify updated...
     printf "#!/data/data/com.termux/files/usr/bin/bash"'\n'"cd ~/storage/Revancify/ && bash revancify.sh" > /data/data/com.termux/files/usr/bin/revancify
+    chmod +x /data/data/com.termux/files/usr/bin/revancify
     sleep 0.5s
     echo Run this script again
     sleep 0.5s
