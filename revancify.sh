@@ -498,7 +498,7 @@ then
     if [ "$variant" = "root" ]
     then
         appver=$( su -c dumpsys package com.google.android.youtube | grep versionName | cut -d= -f 2)
-        python3fetch.py yt root "$appver" & pid=$!
+        python3 fetch.py yt root "$appver" & pid=$!
         trap 'kill $pid 2> /dev/null' EXIT
         while kill -0 $pid 2> /dev/null; do
             anim
@@ -525,7 +525,7 @@ then
         fi
     elif [ "$variant" = "non_root" ]
     then
-        python3fetch.py yt non_root & pid=$!
+        python3 fetch.py yt non_root & pid=$!
         trap 'kill $pid 2> /dev/null' EXIT
         while kill -0 $pid 2> /dev/null; do
             anim
@@ -576,7 +576,7 @@ then
         appver=$(su -c dumpsys package com.google.android.apps.youtube.music | grep versionName | cut -d= -f 2 )
         if [ "$arch" = "arm64" ]
         then
-            python3fetch.py ytm root arm64 "$appver" & pid=$
+            python3 fetch.py ytm root arm64 "$appver" & pid=$
             trap 'kill $pid 2> /dev/null' EXIT
             while kill -0 $pid 2> /dev/null; do
                 anim
@@ -584,7 +584,7 @@ then
             trap - EXIT
         elif [ "$arch" = "armeabi" ]
         then
-            python3fetch.py ytm root armeabi "$appver" & pid=$!
+            python3 fetch.py ytm root armeabi "$appver" & pid=$!
             trap 'kill $pid 2> /dev/null' EXIT
             while kill -0 $pid 2> /dev/null; do
                 anim
@@ -615,7 +615,7 @@ then
     then
         if [ "$arch" = "arm64" ]
         then
-            python3fetch.py ytm non_root arm64 & pid=$!
+            python3 fetch.py ytm non_root arm64 & pid=$!
             trap 'kill $pid 2> /dev/null' EXIT
             while kill -0 $pid 2> /dev/null; do
                 anim
@@ -623,7 +623,7 @@ then
             trap - EXIT
         elif [ "$arch" = "armeabi" ]
         then
-            python3fetch.py ytm non_root armeabi & pid=$!
+            python3 fetch.py ytm non_root armeabi & pid=$!
             trap 'kill $pid 2> /dev/null' EXIT
             while kill -0 $pid 2> /dev/null; do
                 anim
@@ -656,7 +656,7 @@ then
         termux-open /storage/emulated/0/Revancify/YouTubeMusicRevanced-"$appver".apk
 elif [ "$options" = "Twitter" ]
 then
-    python3fetch.py twitter both & pid=$!
+    python3 fetch.py twitter both & pid=$!
     trap 'kill $pid 2> /dev/null' EXIT
     while kill -0 $pid 2> /dev/null; do
         anim
@@ -677,7 +677,7 @@ then
     termux-open /storage/emulated/0/Revancify/TwitterRevanced-"$appver".apk
 elif [ "$options" = "Reddit" ]
 then
-    python3fetch.py reddit both & pid=$!
+    python3 fetch.py reddit both & pid=$!
     trap 'kill $pid 2> /dev/null' EXIT
     while kill -0 $pid 2> /dev/null; do
         anim
@@ -698,7 +698,7 @@ then
     termux-open /storage/emulated/0/Revancify/RedditRevanced-"$appver".apk
 elif [ "$options" = "TikTok" ]
 then
-    python3fetch.py tiktok both & pid=$!
+    python3 fetch.py tiktok both & pid=$!
     trap 'kill $pid 2> /dev/null' EXIT
     while kill -0 $pid 2> /dev/null; do
         anim
