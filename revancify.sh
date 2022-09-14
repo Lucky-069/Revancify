@@ -663,7 +663,7 @@ then
     trap - EXIT
     sleep 0.5s
     tput rc; tput ed
-    appver=$(sed -n '4p' latest.txt)
+    appver=$(sed -n '4p' latest.txt | cut -d "-" -f 1)
     getlink=$(sed -n '5p' latest.txt)
     get_components
     app_dl Twitter "$appver" "$getlink" &&
@@ -708,7 +708,7 @@ then
     sleep 0.5s
     tput rc; tput ed
     appver=$(sed -n '4p' latest.txt)
-    getlink="$(sed -n '5p' latest.txt)"
+    getlink=$(sed -n '5p' latest.txt)
     get_components
     app_dl TikTok "$appver" "$getlink" &&
     echo Building TikTok Revanced
