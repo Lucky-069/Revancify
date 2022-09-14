@@ -324,6 +324,7 @@ user_input
         fi
     else
         variant="non_root"
+        mkdir -p /storage/emulated/0/Revancify
     fi
 }
 
