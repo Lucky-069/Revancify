@@ -643,7 +643,7 @@ then
         fi
         tput rc; tput ed
         appver=$(sed -n '4p' latest.txt | sed 's/-/\./g')
-        getlink="$(sed -n '5p' latest.txt)"
+        getlink=$(sed -n '5p' latest.txt)
         get_components
         app_dl YouTubeMusic "$appver" "$getlink" &&
         echo "Building YouTube Music Revanced..."
@@ -655,7 +655,7 @@ then
         termux-open /storage/emulated/0/Revancify/YouTubeMusicRevanced-"$appver".apk
 elif [ "$options" = "Twitter" ]
 then
-    python3 fetch.py twitter both & pid=$!
+    python3 fetch.py twitter & pid=$!
     trap 'kill $pid 2> /dev/null' EXIT
     while kill -0 $pid 2> /dev/null; do
         anim
@@ -664,7 +664,7 @@ then
     sleep 0.5s
     tput rc; tput ed
     appver=$(sed -n '4p' latest.txt)
-    getlink="$(sed -n '5p' latest.txt)"
+    getlink=$(sed -n '5p' latest.txt)
     get_components
     app_dl Twitter "$appver" "$getlink" &&
     echo Building Twitter Revanced
@@ -677,7 +677,7 @@ then
     termux-open /storage/emulated/0/Revancify/TwitterRevanced-"$appver".apk
 elif [ "$options" = "Reddit" ]
 then
-    python3 fetch.py reddit both & pid=$!
+    python3 fetch.py reddit & pid=$!
     trap 'kill $pid 2> /dev/null' EXIT
     while kill -0 $pid 2> /dev/null; do
         anim
@@ -686,7 +686,7 @@ then
     sleep 0.5s
     tput rc; tput ed
     appver=$(sed -n '4p' latest.txt)
-    getlink="$(sed -n '5p' latest.txt)"
+    getlink=$(sed -n '5p' latest.txt)
     get_components
     app_dl Reddit "$appver" "$getlink" &&
     echo Building Reddit Revanced
@@ -699,7 +699,7 @@ then
     termux-open /storage/emulated/0/Revancify/RedditRevanced-"$appver".apk
 elif [ "$options" = "TikTok" ]
 then
-    python3 fetch.py tiktok both & pid=$!
+    python3 fetch.py tiktok & pid=$!
     trap 'kill $pid 2> /dev/null' EXIT
     while kill -0 $pid 2> /dev/null; do
         anim
