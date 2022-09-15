@@ -170,11 +170,11 @@ ytpatches()
             sed -i "s/appIconPath = \".*\"/appIconPath = \"null\"/g" options.toml
         elif [ "$appicon" = "Custom icon by decipher" ]
         then
-            [ -d revanced-icons ] && cd revanced-icons && git pull >/dev/null 2>&1 || git clone https://github.com/decipher3114/revanced-icons.git >/dev/null 2>&1
+            [ -d revanced-icons ] && cd revanced-icons && git pull >/dev/null 2>&1 && cd .. || git clone https://github.com/decipher3114/revanced-icons.git >/dev/null 2>&1
             sed -i "s/appIconPath = \".*\"/appIconPath = \"revanced-icons\/youtube\"/g" options.toml
         elif [ "$appicon" = "Custom icon by AFN" ]
         then
-            [ -d afn-icons ] && cd afn-icons && git pull >/dev/null 2>&1 || git clone https://github.com/decipher3114/afn-icons.git >/dev/null 2>&1
+            [ -d afn-icons ] && cd afn-icons && git pull >/dev/null 2>&1 && cd .. || git clone https://github.com/decipher3114/afn-icons.git >/dev/null 2>&1
             sed -i "s/appIconPath = \".*\"/appIconPath = \"afn-icons\/youtube\"/g" options.toml
         fi
     fi
