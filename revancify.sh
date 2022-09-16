@@ -366,7 +366,7 @@ user_input()
         fi
     elif [ "$input" -eq "7" ]
     then
-        timeout 1 java -jar revanced-cli* -b revanced-patches* -m revanced-integrations* -a no.apk -o nooutput.apk > /dev/null 2>&1
+        timeout 3 java -jar revanced-cli* -b revanced-patches* -m revanced-integrations* -a no.apk -o nooutput.apk > /dev/null 2>&1
         rm -rf revanced-cache
         tput cnorm
         dialog --backtitle "Revancify" --no-lines --no-shadow --title "Edit Options file" --editbox options.toml 30 60 2> file.tmp && cat file.tmp > options.toml && rm file.tmp
