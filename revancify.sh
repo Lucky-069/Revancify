@@ -258,16 +258,15 @@ anim()
 
 ytpatches()
 {
-    echo "All saved patches will be reset."
-    read -r -p "Do you want to continue? [y/n] " patchprompt
-    if [[ "$patchprompt" =~ [Y,y] ]]
+    if dialog --backtitle "Revancify" --title 'YouTube Patches' --no-items --no-lines --no-shadow --no-cancel --yesno "All patches will be reset. Do You want to continue?" 10 40
     then
         :
     else
+        clear
+        intro
         user_input
         return 0
     fi
-    echo "Updating patches..."
     python3 latest-app.py yt patches
     sed -i '/microg-support/d' youtube-patches.txt
     sed -i '/enable-debugging/d' youtube-patches.txt
@@ -291,16 +290,15 @@ ytpatches()
 
 ytmpatches()
 {
-    echo "All saved patches will be reset. "
-    read -r -p "Do you want to continue? [y/n] " patchprompt
-    if [[ "$patchprompt" =~ [Y,y] ]]
+    if dialog --backtitle "Revancify" --title 'YouTube Patches' --no-items --no-lines --no-shadow --no-cancel --yesno "All patches will be reset. Do You want to continue?" 30 40
     then
         :
     else
+        clear
+        intro
         user_input
         return 0
     fi
-    echo "Updating Patches..."
     python3 latest-app.py ytm patches
     sed -i '/music-microg-support/d' youtubemusic-patches.txt
     cmd=(dialog --backtitle "Revancify" --title 'YouTube Music Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 40 10)
@@ -351,12 +349,7 @@ user_input()
         options="TikTok"
     elif [ "$input" -eq "6" ]
     then
-        tput rc; tput ed
-        echo "Which app patches do you want to edit?"
-        echo "1. YouTube"
-        echo "2. YouTube Music"
-        read -r -p "Your Input: " patchedit
-        tput rc; tput ed
+        patchedit=$(dialog --backtitle "Revancify" --title 'YouTube Patches' --no-lines --no-shadow --ok-label "Select" --no-cancel --menu "Select Option" 30 40 20 1 "YouTube" 2 "YouTube Music" 2>&1> /dev/tty)
         if [ "$patchedit" -eq "1" ]
         then
             ytpatches
@@ -364,6 +357,7 @@ user_input()
         then
             ytmpatches
         fi
+
     elif [ "$input" -eq "7" ]
     then
         [ ! -e options.toml ] && echo "Generating Options File. Please wait..." &&
