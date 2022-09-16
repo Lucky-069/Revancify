@@ -154,6 +154,7 @@ get_components(){
         echo ""
         wget -q -c https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk -O revanced-integrations-"$int_latest".apk --show-progress
         echo ""
+        sleep 0.5s
         tput rc; tput ed
     fi
 }
