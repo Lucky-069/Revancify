@@ -244,8 +244,10 @@ user_input()
     elif [ "$input" -eq "7" ]
     then
         tput cnorm
-        dialog --title "Edit Options file" --editbox options.toml 30 60 2> file.tmp && cat file.tmp > options.toml && rm file.tmp
+        dialog --no-lines --no-shadow --title "Edit Options file" --editbox options.toml 30 60 2> file.tmp && cat file.tmp > options.toml && rm file.tmp
         tput civis
+        clear
+        intro
         user_input
     else
         echo No input given..
