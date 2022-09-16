@@ -5,7 +5,7 @@ revive(){
 }
 trap revive SIGINT
 
-# For update change this sentence here ...
+# For update change this sentence here ....
 
 clear
 rm -rf ./*cache
@@ -358,8 +358,6 @@ user_input()
 
 
 arch=$(getprop ro.product.cpu.abi | cut -d "-" -f 1)
-mv ./aapt2_$arch ./aapt2 > /dev/null 2>&1
-rm ./aapt2_*
 
 
 user_input
@@ -482,7 +480,7 @@ then
         getlink="$(sed -n '2p' latest-app.txt)"
         app_dl YouTube "$appver" "$getlink" &&
         echo "Building Youtube Revanced ..."
-        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTube-"$appver".apk -e microg-support $excludeyt --keystore ./revanced.keystore -o ./com.google.android.youtube.apk --custom-aapt2-binary ./aapt2 --experimental --options options.toml
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTube-"$appver".apk -e microg-support $excludeyt --keystore ./revanced.keystore -o ./com.google.android.youtube.apk --custom-aapt2-binary ./aapt2_"$arch"_"$arch" --experimental --options options.toml
         rm -rf revanced-cache
         echo "Mounting the app"
         if su -mm -c 'stockapp=$(pm path com.google.android.youtube | grep base | sed 's/package://g' ); grep com.google.android.youtube /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l; done && mv com.google.android.youtube.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.youtube.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.youtube && exit'
@@ -522,7 +520,7 @@ then
         getlink="$(sed -n '2p' latest-app.txt)"
         app_dl YouTube "$appver" "$getlink" &&
         echo "Building YouTube Revanced..."
-        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTube-"$appver".apk $excludeyt --keystore ./revanced.keystore -o ./YouTubeRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental --options options.toml
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTube-"$appver".apk $excludeyt --keystore ./revanced.keystore -o ./YouTubeRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch"_"$arch" --experimental --options options.toml
         rm -rf revanced-cache
         mv YouTubeRevanced* /storage/emulated/0/Revancify/ &&
         sleep 0.5s
@@ -569,7 +567,7 @@ then
         getlink=$(sed -n '2p' latest-app.txt)
         app_dl YouTubeMusic "$appver" "$getlink" &&
         echo "Building YouTube Music Revanced..."
-        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTubeMusic-"$appver".apk -e music-microg-support $excludeytm --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2 --experimental
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTubeMusic-"$appver".apk -e music-microg-support $excludeytm --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2_"$arch"_"$arch" --experimental
         rm -rf revanced-cache
         echo "Mounting the app"
         if su -mm -c 'stockapp=$(pm path com.google.android.apps.youtube.music | grep base | sed 's/package://g' ); grep com.google.android.apps.youtube.music /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l; done && mv com.google.android.apps.youtube.music.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.apps.youtube.music && exit'
@@ -619,7 +617,7 @@ then
         getlink=$(sed -n '2p' latest-app.txt)
         app_dl YouTubeMusic "$appver" "$getlink" &&
         echo "Building YouTube Music Revanced..."
-        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTubeMusic-"$appver".apk $excludeytm --keystore ./revanced.keystore -o ./YouTubeMusicRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTubeMusic-"$appver".apk $excludeytm --keystore ./revanced.keystore -o ./YouTubeMusicRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch"_"$arch" --experimental
         rm -rf revanced-cache
         mv YouTubeMusicRevanced* /storage/emulated/0/Revancify/ &&
         sleep 0.5s &&
@@ -641,7 +639,7 @@ then
     getlink=$(sed -n '2p' latest-app.txt)
     app_dl Twitter "$appver" "$getlink" &&
     echo Building Twitter Revanced
-    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./Twitter-"$appver".apk --keystore ./revanced.keystore -o ./TwitterRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental
+    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./Twitter-"$appver".apk --keystore ./revanced.keystore -o ./TwitterRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch"_"$arch" --experimental
     rm -rf revanced-cache
     mkdir -p /storage/emulated/0/Revancify
     mv TwitterRevanced* /storage/emulated/0/Revancify/ &&
@@ -663,7 +661,7 @@ then
     getlink=$(sed -n '2p' latest-app.txt)
     app_dl Reddit "$appver" "$getlink" &&
     echo Building Reddit Revanced
-    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./Reddit-"$appver".apk -r --keystore ./revanced.keystore -o ./RedditRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental
+    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./Reddit-"$appver".apk -r --keystore ./revanced.keystore -o ./RedditRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch"_"$arch" --experimental
     rm -rf revanced-cache
     mkdir -p /storage/emulated/0/Revancify
     mv RedditRevanced* /storage/emulated/0/Revancify/ &&
@@ -685,7 +683,7 @@ then
     getlink=$(sed -n '2p' latest-app.txt)
     app_dl TikTok "$appver" "$getlink" &&
     echo Building TikTok Revanced
-    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./TikTok-"$appver".apk -r --keystore ./revanced.keystore -o ./TikTokRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental
+    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./TikTok-"$appver".apk -r --keystore ./revanced.keystore -o ./TikTokRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch"_"$arch" --experimental
     rm -rf revanced-cache
     mkdir -p /storage/emulated/0/Revancify
     mv TikTokRevanced* /storage/emulated/0/Revancify/ &&
