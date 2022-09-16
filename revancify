@@ -1,12 +1,15 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-cd ~/storage/Revancify > /dev/null 2>&1 || echo "Revancify not installed"
-
-while getopts 'f' flag; do
-  case "${flag}" in
-    f) git checkout . && git pull & ;;
-    *) echo "Not a valid option"
-  esac
-done
-    
-bash revancify.sh
+if cd ~/storage/Revancify > /dev/null 2>&1 
+then
+    while getopts 'f' flag; do
+    case "${flag}" in
+        f) git checkout . && git pull && exit ;;
+        *) echo "Not a valid option"
+    esac
+    done
+    bash revancify.sh
+else
+    echo "Revancify not installed"
+    exit
+fi
