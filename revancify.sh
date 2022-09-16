@@ -21,8 +21,7 @@ else
     pkg install python openjdk-17 wget ncurses-utils libxml2 libxslt dialog -y &&
     pip install --upgrade pip &&
     pip install requests wheel bs4 &&
-    printf "#!/data/data/com.termux/files/usr/bin/bash"'\n'"cd ~/storage/Revancify/ && bash revancify.sh" > /data/data/com.termux/files/usr/bin/revancify &&
-    chmod +x /data/data/com.termux/files/usr/bin/revancify
+    cp revancify ~/../usr/bin
     sed -i 's/# allow-external-apps = true/allow-external-apps = true/g' ~/.termux/termux.properties
     sleep 0.5s
     echo "Dependencies installed successfully."
@@ -172,8 +171,7 @@ then
     sleep 0.5s
     tput rc; tput ed
     echo Revancify updated...
-    printf "#!/data/data/com.termux/files/usr/bin/bash"'\n'"cd ~/storage/Revancify/ && bash revancify.sh" > /data/data/com.termux/files/usr/bin/revancify
-    chmod +x /data/data/com.termux/files/usr/bin/revancify
+    cp revancify ~/../usr/bin
     sleep 0.5s
     echo Run this script again
     sleep 0.5s

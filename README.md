@@ -26,15 +26,18 @@ termux-setup-storage && pkg update -y && pkg install git -y && cd storage && git
 # Usage
 1. Open Termux.  
 2. Type `revancify` 
+
+To Force Update use `revancify -f`. It will solve any update problem if exists.  
 > Now Revancify is a binary, it can be run directly after opening.
 
 # Troubleshoot
+
 ## Command 1: 
 Use this command in case of any fatal error
 ```
 cd storage/Revancify && bash revancify.sh
 ```  
-## Method 2:  
+## Command 2:  
 if command 1 fails, use this command, this will delete and reinitialize the repo.
 ```
 cd storage && rm -rf Revancify && rm ~/../usr/bin/revancify && git clone https://github.com/decipher3114/Revancify && cd Revancify && bash revancify.sh
