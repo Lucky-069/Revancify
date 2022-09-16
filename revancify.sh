@@ -79,7 +79,6 @@ get_components(){
         then
             echo "Latest Patches already exixts."
             echo ""
-            sleep 0.5s
             wget -q -c https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar --show-progress
             sleep 0.5s
             tput rc; tput ed
@@ -115,7 +114,6 @@ get_components(){
         then
             echo "Latest CLI already exists."
             echo ""
-            sleep 0.5s
             wget -q -c https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar -O revanced-cli-"$cli_latest".jar --show-progress 
             sleep 0.5s
             tput rc; tput ed
@@ -151,7 +149,6 @@ get_components(){
         then
             echo "Latest Integrations already exists."
             echo ""
-            sleep 0.5s
             wget -q -c https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk -O revanced-integrations-"$int_latest".apk --show-progress  
             sleep 0.5s
             tput rc; tput ed
@@ -349,7 +346,7 @@ user_input()
         options="TikTok"
     elif [ "$input" -eq "6" ]
     then
-        patchedit=$(dialog --backtitle "Revancify" --title 'Select App' --no-lines --no-shadow --ok-label "Select" --no-cancel --menu "Select Option" 10 40 1 "YouTube" 2 "YouTube Music" 2>&1> /dev/tty)
+        patchedit=$(dialog --backtitle "Revancify" --title 'Select App' --no-lines --no-shadow --ok-label "Select" --no-cancel --menu "Select Option" 10 40 10 1 "YouTube" 2 "YouTube Music" 2>&1> /dev/tty)
         if [ "$patchedit" -eq "1" ]
         then
             ytpatches
