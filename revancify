@@ -1,6 +1,6 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-cd ~/storage/Revancify || echo "Revancify not installed" && exit
+cd ~/storage/Revancify > /dev/null 2>&1 || echo "Revancify not installed" && exit
 
 while getopts 'f' flag
 do
