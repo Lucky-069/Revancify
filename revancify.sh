@@ -8,16 +8,16 @@ trap revive SIGINT
 clear
 rm -rf ./*cache
 
-if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/dialog ] && [ -e ~/../usr/bin/tput ] && [ "$(find ~/../usr/lib/ -name "wheel" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "requests" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "bs4" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "lxml" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "cchardet" | wc -l)" != "0" ] && [ -e ~/../usr/bin/revancify ] 
+if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/dialog ] && [ -e ~/../usr/bin/tput ] && [ "$(find ~/../usr/lib/ -name "wheel" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "requests" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "bs4" | wc -l)" != "0" ] && [ -e ~/../usr/bin/revancify ] 
 then
     :
 else
     echo "Installing dependencies..."
     sleep 0.5s
     pkg update -y &&
-    pkg install python openjdk-17 wget ncurses-utils libxml2 libxslt dialog --backtitle "Revancify" -y &&
+    pkg install python openjdk-17 wget ncurses-utils libxml2 libxslt dialog -y &&
     pip install --upgrade pip &&
-    pip install requests wheel bs4 cython cchardet lxml &&
+    pip install requests wheel bs4 cython &&
     printf "#!/data/data/com.termux/files/usr/bin/bash"'\n'"cd ~/storage/Revancify/ && bash revancify.sh" > /data/data/com.termux/files/usr/bin/revancify &&
     chmod +x /data/data/com.termux/files/usr/bin/revancify
     sed -i 's/# allow-external-apps = true/allow-external-apps = true/g' ~/.termux/termux.properties
