@@ -2,17 +2,15 @@
 
 cd ~/storage/Revancify || echo "Revancify not installed" && exit
 
-while getopts f flag
+while getopts 'f' flag
 do
     case "$flag" in
-    f)
-        git checkout .
-        git pull
-        exit
-        ;;
-    ?)
-        echo "Not a valid argument. Use -f to force update"
-        ;;
+      f)
+          git checkout . && git pull && exit
+          ;;
+      *)
+          echo "Not a valid argument. Use -f to force update"
+          ;;
     esac
 done
     
