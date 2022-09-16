@@ -171,7 +171,6 @@ then
     sleep 0.5s
     tput rc; tput ed
     echo Revancify updated...
-    cp revancify ~/../usr/bin
     sleep 0.5s
     echo Run this script again
     sleep 0.5s
@@ -186,6 +185,7 @@ else
     python3 revanced-latest.py
     get_components
 fi
+cp revancify ~/../usr/bin
 
 anim()
 {
