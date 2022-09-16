@@ -389,7 +389,7 @@ fi
 
 user_input
 
-su_check
+su_check()
 {
     # variant
     if su -c exit > /dev/null 2>&1
