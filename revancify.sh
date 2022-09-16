@@ -511,7 +511,6 @@ then
         sleep 0.5s
         tput rc; tput ed
         getlink="$(sed -n '2p' latest-app.txt)"
-        get_components
         app_dl YouTube "$appver" "$getlink" &&
         echo "Building Youtube Revanced ..."
         java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTube-"$appver".apk -e microg-support $excludeyt --keystore ./revanced.keystore -o ./com.google.android.youtube.apk --custom-aapt2-binary ./aapt2 --experimental --options options.toml
@@ -552,7 +551,6 @@ then
         tput rc; tput ed
         appver=$(sed -n '1p' latest-app.txt)
         getlink="$(sed -n '2p' latest-app.txt)"
-        get_components
         app_dl YouTube "$appver" "$getlink" &&
         echo "Building YouTube Revanced..."
         java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTube-"$appver".apk $excludeyt --keystore ./revanced.keystore -o ./YouTubeRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental --options options.toml
@@ -600,7 +598,6 @@ then
         sleep 0.5s
         tput rc; tput ed
         getlink=$(sed -n '2p' latest-app.txt)
-        get_components
         app_dl YouTubeMusic "$appver" "$getlink" &&
         echo "Building YouTube Music Revanced..."
         java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTubeMusic-"$appver".apk -e music-microg-support $excludeytm --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2 --experimental
@@ -651,7 +648,6 @@ then
         tput rc; tput ed
         appver=$(sed -n '1p' latest-app.txt | sed 's/-/\./g')
         getlink=$(sed -n '2p' latest-app.txt)
-        get_components
         app_dl YouTubeMusic "$appver" "$getlink" &&
         echo "Building YouTube Music Revanced..."
         java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTubeMusic-"$appver".apk $excludeytm --keystore ./revanced.keystore -o ./YouTubeMusicRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental
@@ -674,7 +670,6 @@ then
     tput rc; tput ed
     appver=$(sed -n '1p' latest-app.txt | cut -d "-" -f 1)
     getlink=$(sed -n '2p' latest-app.txt)
-    get_components
     app_dl Twitter "$appver" "$getlink" &&
     echo Building Twitter Revanced
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./Twitter-"$appver".apk --keystore ./revanced.keystore -o ./TwitterRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental
@@ -697,7 +692,6 @@ then
     tput rc; tput ed
     appver=$(sed -n '1p' latest-app.txt)
     getlink=$(sed -n '2p' latest-app.txt)
-    get_components
     app_dl Reddit "$appver" "$getlink" &&
     echo Building Reddit Revanced
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./Reddit-"$appver".apk -r --keystore ./revanced.keystore -o ./RedditRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental
@@ -720,7 +714,6 @@ then
     tput rc; tput ed
     appver=$(sed -n '1p' latest-app.txt)
     getlink=$(sed -n '2p' latest-app.txt)
-    get_components
     app_dl TikTok "$appver" "$getlink" &&
     echo Building TikTok Revanced
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./TikTok-"$appver".apk -r --keystore ./revanced.keystore -o ./TikTokRevanced-"$appver".apk --custom-aapt2-binary ./aapt2 --experimental
