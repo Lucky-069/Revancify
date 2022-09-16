@@ -14,7 +14,7 @@ else
     echo "Installing dependencies..."
     sleep 0.5s
     pkg update -y &&
-    pkg install python openjdk-17 wget ncurses-utils libxml2 libxslt dialog -y &&
+    pkg install python openjdk-17 wget ncurses-utils libxml2 libxslt dialog --backtitle "Revancify" -y &&
     pip install --upgrade pip &&
     pip install requests wheel bs4 cython cchardet lxml &&
     printf "#!/data/data/com.termux/files/usr/bin/bash"'\n'"cd ~/storage/Revancify/ && bash revancify.sh" > /data/data/com.termux/files/usr/bin/revancify &&
@@ -148,7 +148,7 @@ ytpatches()
     python3 fetch.py yt patches
     sed -i '/microg-support/d' youtube_patches.txt
     sed -i '/enable-debugging/d' youtube_patches.txt
-    cmd=(dialog --title 'YouTube Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 40 10)
+    cmd=(dialog --backtitle "Revancify" --title 'YouTube Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 40 10)
     patches=()
     while read -r line
     do
@@ -180,7 +180,7 @@ ytmpatches()
     echo "Updating Patches..."
     python3 fetch.py ytm patches
     sed -i '/music-microg-support/d' youtubemusic_patches.txt
-    cmd=(dialog --title 'YouTube Music Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 40 10)
+    cmd=(dialog --backtitle "Revancify" --title 'YouTube Music Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 40 10)
     patches=()
     while read -r line
     do
@@ -244,7 +244,7 @@ user_input()
     elif [ "$input" -eq "7" ]
     then
         tput cnorm
-        dialog --no-lines --no-shadow --title "Edit Options file" --editbox options.toml 30 60 2> file.tmp && cat file.tmp > options.toml && rm file.tmp
+        dialog --backtitle "Revancify" --no-lines --no-shadow --title "Edit Options file" --editbox options.toml 30 60 2> file.tmp && cat file.tmp > options.toml && rm file.tmp
         tput civis
         clear
         intro
