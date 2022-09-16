@@ -349,7 +349,7 @@ user_input()
         options="TikTok"
     elif [ "$input" -eq "6" ]
     then
-        patchedit=$(dialog --backtitle "Revancify" --title 'YouTube Patches' --no-lines --no-shadow --ok-label "Select" --no-cancel --menu "Select Option" 30 40 20 1 "YouTube" 2 "YouTube Music" 2>&1> /dev/tty)
+        patchedit=$(dialog --backtitle "Revancify" --title 'Select App' --no-lines --no-shadow --ok-label "Select" --no-cancel --menu "Select Option" 10 40 1 "YouTube" 2 "YouTube Music" 2>&1> /dev/tty)
         if [ "$patchedit" -eq "1" ]
         then
             ytpatches
@@ -364,7 +364,7 @@ user_input()
         java -jar revanced-cli* -b revanced-patches* -m revanced-integrations* -a no.apk -o nooutput.apk > /dev/null 2>&1
         rm -rf revanced-cache
         tput cnorm
-        dialog --backtitle "Revancify" --no-lines --no-shadow --title "Edit Options file" --editbox options.toml 30 60 2> file.tmp && cat file.tmp > options.toml && rm file.tmp
+        dialog --backtitle "Revancify" --no-lines --no-shadow --title "Edit Options file" --editbox options.toml 25 60 2> file.tmp && cat file.tmp > options.toml && rm file.tmp
         tput civis
         clear
         intro
