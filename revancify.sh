@@ -246,6 +246,7 @@ user_input()
         tput cnorm
         dialog --title "Edit Options file" --editbox options.toml 30 60 2> file.tmp && cat file.tmp > options.toml && rm file.tmp
         tput civis
+        user_input
     else
         echo No input given..
         user_input
