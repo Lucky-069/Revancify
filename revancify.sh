@@ -160,24 +160,7 @@ ytpatches()
     do
         echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtube_patches.txt
     done < <(cut -d " " -f 1 youtube_patches.txt)
-    if grep -q "custom-branding on" youtube_patches.txt
-    then
-        appnameoptions=$(dialog --no-items --no-lines --no-shadow --menu 'Choose Appname' 10 40 5 "YouTube Revanced" "YouTube" 2>&1 >/dev/tty)
-        sed -i "s/appName = \".*\"/appName = \"$appnameoptions\"/g" options.toml
-        appicon=$(dialog --no-items --no-lines --no-shadow --menu 'Choose Appicon' 10 40 5 "YouTube Revanced Default" "Custom icon by decipher" "Custom icon by AFN" 2>&1 >/dev/tty)
-        if [ "$appicon" = "YouTube Revanced Default" ]
-        then
-            sed -i "s/appIconPath = \".*\"/appIconPath = \"null\"/g" options.toml
-        elif [ "$appicon" = "Custom icon by decipher" ]
-        then
-            [ -d revanced-icons ] && cd revanced-icons && git pull >/dev/null 2>&1 && cd .. || git clone https://github.com/decipher3114/revanced-icons.git >/dev/null 2>&1
-            sed -i "s/appIconPath = \".*\"/appIconPath = \"revanced-icons\/youtube\"/g" options.toml
-        elif [ "$appicon" = "Custom icon by AFN" ]
-        then
-            [ -d afn-icons ] && cd afn-icons && git pull >/dev/null 2>&1 && cd .. || git clone https://github.com/decipher3114/afn-icons.git >/dev/null 2>&1
-            sed -i "s/appIconPath = \".*\"/appIconPath = \"afn-icons\/youtube\"/g" options.toml
-        fi
-    fi
+    dialog --title "Edit Options file" --editbox options.toml 30 60 2> file.tmp && cat file.tmp > options.toml && rm file.tmp
     clear
     intro
     user_input
