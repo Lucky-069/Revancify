@@ -97,9 +97,9 @@ get_components(){
             tput rc; tput ed
         fi
     else
-        echo "No patches found in local storage"
+        echo "No patches found in Current Directory"
         echo ""
-        echo Downloading latest patches file...
+        echo "Downloading latest patches file..."
         echo ""
         wget -q -c https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar --show-progress 
         sleep 0.5s
@@ -119,23 +119,23 @@ get_components(){
             sleep 0.5s
             tput rc; tput ed
         else
-            echo "CLI update available"
+            echo "CLI update available !!"
             sleep 0.5s
             tput rc; tput ed
-            echo Removing previous CLI
+            echo "Removing previous CLI..."
             rm revanced-cli*
             sleep 0.5s
             tput rc; tput ed
-            echo Downloading latest CLI...
+            echo "Downloading latest CLI..."
             echo ""
             wget -q -c https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar -O revanced-cli-"$cli_latest".jar --show-progress 
             sleep 0.5s
             tput rc; tput ed
         fi
     else
-        echo "No CLI found locally"
+        echo "No CLI found in Current Directory"
         echo ""
-        echo Downloading latest CLI...
+        echo "Downloading latest CLI..."
         echo ""
         wget -q -c https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar -O revanced-cli-"$cli_latest".jar --show-progress 
         sleep 0.5s
@@ -155,10 +155,10 @@ get_components(){
             sleep 0.5s
             tput rc; tput ed
         else
-            echo "Integrations update available"
+            echo "Integrations update available !!"
             sleep 0.5s
             tput rc; tput ed
-            echo removing previous Integrations
+            echo "Removing previous Integrations..."
             rm revanced-integrations*
             sleep 0.5s
             tput rc; tput ed
@@ -170,9 +170,9 @@ get_components(){
             tput rc; tput ed
         fi
     else
-        echo "No Integrations found locally"
+        echo "No Integrations found in Current Directory"
         echo ""
-        echo Downloading latest Integrations apk...
+        echo "Downloading latest Integrations apk..."
         echo ""
         wget -q -c https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk -O revanced-integrations-"$int_latest".apk --show-progress
         sleep 0.5s
@@ -391,6 +391,7 @@ fi
 
 user_input
 
+su_check
 {
     # variant
     if su -c exit > /dev/null 2>&1
@@ -453,14 +454,14 @@ app_dl()
     then
         app_available=$(basename "$1"-* .apk | cut -d '-' -f 2) #get version
         if [ "$2" = "$app_available" ];then
-            echo "Latest $1 apk already exists. "
+            echo "Latest $1 apk already exists."
             echo ""
             sleep 0.5s
             wget -q -c "$3" -O "$1"-"$2".apk --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
             sleep 0.5s
             tput rc; tput ed
         else
-            echo "$1 update available"
+            echo "$1 update available !!"
             sleep 0.5s
             tput rc; tput ed
             echo "Removing previous $1 apk..."
@@ -474,7 +475,7 @@ app_dl()
             tput rc; tput ed
         fi
     else
-        echo "No $1 apk found locally"
+        echo "No $1 apk found in Current Directory"
         echo " "
         echo "Downloading latest $1 apk..."
         echo " "
@@ -485,7 +486,7 @@ app_dl()
 }
 
 #Build apps
-
+su_check
 if [ "$options" = "YouTube" ]
 then
     [[ ! -f youtube-patches.txt ]] && python3 latest-app.py yt patches
