@@ -17,7 +17,7 @@ else
     pkg update -y &&
     pkg install python openjdk-17 wget ncurses-utils libxml2 libxslt dialog -y &&
     pip install --upgrade pip &&
-    pip install requests wheel bs4 cython &&
+    pip install requests wheel bs4 &&
     printf "#!/data/data/com.termux/files/usr/bin/bash"'\n'"cd ~/storage/Revancify/ && bash revancify.sh" > /data/data/com.termux/files/usr/bin/revancify &&
     chmod +x /data/data/com.termux/files/usr/bin/revancify
     sed -i 's/# allow-external-apps = true/allow-external-apps = true/g' ~/.termux/termux.properties
