@@ -6,6 +6,7 @@ revive(){
 trap revive SIGINT
 
 clear
+rm -rf ./*cache
 
 if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/dialog ] && [ -e ~/../usr/bin/tput ] && [ "$(find ~/../usr/lib/ -name "wheel" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "requests" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "bs4" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "lxml" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "cchardet" | wc -l)" != "0" ] && [ -e ~/../usr/bin/revancify ] 
 then
@@ -365,6 +366,8 @@ user_input()
         fi
     elif [ "$input" -eq "7" ]
     then
+        timeout 1 java -jar revanced-cli* -b revanced-patches* -m revanced-integrations* -a no.apk -o nooutput.apk > /dev/null 2>&1
+        rm -rf revanced-cache
         tput cnorm
         dialog --backtitle "Revancify" --no-lines --no-shadow --title "Edit Options file" --editbox options.toml 30 60 2> file.tmp && cat file.tmp > options.toml && rm file.tmp
         tput civis
@@ -419,7 +422,7 @@ su_check
                 sleep 0.5s
                 echo "Install YouTube from PlayStore and run this script again."
                 tput cnorm
-                cd ~ || exit 
+                cd ~ || exit
                 exit
             fi
         elif [ "$options" = "YouTubeMusic" ] 
