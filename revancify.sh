@@ -358,13 +358,9 @@ user_input()
 
 
 arch=$(getprop ro.product.cpu.abi | cut -d "-" -f 1)
-if [ -e ./aapt2 ]
-then
-    :
-else 
-    mv ./aapt2_$arch ./aapt2
-    rm ./aapt2_*
-fi
+mv ./aapt2_$arch ./aapt2 > /dev/null 2>&1
+rm ./aapt2_*
+
 
 user_input
 
