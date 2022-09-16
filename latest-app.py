@@ -34,10 +34,10 @@ elif sys.argv[1] == "ytm":
     elif sys.argv[2] == "root":
         appver = sys.argv[4]
     elif sys.argv[2] == "patches":
-        open("youtubemusic_patches.txt", "w").close()
+        open("youtubemusic-patches.txt", "w").close()
         for i in (requests.get('https://raw.githubusercontent.com/revanced/revanced-patches/main/patches.json')).json():
             if (((i['compatiblePackages'])[0])['name']) == "com.google.android.apps.youtube.music" and i['deprecated'] != True:
-                with open("youtubemusic_patches.txt", "a") as p:
+                with open("youtubemusic-patches.txt", "a") as p:
                     p.write(str(i['name']) + " " + "on" + "\n")
         sys.exit()
 
