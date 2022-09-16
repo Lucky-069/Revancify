@@ -1,15 +1,9 @@
 import requests
-import lxml
+import html.parser
 from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
 import re
 import sys
-
-requests_session = requests.Session()
-patches_version = (((requests_session.get('https://api.github.com/repos/revanced/revanced-patches/releases/latest')).json())['name']).replace("v","")
-cli_version = (((requests_session.get('https://api.github.com/repos/revanced/revanced-cli/releases/latest')).json())['name']).replace("v","")
-integrations_version = (((requests_session.get('https://api.github.com/repos/revanced/revanced-integrations/releases/latest')).json())['name']).replace("v","")
-
 
 if sys.argv[1] == "yt":
     if sys.argv[2] == "non_root":
@@ -29,7 +23,7 @@ if sys.argv[1] == "yt":
 
     appurl = "".join(["https://www.apkmirror.com/apk/google-inc/youtube/youtube-", appver.replace(".","-"), "-release/"])
 
-    apppage1= "".join(["https://apkmirror.com", ((((BeautifulSoup((urlopen(Request(url=appurl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["span"], text="APK")).parent).find(["a"], class_="accent_color")['href'])])
+    apppage1= "".join(["https://apkmirror.com", ((((BeautifulSoup((urlopen(Request(url=appurl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'html.parser')).find(["span"], text="APK")).parent).find(["a"], class_="accent_color")['href'])])
 
 elif sys.argv[1] == "ytm":
     if sys.argv[2] == "non_root":
@@ -50,39 +44,39 @@ elif sys.argv[1] == "ytm":
     appurl = "".join(["https://www.apkmirror.com/apk/google-inc/youtube-music/youtube-music-", appver.replace(".","-"), "-release/"])
 
     if sys.argv[3] == "arm64":
-        apppage1 = "".join(["https://www.apkmirror.com", (((((BeautifulSoup((urlopen(Request(url=appurl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["div"], text="arm64-v8a")).parent).find(["a"], class_="accent_color"))['href'])])
+        apppage1 = "".join(["https://www.apkmirror.com", (((((BeautifulSoup((urlopen(Request(url=appurl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'html.parser')).find(["div"], text="arm64-v8a")).parent).find(["a"], class_="accent_color"))['href'])])
     elif sys.argv[3] == "armeabi":
-        apppage1 = "".join(["https://www.apkmirror.com", (((((BeautifulSoup((urlopen(Request(url=appurl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["div"], text="armeabi-v7a")).parent).find(["a"], class_="accent_color"))['href'])])
+        apppage1 = "".join(["https://www.apkmirror.com", (((((BeautifulSoup((urlopen(Request(url=appurl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'html.parser')).find(["div"], text="armeabi-v7a")).parent).find(["a"], class_="accent_color"))['href'])])
 
 
 elif sys.argv[1] == "twitter":
-    for a in ((BeautifulSoup((urlopen(Request(url="https://www.apkmirror.com/apk/twitter-inc/", headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find_all(["a"], class_="fontBlack", text=re.compile("^.*.release*"))):
+    for a in ((BeautifulSoup((urlopen(Request(url="https://www.apkmirror.com/apk/twitter-inc/", headers={'User-Agent': 'Mozilla/5.0'})).read()), 'html.parser')).find_all(["a"], class_="fontBlack", text=re.compile("^.*.release*"))):
         appver = ((a.string).split(' ')[1])
         break
     appurl = "".join(["https://www.apkmirror.com/apk/twitter-inc/twitter/twitter-", appver.replace(".","-"), "-release/"])
 
-    apppage1= "".join(["https://apkmirror.com", ((((BeautifulSoup((urlopen(Request(url=appurl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["span"], text="APK")).parent).find(["a"], class_="accent_color")['href'])])
+    apppage1= "".join(["https://apkmirror.com", ((((BeautifulSoup((urlopen(Request(url=appurl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'html.parser')).find(["span"], text="APK")).parent).find(["a"], class_="accent_color")['href'])])
 
 elif sys.argv[1] == "reddit":
-    for a in ((BeautifulSoup((urlopen(Request(url="https://www.apkmirror.com/apk/redditinc/", headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find_all(["a"], class_="fontBlack")): 
+    for a in ((BeautifulSoup((urlopen(Request(url="https://www.apkmirror.com/apk/redditinc/", headers={'User-Agent': 'Mozilla/5.0'})).read()), 'html.parser')).find_all(["a"], class_="fontBlack")): 
         appver = ((a.string).split(' ')[1])
         break
     appurl = "".join(["https://www.apkmirror.com/apk/reddditinc/reddit/reddit-", appver.replace(".","-"), "-release/"])
 
-    apppage1= "".join(["https://apkmirror.com", ((((BeautifulSoup((urlopen(Request(url=appurl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["span"], text="APK")).parent).find(["a"], class_="accent_color")['href'])])
+    apppage1= "".join(["https://apkmirror.com", ((((BeautifulSoup((urlopen(Request(url=appurl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'html.parser')).find(["span"], text="APK")).parent).find(["a"], class_="accent_color")['href'])])
 elif sys.argv[1] == "tiktok":
-    for a in ((BeautifulSoup((urlopen(Request(url="https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok/",headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find_all(["a"], class_="fontBlack")):
+    for a in ((BeautifulSoup((urlopen(Request(url="https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok/",headers={'User-Agent': 'Mozilla/5.0'})).read()), 'html.parser')).find_all(["a"], class_="fontBlack")):
         appver = ((a.string).split(' ')[1])
         break
 
     appurl = "".join(["https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok/tik-tok-", appver.replace(".","-"), "-release/"])
 
-    apppage1= "".join(["https://apkmirror.com", ((((BeautifulSoup((urlopen(Request(url=appurl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["span"], text="APK")).parent).find(["a"], class_="accent_color")['href'])])
+    apppage1= "".join(["https://apkmirror.com", ((((BeautifulSoup((urlopen(Request(url=appurl, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'html.parser')).find(["span"], text="APK")).parent).find(["a"], class_="accent_color")['href'])])
 
-apppage2= "".join(["https://apkmirror.com", ((BeautifulSoup((urlopen(Request(url=apppage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(["a"], { 'class' : re.compile("accent_bg btn btn-flat downloadButton")})['href'])])
+apppage2= "".join(["https://apkmirror.com", ((BeautifulSoup((urlopen(Request(url=apppage1, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'html.parser')).find(["a"], { 'class' : re.compile("accent_bg btn btn-flat downloadButton")})['href'])])
 
-appdllink = "".join(["https://apkmirror.com", (((BeautifulSoup((urlopen(Request(url=apppage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'lxml')).find(rel="nofollow"))['href'])])
+appdllink = "".join(["https://apkmirror.com", (((BeautifulSoup((urlopen(Request(url=apppage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'html.parser')).find(rel="nofollow"))['href'])])
 
-with open("latest.txt", "w") as f:
-        f.write('\n'.join([patches_version, cli_version, integrations_version, appver, appdllink]))
+with open("latest_app.txt", "w") as f:
+        f.write('\n'.join([appver, appdllink]))
 

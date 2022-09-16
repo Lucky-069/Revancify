@@ -60,6 +60,126 @@ intro()
     tput sc
 }
 
+get_components(){
+    #get patches version
+    patches_latest=$(sed -n '1p' revanced_latest.txt)
+
+    #get cli version
+    cli_latest=$(sed -n '2p' revanced_latest.txt)
+
+    #get patches version
+    int_latest=$(sed -n '3p' revanced_latest.txt)
+
+    #check patch
+    if ls ./revanced-patches-* > /dev/null 2>&1
+    then
+        patches_available=$(basename revanced-patches* .jar | cut -d '-' -f 3) #get version
+        if [ "$patches_latest" = "$patches_available" ]
+        then
+            echo "Latest Patches already exixts."
+            echo ""
+            sleep 0.5s
+            wget -q -c https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar --show-progress
+            sleep 0.5s
+            tput rc; tput ed
+        else
+            echo "Patches update available."
+            sleep 0.5s
+            tput rc; tput ed
+            echo "Removing previous Patches..."
+            rm revanced-patches*
+            sleep 0.5s
+            tput rc; tput ed
+            echo "Downloading latest Patches..."
+            echo " "
+            wget -q -c https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar --show-progress 
+            sleep 0.5s
+            tput rc; tput ed
+        fi
+    else
+        echo "No patches found in local storage"
+        echo ""
+        echo Downloading latest patches file...
+        echo ""
+        wget -q -c https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar --show-progress 
+        sleep 0.5s
+        tput rc; tput ed
+    fi
+
+    #check cli
+    if ls -l ./revanced-cli-* > /dev/null 2>&1
+    then
+        cli_available=$(basename revanced-cli* .jar | cut -d '-' -f 3) #get version
+        if [ "$cli_latest" = "$cli_available" ]
+        then
+            echo "Latest CLI already exists."
+            echo ""
+            sleep 0.5s
+            wget -q -c https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar -O revanced-cli-"$cli_latest".jar --show-progress 
+            sleep 0.5s
+            tput rc; tput ed
+        else
+            echo "CLI update available"
+            sleep 0.5s
+            tput rc; tput ed
+            echo Removing previous CLI
+            rm revanced-cli*
+            sleep 0.5s
+            tput rc; tput ed
+            echo Downloading latest CLI...
+            echo ""
+            wget -q -c https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar -O revanced-cli-"$cli_latest".jar --show-progress 
+            sleep 0.5s
+            tput rc; tput ed
+        fi
+    else
+        echo "No CLI found locally"
+        echo ""
+        echo Downloading latest CLI...
+        echo ""
+        wget -q -c https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar -O revanced-cli-"$cli_latest".jar --show-progress 
+        sleep 0.5s
+        tput rc; tput ed
+    fi
+
+    #check integrations
+    if ls ./revanced-integrations-* > /dev/null 2>&1
+    then
+        int_available=$(basename revanced-integrations* .apk | cut -d '-' -f 3) #get version
+        if [ "$int_latest" = "$int_available" ]
+        then
+            echo "Latest Integrations already exists."
+            echo ""
+            sleep 0.5s
+            wget -q -c https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk -O revanced-integrations-"$int_latest".apk --show-progress  
+            sleep 0.5s
+            tput rc; tput ed
+        else
+            echo "Integrations update available"
+            sleep 0.5s
+            tput rc; tput ed
+            echo removing previous Integrations
+            rm revanced-integrations*
+            sleep 0.5s
+            tput rc; tput ed
+            echo "Downloading latest Integrations apk..."
+            echo ""
+            wget -q -c https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk -O revanced-integrations-"$int_latest".apk --show-progress  
+            echo ""
+            sleep 0.5s
+            tput rc; tput ed
+        fi
+    else
+        echo "No Integrations found locally"
+        echo ""
+        echo Downloading latest Integrations apk...
+        echo ""
+        wget -q -c https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk -O revanced-integrations-"$int_latest".apk --show-progress
+        sleep 0.5s
+        tput rc; tput ed
+    fi
+}
+
 intro
 
 echo "Checking for update..."
@@ -83,6 +203,8 @@ else
     echo "Script already up to date."
     sleep 0.5s
     tput rc; tput ed
+    python3 revanced_latest.py
+    get_components
 fi
 
 anim()
@@ -323,126 +445,6 @@ user_input
     fi
 }
 
-get_components(){
-    #get patches version
-    patches_latest=$(sed -n '1p' latest.txt)
-
-    #get cli version
-    cli_latest=$(sed -n '2p' latest.txt)
-
-    #get patches version
-    int_latest=$(sed -n '3p' latest.txt)
-
-    #check patch
-    if ls ./revanced-patches-* > /dev/null 2>&1
-    then
-        patches_available=$(basename revanced-patches* .jar | cut -d '-' -f 3) #get version
-        if [ "$patches_latest" = "$patches_available" ]
-        then
-            echo "Latest Patches already exixts."
-            echo ""
-            sleep 0.5s
-            wget -q -c https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar --show-progress
-            sleep 0.5s
-            tput rc; tput ed
-        else
-            echo "Patches update available."
-            sleep 0.5s
-            tput rc; tput ed
-            echo "Removing previous Patches..."
-            rm revanced-patches*
-            sleep 0.5s
-            tput rc; tput ed
-            echo "Downloading latest Patches..."
-            echo " "
-            wget -q -c https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar --show-progress 
-            sleep 0.5s
-            tput rc; tput ed
-        fi
-    else
-        echo "No patches found in local storage"
-        echo ""
-        echo Downloading latest patches file...
-        echo ""
-        wget -q -c https://github.com/revanced/revanced-patches/releases/download/v"$patches_latest"/revanced-patches-"$patches_latest".jar --show-progress 
-        sleep 0.5s
-        tput rc; tput ed
-    fi
-
-    #check cli
-    if ls -l ./revanced-cli-* > /dev/null 2>&1
-    then
-        cli_available=$(basename revanced-cli* .jar | cut -d '-' -f 3) #get version
-        if [ "$cli_latest" = "$cli_available" ]
-        then
-            echo "Latest CLI already exists."
-            echo ""
-            sleep 0.5s
-            wget -q -c https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar -O revanced-cli-"$cli_latest".jar --show-progress 
-            sleep 0.5s
-            tput rc; tput ed
-        else
-            echo "CLI update available"
-            sleep 0.5s
-            tput rc; tput ed
-            echo Removing previous CLI
-            rm revanced-cli*
-            sleep 0.5s
-            tput rc; tput ed
-            echo Downloading latest CLI...
-            echo ""
-            wget -q -c https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar -O revanced-cli-"$cli_latest".jar --show-progress 
-            sleep 0.5s
-            tput rc; tput ed
-        fi
-    else
-        echo "No CLI found locally"
-        echo ""
-        echo Downloading latest CLI...
-        echo ""
-        wget -q -c https://github.com/revanced/revanced-cli/releases/download/v"$cli_latest"/revanced-cli-"$cli_latest"-all.jar -O revanced-cli-"$cli_latest".jar --show-progress 
-        sleep 0.5s
-        tput rc; tput ed
-    fi
-
-    #check integrations
-    if ls ./revanced-integrations-* > /dev/null 2>&1
-    then
-        int_available=$(basename revanced-integrations* .apk | cut -d '-' -f 3) #get version
-        if [ "$int_latest" = "$int_available" ]
-        then
-            echo "Latest Integrations already exists."
-            echo ""
-            sleep 0.5s
-            wget -q -c https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk -O revanced-integrations-"$int_latest".apk --show-progress  
-            sleep 0.5s
-            tput rc; tput ed
-        else
-            echo "Integrations update available"
-            sleep 0.5s
-            tput rc; tput ed
-            echo removing previous Integrations
-            rm revanced-integrations*
-            sleep 0.5s
-            tput rc; tput ed
-            echo "Downloading latest Integrations apk..."
-            echo ""
-            wget -q -c https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk -O revanced-integrations-"$int_latest".apk --show-progress  
-            echo ""
-            sleep 0.5s
-            tput rc; tput ed
-        fi
-    else
-        echo "No Integrations found locally"
-        echo ""
-        echo Downloading latest Integrations apk...
-        echo ""
-        wget -q -c https://github.com/revanced/revanced-integrations/releases/download/v"$int_latest"/app-release-unsigned.apk -O revanced-integrations-"$int_latest".apk --show-progress
-        sleep 0.5s
-        tput rc; tput ed
-    fi
-}
-
 
 # App Downloader
 app_dl()
@@ -503,7 +505,7 @@ then
         trap - EXIT
         sleep 0.5s
         tput rc; tput ed
-        getlink="$(sed -n '5p' latest.txt)"
+        getlink="$(sed -n '2p' latest_app.txt)"
         get_components
         app_dl YouTube "$appver" "$getlink" &&
         echo "Building Youtube Revanced ..."
@@ -543,8 +545,8 @@ then
             :
         fi
         tput rc; tput ed
-        appver=$(sed -n '4p' latest.txt)
-        getlink="$(sed -n '5p' latest.txt)"
+        appver=$(sed -n '1p' latest_app.txt)
+        getlink="$(sed -n '2p' latest_app.txt)"
         get_components
         app_dl YouTube "$appver" "$getlink" &&
         echo "Building YouTube Revanced..."
@@ -592,7 +594,7 @@ then
         fi
         sleep 0.5s
         tput rc; tput ed
-        getlink=$(sed -n '5p' latest.txt)
+        getlink=$(sed -n '2p' latest_app.txt)
         get_components
         app_dl YouTubeMusic "$appver" "$getlink" &&
         echo "Building YouTube Music Revanced..."
@@ -642,8 +644,8 @@ then
             :
         fi
         tput rc; tput ed
-        appver=$(sed -n '4p' latest.txt | sed 's/-/\./g')
-        getlink=$(sed -n '5p' latest.txt)
+        appver=$(sed -n '1p' latest_app.txt | sed 's/-/\./g')
+        getlink=$(sed -n '2p' latest_app.txt)
         get_components
         app_dl YouTubeMusic "$appver" "$getlink" &&
         echo "Building YouTube Music Revanced..."
@@ -665,8 +667,8 @@ then
     trap - EXIT
     sleep 0.5s
     tput rc; tput ed
-    appver=$(sed -n '4p' latest.txt | cut -d "-" -f 1)
-    getlink=$(sed -n '5p' latest.txt)
+    appver=$(sed -n '1p' latest_app.txt | cut -d "-" -f 1)
+    getlink=$(sed -n '2p' latest_app.txt)
     get_components
     app_dl Twitter "$appver" "$getlink" &&
     echo Building Twitter Revanced
@@ -688,8 +690,8 @@ then
     trap - EXIT
     sleep 0.5s
     tput rc; tput ed
-    appver=$(sed -n '4p' latest.txt)
-    getlink=$(sed -n '5p' latest.txt)
+    appver=$(sed -n '1p' latest_app.txt)
+    getlink=$(sed -n '2p' latest_app.txt)
     get_components
     app_dl Reddit "$appver" "$getlink" &&
     echo Building Reddit Revanced
@@ -711,8 +713,8 @@ then
     trap - EXIT
     sleep 0.5s
     tput rc; tput ed
-    appver=$(sed -n '4p' latest.txt)
-    getlink=$(sed -n '5p' latest.txt)
+    appver=$(sed -n '1p' latest_app.txt)
+    getlink=$(sed -n '2p' latest_app.txt)
     get_components
     app_dl TikTok "$appver" "$getlink" &&
     echo Building TikTok Revanced
