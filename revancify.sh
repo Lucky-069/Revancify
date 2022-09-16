@@ -160,9 +160,6 @@ ytpatches()
     do
         echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtube_patches.txt
     done < <(cut -d " " -f 1 youtube_patches.txt)
-    tput cnorm
-    dialog --title "Edit Options file" --editbox options.toml 30 60 2> file.tmp && cat file.tmp > options.toml && rm file.tmp
-    tput civis
     clear
     intro
     user_input
@@ -212,6 +209,7 @@ user_input()
     echo "4. Patch Reddit"
     echo "5. Patch TikTok"
     echo "6. Edit Patches"
+    echo "7. Edit Patches Options"
     read -r -p "Your Input: " input
     if [ "$input" -eq "1" ]
     then
@@ -243,6 +241,11 @@ user_input()
         then
             ytmpatches
         fi
+    elif [ "$input" -eq "7" ]
+    then
+        tput cnorm
+        dialog --title "Edit Options file" --editbox options.toml 30 60 2> file.tmp && cat file.tmp > options.toml && rm file.tmp
+        tput civis
     else
         echo No input given..
         user_input
