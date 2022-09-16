@@ -14,6 +14,7 @@ then
 else
     echo "Installing dependencies..."
     sleep 0.5s
+    git pull
     pkg update -y &&
     pkg install python openjdk-17 wget ncurses-utils libxml2 libxslt dialog -y &&
     pip install --upgrade pip &&
