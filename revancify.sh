@@ -160,7 +160,9 @@ ytpatches()
     do
         echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtube_patches.txt
     done < <(cut -d " " -f 1 youtube_patches.txt)
+    tput cnorm
     dialog --title "Edit Options file" --editbox options.toml 30 60 2> file.tmp && cat file.tmp > options.toml && rm file.tmp
+    tput civis
     clear
     intro
     user_input
