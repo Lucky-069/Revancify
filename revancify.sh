@@ -62,13 +62,13 @@ intro()
 
 get_components(){
     #get patches version
-    patches_latest=$(sed -n '1p' revanced_latest.txt)
+    patches_latest=$(sed -n '1p' revanced-latest.txt)
 
     #get cli version
-    cli_latest=$(sed -n '2p' revanced_latest.txt)
+    cli_latest=$(sed -n '2p' revanced-latest.txt)
 
     #get patches version
-    int_latest=$(sed -n '3p' revanced_latest.txt)
+    int_latest=$(sed -n '3p' revanced-latest.txt)
 
     #check patch
     if ls ./revanced-patches-* > /dev/null 2>&1
@@ -203,7 +203,7 @@ else
     echo "Script already up to date."
     sleep 0.5s
     tput rc; tput ed
-    python3 revanced_latest.py
+    python3 revanced-latest.py
     get_components
 fi
 
@@ -267,21 +267,21 @@ ytpatches()
         return 0
     fi
     echo "Updating patches..."
-    python3 fetch.py yt patches
-    sed -i '/microg-support/d' youtube_patches.txt
-    sed -i '/enable-debugging/d' youtube_patches.txt
+    python3 latest-app.py yt patches
+    sed -i '/microg-support/d' youtube-patches.txt
+    sed -i '/enable-debugging/d' youtube-patches.txt
     cmd=(dialog --backtitle "Revancify" --title 'YouTube Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 40 10)
     patches=()
     while read -r line
     do
         read -r -a arr <<< "$line"
         patches+=("${arr[@]}")
-    done < <(cat youtube_patches.txt)
+    done < <(cat youtube-patches.txt)
     mapfile -t choices < <("${cmd[@]}" "${patches[@]}" 2>&1 >/dev/tty)
     while read -r line
     do
-        echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtube_patches.txt
-    done < <(cut -d " " -f 1 youtube_patches.txt)
+        echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtube-patches.txt
+    done < <(cut -d " " -f 1 youtube-patches.txt)
     clear
     intro
     user_input
@@ -300,20 +300,20 @@ ytmpatches()
         return 0
     fi
     echo "Updating Patches..."
-    python3 fetch.py ytm patches
-    sed -i '/music-microg-support/d' youtubemusic_patches.txt
+    python3 latest-app.py ytm patches
+    sed -i '/music-microg-support/d' youtubemusic-patches.txt
     cmd=(dialog --backtitle "Revancify" --title 'YouTube Music Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 40 10)
     patches=()
     while read -r line
     do
         read -r -a arr <<< "$line"
         patches+=("${arr[@]}")
-    done < <(cat youtubemusic_patches.txt)
+    done < <(cat youtubemusic-patches.txt)
     mapfile -t choices < <("${cmd[@]}" "${patches[@]}" 2>&1 >/dev/tty)
     while read -r line
     do
-        echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtubemusic_patches.txt
-    done < <(cut -d " " -f 1 youtubemusic_patches.txt)
+        echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtubemusic-patches.txt
+    done < <(cut -d " " -f 1 youtubemusic-patches.txt)
     clear
     intro
     user_input
@@ -488,16 +488,16 @@ app_dl()
 
 if [ "$options" = "YouTube" ]
 then
-    [[ ! -f youtube_patches.txt ]] && python3 fetch.py yt patches
+    [[ ! -f youtube-patches.txt ]] && python3 latest-app.py yt patches
     excludeyt=$(while read -r line; do
         patch=$(echo "$line"| cut -d " " -f 1)
         printf -- " -e "
         printf "%s""$patch"
-    done < <(grep " off" youtube_patches.txt))
+    done < <(grep " off" youtube-patches.txt))
     if [ "$variant" = "root" ]
     then
         appver=$( su -c dumpsys package com.google.android.youtube | grep versionName | cut -d= -f 2)
-        python3 fetch.py yt root "$appver" & pid=$!
+        python3 latest-app.py yt root "$appver" & pid=$!
         trap 'kill $pid 2> /dev/null' EXIT
         while kill -0 $pid 2> /dev/null; do
             anim
@@ -505,7 +505,7 @@ then
         trap - EXIT
         sleep 0.5s
         tput rc; tput ed
-        getlink="$(sed -n '2p' latest_app.txt)"
+        getlink="$(sed -n '2p' latest-app.txt)"
         get_components
         app_dl YouTube "$appver" "$getlink" &&
         echo "Building Youtube Revanced ..."
@@ -525,7 +525,7 @@ then
         fi
     elif [ "$variant" = "non_root" ]
     then
-        python3 fetch.py yt non_root & pid=$!
+        python3 latest-app.py yt non_root & pid=$!
         trap 'kill $pid 2> /dev/null' EXIT
         while kill -0 $pid 2> /dev/null; do
             anim
@@ -545,8 +545,8 @@ then
             :
         fi
         tput rc; tput ed
-        appver=$(sed -n '1p' latest_app.txt)
-        getlink="$(sed -n '2p' latest_app.txt)"
+        appver=$(sed -n '1p' latest-app.txt)
+        getlink="$(sed -n '2p' latest-app.txt)"
         get_components
         app_dl YouTube "$appver" "$getlink" &&
         echo "Building YouTube Revanced..."
@@ -566,18 +566,18 @@ then
     fi
 elif [ "$options" = "YouTubeMusic" ]
 then
-    [[ ! -f youtubemusic_patches.txt ]] && python3 fetch.py ytm patches
+    [[ ! -f youtubemusic-patches.txt ]] && python3 latest-app.py ytm patches
     excludeytm=$(while read -r line; do
         patch=$(echo "$line"| cut -d " " -f 1)
         printf -- " -e "
         printf "%s""$patch"
-    done < <(grep " off" youtubemusic_patches.txt))
+    done < <(grep " off" youtubemusic-patches.txt))
     if [ "$variant" = "root" ]
     then
         appver=$(su -c dumpsys package com.google.android.apps.youtube.music | grep versionName | cut -d= -f 2 )
         if [ "$arch" = "arm64" ]
         then
-            python3 fetch.py ytm root arm64 "$appver" & pid=$
+            python3 latest-app.py ytm root arm64 "$appver" & pid=$
             trap 'kill $pid 2> /dev/null' EXIT
             while kill -0 $pid 2> /dev/null; do
                 anim
@@ -585,7 +585,7 @@ then
             trap - EXIT
         elif [ "$arch" = "armeabi" ]
         then
-            python3 fetch.py ytm root armeabi "$appver" & pid=$!
+            python3 latest-app.py ytm root armeabi "$appver" & pid=$!
             trap 'kill $pid 2> /dev/null' EXIT
             while kill -0 $pid 2> /dev/null; do
                 anim
@@ -594,7 +594,7 @@ then
         fi
         sleep 0.5s
         tput rc; tput ed
-        getlink=$(sed -n '2p' latest_app.txt)
+        getlink=$(sed -n '2p' latest-app.txt)
         get_components
         app_dl YouTubeMusic "$appver" "$getlink" &&
         echo "Building YouTube Music Revanced..."
@@ -616,7 +616,7 @@ then
     then
         if [ "$arch" = "arm64" ]
         then
-            python3 fetch.py ytm non_root arm64 & pid=$!
+            python3 latest-app.py ytm non_root arm64 & pid=$!
             trap 'kill $pid 2> /dev/null' EXIT
             while kill -0 $pid 2> /dev/null; do
                 anim
@@ -624,7 +624,7 @@ then
             trap - EXIT
         elif [ "$arch" = "armeabi" ]
         then
-            python3 fetch.py ytm non_root armeabi & pid=$!
+            python3 latest-app.py ytm non_root armeabi & pid=$!
             trap 'kill $pid 2> /dev/null' EXIT
             while kill -0 $pid 2> /dev/null; do
                 anim
@@ -644,8 +644,8 @@ then
             :
         fi
         tput rc; tput ed
-        appver=$(sed -n '1p' latest_app.txt | sed 's/-/\./g')
-        getlink=$(sed -n '2p' latest_app.txt)
+        appver=$(sed -n '1p' latest-app.txt | sed 's/-/\./g')
+        getlink=$(sed -n '2p' latest-app.txt)
         get_components
         app_dl YouTubeMusic "$appver" "$getlink" &&
         echo "Building YouTube Music Revanced..."
@@ -659,7 +659,7 @@ then
     fi
 elif [ "$options" = "Twitter" ]
 then
-    python3 fetch.py twitter & pid=$!
+    python3 latest-app.py twitter & pid=$!
     trap 'kill $pid 2> /dev/null' EXIT
     while kill -0 $pid 2> /dev/null; do
         anim
@@ -667,8 +667,8 @@ then
     trap - EXIT
     sleep 0.5s
     tput rc; tput ed
-    appver=$(sed -n '1p' latest_app.txt | cut -d "-" -f 1)
-    getlink=$(sed -n '2p' latest_app.txt)
+    appver=$(sed -n '1p' latest-app.txt | cut -d "-" -f 1)
+    getlink=$(sed -n '2p' latest-app.txt)
     get_components
     app_dl Twitter "$appver" "$getlink" &&
     echo Building Twitter Revanced
@@ -682,7 +682,7 @@ then
     termux-open /storage/emulated/0/Revancify/TwitterRevanced-"$appver".apk
 elif [ "$options" = "Reddit" ]
 then
-    python3 fetch.py reddit & pid=$!
+    python3 latest-app.py reddit & pid=$!
     trap 'kill $pid 2> /dev/null' EXIT
     while kill -0 $pid 2> /dev/null; do
         anim
@@ -690,8 +690,8 @@ then
     trap - EXIT
     sleep 0.5s
     tput rc; tput ed
-    appver=$(sed -n '1p' latest_app.txt)
-    getlink=$(sed -n '2p' latest_app.txt)
+    appver=$(sed -n '1p' latest-app.txt)
+    getlink=$(sed -n '2p' latest-app.txt)
     get_components
     app_dl Reddit "$appver" "$getlink" &&
     echo Building Reddit Revanced
@@ -705,7 +705,7 @@ then
     termux-open /storage/emulated/0/Revancify/RedditRevanced-"$appver".apk
 elif [ "$options" = "TikTok" ]
 then
-    python3 fetch.py tiktok & pid=$!
+    python3 latest-app.py tiktok & pid=$!
     trap 'kill $pid 2> /dev/null' EXIT
     while kill -0 $pid 2> /dev/null; do
         anim
@@ -713,8 +713,8 @@ then
     trap - EXIT
     sleep 0.5s
     tput rc; tput ed
-    appver=$(sed -n '1p' latest_app.txt)
-    getlink=$(sed -n '2p' latest_app.txt)
+    appver=$(sed -n '1p' latest-app.txt)
+    getlink=$(sed -n '2p' latest-app.txt)
     get_components
     app_dl TikTok "$appver" "$getlink" &&
     echo Building TikTok Revanced

@@ -14,10 +14,9 @@ if sys.argv[1] == "yt":
     elif sys.argv[2] == "root":
         appver = (sys.argv[3])
     elif sys.argv[2] == "patches":
-        open("youtube_patches.txt", "w").close()
         for i in (requests.get('https://raw.githubusercontent.com/revanced/revanced-patches/main/patches.json')).json():
             if (((i['compatiblePackages'])[0])['name']) == "com.google.android.youtube" and i['deprecated'] != True:
-                with open("youtube_patches.txt", "a") as p:
+                with open("youtube-patches.txt", "w") as p:
                     p.write(str(i['name']) + " " + "on" + "\n")
         sys.exit()
 
@@ -34,10 +33,9 @@ elif sys.argv[1] == "ytm":
     elif sys.argv[2] == "root":
         appver = sys.argv[4]
     elif sys.argv[2] == "patches":
-        open("youtubemusic_patches.txt", "w").close()
         for i in (requests.get('https://raw.githubusercontent.com/revanced/revanced-patches/main/patches.json')).json():
             if (((i['compatiblePackages'])[0])['name']) == "com.google.android.apps.youtube.music" and i['deprecated'] != True:
-                with open("youtubemusic_patches.txt", "a") as p:
+                with open("youtubemusic_patches.txt", "w") as p:
                     p.write(str(i['name']) + " " + "on" + "\n")
         sys.exit()
 
@@ -77,6 +75,6 @@ apppage2= "".join(["https://apkmirror.com", ((BeautifulSoup((urlopen(Request(url
 
 appdllink = "".join(["https://apkmirror.com", (((BeautifulSoup((urlopen(Request(url=apppage2, headers={'User-Agent': 'Mozilla/5.0'})).read()), 'html.parser')).find(rel="nofollow"))['href'])])
 
-with open("latest_app.txt", "w") as f:
+with open("latest-app.txt", "w") as f:
         f.write('\n'.join([appver, appdllink]))
 
