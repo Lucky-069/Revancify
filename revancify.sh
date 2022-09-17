@@ -167,6 +167,7 @@ get_components(){
 intro
 
 echo "Checking for update..."
+git config pull.rebase true
 sleep 0.5s
 
 if [ "$(git pull)" != "Already up to date." ]
