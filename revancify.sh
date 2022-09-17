@@ -491,7 +491,6 @@ then
         else
             echo "Mount failed..."
             echo "Exiting the script"
-            report
             tput cnorm && cd ~ && exit
         fi
     elif [ "$variant" = "non_root" ]
@@ -547,7 +546,7 @@ then
         appver=$(su -c dumpsys package com.google.android.apps.youtube.music | grep versionName | cut -d= -f 2 )
         if [ "$arch" = "arm64" ]
         then
-            python3 latest-app.py ytm root arm64 "$appver" & pid=$
+            python3 latest-app.py ytm root arm64 "$appver" & pid=$!
             trap 'kill $pid 2> /dev/null' EXIT
             while kill -0 $pid 2> /dev/null; do
                 anim
@@ -578,7 +577,6 @@ then
         else
             echo "Mount failed..."
             echo "Exiting the script"
-            report
             tput cnorm && cd ~ && exit
         fi
     elif [ "$variant" = "non_root" ]
