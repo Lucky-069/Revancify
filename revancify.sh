@@ -5,7 +5,7 @@ revive(){
 }
 trap revive SIGINT
 
-# For update change this sentence here ....
+# For update change this sentence here ...
 
 clear
 rm -rf ./*cache
@@ -64,6 +64,9 @@ intro()
 }
 
 get_components(){
+
+    python3 revanced-latest.py
+    
     #get patches version
     patches_latest=$(sed -n '1p' revanced-latest.txt)
 
@@ -164,6 +167,7 @@ get_components(){
 intro
 
 echo "Checking for update..."
+git config pull.rebase true
 sleep 0.5s
 
 if [ "$(git pull)" != "Already up to date." ]
@@ -182,7 +186,6 @@ else
     echo "Script already up to date."
     sleep 0.5s
     tput rc; tput ed
-    python3 revanced-latest.py
     get_components
 fi
 cp revancify ~/../usr/bin
@@ -237,64 +240,62 @@ anim()
 
 ytpatches()
 {
-    if dialog --backtitle "Revancify" --title 'YouTube Patches' --no-items --no-lines --no-shadow --no-cancel --yesno "All patches will be reset. Do You want to continue?" 10 40
+    if dialog --backtitle "Revancify" --title 'Confirmation' --no-items --no-lines --no-shadow --no-cancel --yesno "All patches will be reset. Do You want to continue?" 10 40
     then
-        :
+        python3 latest-app.py yt patches
+        sed -i '/microg-support/d' youtube-patches.txt
+        sed -i '/enable-debugging/d' youtube-patches.txt
+        cmd=(dialog --backtitle "Revancify" --title 'YouTube Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 40 10)
+        patches=()
+        while read -r line
+        do
+            read -r -a arr <<< "$line"
+            patches+=("${arr[@]}")
+        done < <(cat youtube-patches.txt)
+        mapfile -t choices < <("${cmd[@]}" "${patches[@]}" 2>&1 >/dev/tty)
+        while read -r line
+        do
+            echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtube-patches.txt
+        done < <(cut -d " " -f 1 youtube-patches.txt)
+        clear
+        intro
+        user_input
     else
         clear
         intro
         user_input
         return 0
     fi
-    python3 latest-app.py yt patches
-    sed -i '/microg-support/d' youtube-patches.txt
-    sed -i '/enable-debugging/d' youtube-patches.txt
-    cmd=(dialog --backtitle "Revancify" --title 'YouTube Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 40 10)
-    patches=()
-    while read -r line
-    do
-        read -r -a arr <<< "$line"
-        patches+=("${arr[@]}")
-    done < <(cat youtube-patches.txt)
-    mapfile -t choices < <("${cmd[@]}" "${patches[@]}" 2>&1 >/dev/tty)
-    while read -r line
-    do
-        echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtube-patches.txt
-    done < <(cut -d " " -f 1 youtube-patches.txt)
-    clear
-    intro
-    user_input
 }
 
 
 ytmpatches()
 {
-    if dialog --backtitle "Revancify" --title 'YouTube Patches' --no-items --no-lines --no-shadow --no-cancel --yesno "All patches will be reset. Do You want to continue?" 30 40
+    if dialog --backtitle "Revancify" --title 'Confirmation' --no-items --no-lines --no-shadow --no-cancel --yesno "All patches will be reset. Do You want to continue?" 10 40
     then
-        :
+        python3 latest-app.py ytm patches
+        sed -i '/music-microg-support/d' youtubemusic-patches.txt
+        cmd=(dialog --backtitle "Revancify" --title 'YouTube Music Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 40 10)
+        patches=()
+        while read -r line
+        do
+            read -r -a arr <<< "$line"
+            patches+=("${arr[@]}")
+        done < <(cat youtubemusic-patches.txt)
+        mapfile -t choices < <("${cmd[@]}" "${patches[@]}" 2>&1 >/dev/tty)
+        while read -r line
+        do
+            echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtubemusic-patches.txt
+        done < <(cut -d " " -f 1 youtubemusic-patches.txt)
+        clear
+        intro
+        user_input
     else
         clear
         intro
         user_input
         return 0
     fi
-    python3 latest-app.py ytm patches
-    sed -i '/music-microg-support/d' youtubemusic-patches.txt
-    cmd=(dialog --backtitle "Revancify" --title 'YouTube Music Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 40 10)
-    patches=()
-    while read -r line
-    do
-        read -r -a arr <<< "$line"
-        patches+=("${arr[@]}")
-    done < <(cat youtubemusic-patches.txt)
-    mapfile -t choices < <("${cmd[@]}" "${patches[@]}" 2>&1 >/dev/tty)
-    while read -r line
-    do
-        echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtubemusic-patches.txt
-    done < <(cut -d " " -f 1 youtubemusic-patches.txt)
-    clear
-    intro
-    user_input
 }
 
 
@@ -636,7 +637,7 @@ then
     appver=$(sed -n '1p' latest-app.txt | cut -d "-" -f 1)
     getlink=$(sed -n '2p' latest-app.txt)
     app_dl Twitter "$appver" "$getlink" &&
-    echo Building Twitter Revanced
+    echo "Building Twitter Revanced..."
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./Twitter-"$appver".apk --keystore ./revanced.keystore -o ./TwitterRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --experimental
     rm -rf revanced-cache
     mkdir -p /storage/emulated/0/Revancify
@@ -658,7 +659,7 @@ then
     appver=$(sed -n '1p' latest-app.txt)
     getlink=$(sed -n '2p' latest-app.txt)
     app_dl Reddit "$appver" "$getlink" &&
-    echo Building Reddit Revanced
+    echo "Building Reddit Revanced..."
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./Reddit-"$appver".apk -r --keystore ./revanced.keystore -o ./RedditRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --experimental
     rm -rf revanced-cache
     mkdir -p /storage/emulated/0/Revancify
@@ -680,7 +681,7 @@ then
     appver=$(sed -n '1p' latest-app.txt)
     getlink=$(sed -n '2p' latest-app.txt)
     app_dl TikTok "$appver" "$getlink" &&
-    echo Building TikTok Revanced
+    echo "Building TikTok Revanced..."
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./TikTok-"$appver".apk -r --keystore ./revanced.keystore -o ./TikTokRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --experimental
     rm -rf revanced-cache
     mkdir -p /storage/emulated/0/Revancify
