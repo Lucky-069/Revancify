@@ -637,7 +637,7 @@ then
     appver=$(sed -n '1p' latest-app.txt | cut -d "-" -f 1)
     getlink=$(sed -n '2p' latest-app.txt)
     app_dl Twitter "$appver" "$getlink" &&
-    echo Building Twitter Revanced
+    echo "Building Twitter Revanced..."
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./Twitter-"$appver".apk --keystore ./revanced.keystore -o ./TwitterRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --experimental
     rm -rf revanced-cache
     mkdir -p /storage/emulated/0/Revancify
@@ -659,7 +659,7 @@ then
     appver=$(sed -n '1p' latest-app.txt)
     getlink=$(sed -n '2p' latest-app.txt)
     app_dl Reddit "$appver" "$getlink" &&
-    echo Building Reddit Revanced
+    echo "Building Reddit Revanced..."
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./Reddit-"$appver".apk -r --keystore ./revanced.keystore -o ./RedditRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --experimental
     rm -rf revanced-cache
     mkdir -p /storage/emulated/0/Revancify
@@ -681,7 +681,7 @@ then
     appver=$(sed -n '1p' latest-app.txt)
     getlink=$(sed -n '2p' latest-app.txt)
     app_dl TikTok "$appver" "$getlink" &&
-    echo Building TikTok Revanced
+    echo "Building TikTok Revanced..."
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./TikTok-"$appver".apk -r --keystore ./revanced.keystore -o ./TikTokRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --experimental
     rm -rf revanced-cache
     mkdir -p /storage/emulated/0/Revancify
