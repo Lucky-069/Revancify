@@ -239,64 +239,62 @@ anim()
 
 ytpatches()
 {
-    if dialog --backtitle "Revancify" --title 'YouTube Patches' --no-items --no-lines --no-shadow --no-cancel --yesno "All patches will be reset. Do You want to continue?" 10 40
+    if dialog --backtitle "Revancify" --title 'Confirmation' --no-items --no-lines --no-shadow --no-cancel --yesno "All patches will be reset. Do You want to continue?" 10 40
     then
-        :
+        python3 latest-app.py yt patches
+        sed -i '/microg-support/d' youtube-patches.txt
+        sed -i '/enable-debugging/d' youtube-patches.txt
+        cmd=(dialog --backtitle "Revancify" --title 'YouTube Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 40 10)
+        patches=()
+        while read -r line
+        do
+            read -r -a arr <<< "$line"
+            patches+=("${arr[@]}")
+        done < <(cat youtube-patches.txt)
+        mapfile -t choices < <("${cmd[@]}" "${patches[@]}" 2>&1 >/dev/tty)
+        while read -r line
+        do
+            echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtube-patches.txt
+        done < <(cut -d " " -f 1 youtube-patches.txt)
+        clear
+        intro
+        user_input
     else
         clear
         intro
         user_input
         return 0
     fi
-    python3 latest-app.py yt patches
-    sed -i '/microg-support/d' youtube-patches.txt
-    sed -i '/enable-debugging/d' youtube-patches.txt
-    cmd=(dialog --backtitle "Revancify" --title 'YouTube Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 40 10)
-    patches=()
-    while read -r line
-    do
-        read -r -a arr <<< "$line"
-        patches+=("${arr[@]}")
-    done < <(cat youtube-patches.txt)
-    mapfile -t choices < <("${cmd[@]}" "${patches[@]}" 2>&1 >/dev/tty)
-    while read -r line
-    do
-        echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtube-patches.txt
-    done < <(cut -d " " -f 1 youtube-patches.txt)
-    clear
-    intro
-    user_input
 }
 
 
 ytmpatches()
 {
-    if dialog --backtitle "Revancify" --title 'YouTube Patches' --no-items --no-lines --no-shadow --no-cancel --yesno "All patches will be reset. Do You want to continue?" 30 40
+    if dialog --backtitle "Revancify" --title 'Confirmation' --no-items --no-lines --no-shadow --no-cancel --yesno "All patches will be reset. Do You want to continue?" 10 40
     then
-        :
+        python3 latest-app.py ytm patches
+        sed -i '/music-microg-support/d' youtubemusic-patches.txt
+        cmd=(dialog --backtitle "Revancify" --title 'YouTube Music Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 40 10)
+        patches=()
+        while read -r line
+        do
+            read -r -a arr <<< "$line"
+            patches+=("${arr[@]}")
+        done < <(cat youtubemusic-patches.txt)
+        mapfile -t choices < <("${cmd[@]}" "${patches[@]}" 2>&1 >/dev/tty)
+        while read -r line
+        do
+            echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtubemusic-patches.txt
+        done < <(cut -d " " -f 1 youtubemusic-patches.txt)
+        clear
+        intro
+        user_input
     else
         clear
         intro
         user_input
         return 0
     fi
-    python3 latest-app.py ytm patches
-    sed -i '/music-microg-support/d' youtubemusic-patches.txt
-    cmd=(dialog --backtitle "Revancify" --title 'YouTube Music Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 40 10)
-    patches=()
-    while read -r line
-    do
-        read -r -a arr <<< "$line"
-        patches+=("${arr[@]}")
-    done < <(cat youtubemusic-patches.txt)
-    mapfile -t choices < <("${cmd[@]}" "${patches[@]}" 2>&1 >/dev/tty)
-    while read -r line
-    do
-        echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtubemusic-patches.txt
-    done < <(cut -d " " -f 1 youtubemusic-patches.txt)
-    clear
-    intro
-    user_input
 }
 
 
