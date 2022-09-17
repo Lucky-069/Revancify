@@ -64,6 +64,9 @@ intro()
 }
 
 get_components(){
+
+    python3 revanced-latest.py
+    
     #get patches version
     patches_latest=$(sed -n '1p' revanced-latest.txt)
 
@@ -182,7 +185,6 @@ else
     echo "Script already up to date."
     sleep 0.5s
     tput rc; tput ed
-    python3 revanced-latest.py
     get_components
 fi
 cp revancify ~/../usr/bin
