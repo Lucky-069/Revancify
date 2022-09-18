@@ -10,7 +10,7 @@ trap revive SIGINT
 clear
 rm -rf ./*cache
 
-if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/dialog ] && [ -e ~/../usr/bin/tput ] && [ "$(find ~/../usr/lib/ -name "wheel" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "requests" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "bs4" | wc -l)" != "0" ] && [ -e ~/../usr/bin/revancify ] 
+if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/dialog ] && [ -e ~/../usr/bin/tput ] && [ "$(find ~/../usr/lib/ -name "wheel" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "requests" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "bs4" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "toml" | wc -l)" != "0" ] && [ -e ~/../usr/bin/revancify ] 
 then
     :
 else
@@ -18,9 +18,10 @@ else
     sleep 0.5s
     git pull
     pkg update -y &&
-    pkg install python openjdk-17 wget ncurses-utils libxml2 libxslt dialog -y &&
-    pip install --upgrade pip &&
-    pip install requests wheel bs4 &&
+    pkg install python openjdk-17 wget ncurses-utils libxml2 libxslt dialog -y
+    pip install --upgrade pip
+    pip install wheel
+    pip install requests toml bs4
     cp revancify ~/../usr/bin
     sed -i 's/# allow-external-apps = true/allow-external-apps = true/g' ~/.termux/termux.properties
     sleep 0.5s
