@@ -246,7 +246,7 @@ ytpatches()
         python3 latest-app.py yt patches
         sed -i '/microg-support/d' youtube-patches.txt
         sed -i '/enable-debugging/d' youtube-patches.txt
-        cmd=(dialog --backtitle "Revancify" --title 'YouTube Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 40 10)
+        cmd=(dialog --backtitle "Revancify" --title 'YouTube Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 50 10)
         patches=()
         while read -r line
         do
@@ -276,7 +276,7 @@ ytmpatches()
     then
         python3 latest-app.py ytm patches
         sed -i '/music-microg-support/d' youtubemusic-patches.txt
-        cmd=(dialog --backtitle "Revancify" --title 'YouTube Music Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 40 10)
+        cmd=(dialog --backtitle "Revancify" --title 'YouTube Music Patches' --no-items --no-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 50 10)
         patches=()
         while read -r line
         do
