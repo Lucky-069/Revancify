@@ -662,7 +662,7 @@ then
     getlink=$(sed -n '2p' latest-app.txt)
     app_dl Reddit "$appver" "$getlink" &&
     echo "Building Reddit Revanced..."
-    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./Reddit-"$appver".apk -r --keystore ./revanced.keystore -o ./RedditRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --experimental
+    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./Reddit-"$appver".apk --keystore ./revanced.keystore -o ./RedditRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --experimental
     rm -rf revanced-cache
     mkdir -p /storage/emulated/0/Revancify
     mv RedditRevanced* /storage/emulated/0/Revancify/ &&
@@ -684,7 +684,7 @@ then
     getlink=$(sed -n '2p' latest-app.txt)
     app_dl TikTok "$appver" "$getlink" &&
     echo "Building TikTok Revanced..."
-    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./TikTok-"$appver".apk -r --keystore ./revanced.keystore -o ./TikTokRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --experimental
+    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./TikTok-"$appver".apk --keystore ./revanced.keystore -o ./TikTokRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --experimental
     rm -rf revanced-cache
     mkdir -p /storage/emulated/0/Revancify
     mv TikTokRevanced* /storage/emulated/0/Revancify/ &&
