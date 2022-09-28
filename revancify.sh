@@ -165,6 +165,11 @@ get_components(){
     fi
 }
 
+[[ ! -f ~/.dialogrc ]] && dialog --create-rc ~/.dialogrc
+sed -i "/$line/s/ on/ off/"
+sed 'use_colors/s/ON/OFF' ~/.dialogrc
+sed 'screen_color/s/\(.*\)/(WHITE,BLACK,OFF)' ~/.dialogrc
+
 intro
 
 echo "Checking for update..."
@@ -463,7 +468,7 @@ app_dl()
 su_check
 if [ "$options" = "YouTube" ]
 then
-    [[ ! -f youtube-patches.txt ]] && python3 python-utils/fetch-patches.py yt
+    [[ ! -f python-utils/youtube-patches.txt ]] && python3 python-utils/fetch-patches.py yt
     excludeyt=$(while read -r line; do
         patch=$(echo "$line"| cut -d " " -f 1)
         printf -- " -e "
@@ -525,7 +530,7 @@ then
     fi
 elif [ "$options" = "YouTubeMusic" ]
 then
-    [[ ! -f youtubemusic-patches.txt ]] && python3 python-utils/fetch-patches.py ytm
+    [[ ! -f python-utils/youtubemusic-patches.txt ]] && python3 python-utils/fetch-patches.py ytm
     excludeytm=$(while read -r line; do
         patch=$(echo "$line"| cut -d " " -f 1)
         printf -- " -e "
