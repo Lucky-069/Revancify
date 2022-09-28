@@ -66,7 +66,7 @@ intro()
 
 get_components(){
 
-    revanced_latest=($(python3 python-utils/revanced-latest.py))
+    revanced_latest=($(python3 ./python-utils/revanced-latest.py))
     
     #get patches version
     patches_latest="${revanced_latest[0]}"
@@ -248,21 +248,21 @@ ytpatches()
 {
     if dialog --backtitle "Revancify" --title 'Confirmation' --no-items --ascii-lines --no-shadow --no-cancel --yesno "All patches will be reset. Do You want to continue?" 10 40
     then
-        python3 python-utils/fetch-patches.py yt
-        sed -i '/microg-support/d' python-utils/youtube-patches.txt
-        sed -i '/enable-debugging/d' python-utils/youtube-patches.txt
+        python3 ./python-utils/fetch-patches.py yt
+        sed -i '/microg-support/d' ./python-utils/youtube-patches.txt
+        sed -i '/enable-debugging/d' ./python-utils/youtube-patches.txt
         cmd=(dialog --backtitle "Revancify" --title 'YouTube Patches' --no-items --ascii-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 45 10)
         patches=()
         while read -r line
         do
             read -r -a arr <<< "$line"
             patches+=("${arr[@]}")
-        done < <(cat python-utils/youtube-patches.txt)
+        done < <(cat ./python-utils/youtube-patches.txt)
         mapfile -t choices < <("${cmd[@]}" "${patches[@]}" 2>&1 >/dev/tty)
         while read -r line
         do
-            echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" python-utils/youtube-patches.txt
-        done < <(cut -d " " -f 1 python-utils/youtube-patches.txt)
+            echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" ./python-utils/youtube-patches.txt
+        done < <(cut -d " " -f 1 ./python-utils/youtube-patches.txt)
         clear
         intro
         user_input
@@ -279,20 +279,20 @@ ytmpatches()
 {
     if dialog --backtitle "Revancify" --title 'Confirmation' --no-items --ascii-lines --no-shadow --no-cancel --yesno "All patches will be reset. Do You want to continue?" 10 40
     then
-        python3 python-utils/fetch-patches.py yt
-        sed -i '/music-microg-support/d' python-utils/youtubemusic-patches.txt
+        python3 ./python-utils/fetch-patches.py yt
+        sed -i '/music-microg-support/d' ./python-utils/youtubemusic-patches.txt
         cmd=(dialog --backtitle "Revancify" --title 'YouTube Music Patches' --no-items --ascii-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 45 10)
         patches=()
         while read -r line
         do
             read -r -a arr <<< "$line"
             patches+=("${arr[@]}")
-        done < <(cat python-utils/youtubemusic-patches.txt)
+        done < <(cat ./python-utils/youtubemusic-patches.txt)
         mapfile -t choices < <("${cmd[@]}" "${patches[@]}" 2>&1 >/dev/tty)
         while read -r line
         do
-            echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" python-utils/youtubemusic-patches.txt
-        done < <(cut -d " " -f 1 python-utils/youtubemusic-patches.txt)
+            echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" ./python-utils/youtubemusic-patches.txt
+        done < <(cut -d " " -f 1 ./python-utils/youtubemusic-patches.txt)
         clear
         intro
         user_input
@@ -468,16 +468,16 @@ app_dl()
 su_check
 if [ "$options" = "YouTube" ]
 then
-    [[ ! -f python-utils/youtube-patches.txt ]] && python3 python-utils/fetch-patches.py yt
+    [[ ! -f ./python-utils/youtube-patches.txt ]] && python3 ./python-utils/fetch-patches.py yt
     excludeyt=$(while read -r line; do
         patch=$(echo "$line"| cut -d " " -f 1)
         printf -- " -e "
         printf "%s""$patch"
-    done < <(grep " off" python-utils/youtube-patches.txt))
+    done < <(grep " off" ./python-utils/youtube-patches.txt))
     if [ "$variant" = "root" ]
     then
         appver=$( su -c dumpsys package com.google.android.youtube | grep versionName | cut -d= -f 2)
-        getlink=$(python3 python-utils/fetch-link.py "YouTube Music" "$appver")
+        getlink=$(python3 ./python-utils/fetch-link.py "YouTube Music" "$appver")
         app_dl YouTube "$appver" "$getlink" &&
         echo "Building Youtube Revanced ..."
         java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTube-"$appver".apk -e microg-support $excludeyt --keystore ./revanced.keystore -o ./com.google.android.youtube.apk --custom-aapt2-binary ./aapt2_"$arch" --experimental --options options.toml
@@ -495,9 +495,9 @@ then
         fi
     elif [ "$variant" = "non_root" ]
     then
-        appverlist=($(python3 python-utils/version-list.py "YouTube"))
+        appverlist=($(python3 ./python-utils/version-list.py "YouTube"))
         appver=$(dialog --backtitle "Revancify" --title "YouTube" --no-items --ascii-lines --no-shadow --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
-        getlink=$(python3 python-utils/fetch-link.py "YouTube" "$appver")
+        getlink=$(python3 ./python-utils/fetch-link.py "YouTube" "$appver")
         clear
         intro
         read -r -p "Download MicroG [y/n]: " mgprompt
@@ -530,16 +530,16 @@ then
     fi
 elif [ "$options" = "YouTubeMusic" ]
 then
-    [[ ! -f python-utils/youtubemusic-patches.txt ]] && python3 python-utils/fetch-patches.py ytm
+    [[ ! -f ./python-utils/youtubemusic-patches.txt ]] && python3 ./python-utils/fetch-patches.py ytm
     excludeytm=$(while read -r line; do
         patch=$(echo "$line"| cut -d " " -f 1)
         printf -- " -e "
         printf "%s""$patch"
-    done < <(grep " off" python-utils/youtubemusic-patches.txt))
+    done < <(grep " off" ./python-utils/youtubemusic-patches.txt))
     if [ "$variant" = "root" ]
     then
         appver=$(su -c dumpsys package com.google.android.apps.youtube.music | grep versionName | cut -d= -f 2 )
-        getlink=$(python3 python-utils/fetch-link.py "YouTube Music" "$appver" "$arch")
+        getlink=$(python3 ./python-utils/fetch-link.py "YouTube Music" "$appver" "$arch")
         app_dl YouTubeMusic "$appver" "$getlink" &&
         echo "Building YouTube Music Revanced..."
         java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTubeMusic-"$appver".apk -e music-microg-support $excludeytm --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2_"$arch" --experimental
@@ -557,9 +557,9 @@ then
         fi
     elif [ "$variant" = "non_root" ]
     then
-        appverlist=($(python3 python-utils/version-list.py "YouTubeMusic"))
+        appverlist=($(python3 ./python-utils/version-list.py "YouTubeMusic"))
         appver=$(dialog --backtitle "Revancify" --title "YouTube Music" --no-items --ascii-lines --no-shadow --ok-label "Select" --menu "Select App Version" 20 40 10 "${appver[@]}" 2>&1> /dev/tty)
-        getlink=$(python3 python-utils/fetch-link.py "YouTube Music" "$appver" "$arch")
+        getlink=$(python3 ./python-utils/fetch-link.py "YouTube Music" "$appver" "$arch")
         clear
         intro
         read -r -p "Download MicroG [y/n]: " mgprompt
@@ -585,9 +585,9 @@ then
     fi
 elif [ "$options" = "Twitter" ]
 then
-    appverlist=($(python3 python-utils/version-list.py "Twitter"))
+    appverlist=($(python3 ./python-utils/version-list.py "Twitter"))
     appver=$(dialog --backtitle "Revancify" --title "Twitter" --no-items --ascii-lines --no-shadow --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
-    getlink=$(python3 python-utils/fetch-link.py "Twitter" "$appver")
+    getlink=$(python3 ./python-utils/fetch-link.py "Twitter" "$appver")
     clear
     intro
     app_dl Twitter "$appver" "$getlink" &&
@@ -602,9 +602,9 @@ then
     termux-open /storage/emulated/0/Revancify/TwitterRevanced-"$appver".apk
 elif [ "$options" = "Reddit" ]
 then
-    appverlist=($(python3 python-utils/version-list.py "Reddit"))
+    appverlist=($(python3 ./python-utils/version-list.py "Reddit"))
     appver=$(dialog --backtitle "Revancify" --title "Reddit" --no-items --ascii-lines --no-shadow --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
-    getlink=$(python3 python-utils/fetch-link.py "Reddit" "$appver")
+    getlink=$(python3 ./python-utils/fetch-link.py "Reddit" "$appver")
     clear
     intro
     app_dl Reddit "$appver" "$getlink" &&
@@ -619,9 +619,9 @@ then
     termux-open /storage/emulated/0/Revancify/RedditRevanced-"$appver".apk
 elif [ "$options" = "TikTok" ]
 then
-    appverlist=($(python3 python-utils/version-list.py "Reddit"))
+    appverlist=($(python3 ./python-utils/version-list.py "Reddit"))
     appver=$(dialog --backtitle "Revancify" --title "Reddit" --no-items --ascii-lines --no-shadow --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
-    getlink=$(python3 python-utils/fetch-link.py "Reddit" "$appver")
+    getlink=$(python3 ./python-utils/fetch-link.py "Reddit" "$appver")
     clear
     intro
     app_dl TikTok "$appver" "$getlink" &&
