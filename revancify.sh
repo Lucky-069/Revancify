@@ -546,7 +546,7 @@ then
     then
         appverlist=($(python3 ./python-utils/version-list.py "YouTubeMusic"))
         appver=$(dialog --backtitle "Revancify" --title "YouTube Music" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
-        getlink=$(python3 ./python-utils/fetch-link.py "YouTube Music" "$appver" "$arch")
+        getlink=$(python3 ./python-utils/fetch-link.py "YouTubeMusic" "$appver" "$arch")
         if dialog --backtitle "Revancify" --title 'MicroG' --no-items --defaultno --ascii-lines --yesno "Download MicroG?" 5 20
         then
             clear
