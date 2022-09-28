@@ -13,7 +13,7 @@ def bsurl(url):
 if sys.argv[1] == "YouTube":
     for json in (requests.get('https://raw.githubusercontent.com/revanced/revanced-patches/main/patches.json')).json():
         if json['name'] == 'general-ads':
-            for appver in (((json['compatiblePackages'])[0])['versions'])[::-1]:
+            for appver in (((json['compatiblePackages'])[0])['versions'])[-1:-11:-1]:
                 print(appver)
 elif sys.argv[1] == "YouTubeMusic":
     for json in (requests.get('https://raw.githubusercontent.com/revanced/revanced-patches/main/patches.json')).json():
