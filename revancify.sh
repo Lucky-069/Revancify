@@ -187,56 +187,9 @@ else
     echo "Script already up to date."
     sleep 0.5s
     tput rc; tput ed
-    get_components | dialog --progressbox 10 40 
+    get_components | dialog --progressbox 25 40
 fi
 cp revancify ~/../usr/bin
-
-anim()
-{
-    echo "Fetching latest version info"
-    echo ""
-    echo "Please Wait..."
-    echo ""
-    tput sc
-    echo "█░░░░░░░░░"
-    sleep 0.1s
-    tput rc
-    echo "░█░░░░░░░░"
-    sleep 0.1s
-    tput rc
-    echo "░░█░░░░░░░"
-    sleep 0.1s
-    tput rc
-    echo "░░░█░░░░░░"
-    sleep 0.1s
-    tput rc
-    echo "░░░░█░░░░░"
-    sleep 0.1s
-    tput rc
-    echo "░░░░░█░░░░"
-    sleep 0.1s
-    tput rc
-    echo "░░░░░░█░░░"
-    sleep 0.1s
-    tput rc
-    echo "░░░░░░░█░░"
-    sleep 0.1s
-    tput rc
-    echo "░░░░░░░░█░"
-    sleep 0.1s
-    tput rc
-    echo "░░░░░░░░░█"
-    sleep 0.1s
-    tput rc
-    echo "░░░░░░░░░░"
-    sleep 0.1s
-    tput rc
-    tput cuu1
-    tput cuu1
-    tput cuu1
-    tput cuu1
-    tput sc
-}
 
 
 ytpatches()
@@ -303,7 +256,7 @@ ytmpatches()
 
 user_input()
 {
-    input=$(dialog --backtitle "Revancify" --title 'Select App' --no-items --ascii-lines --ok-label "Select" --menu "Select Option" 20 40 10 1 "YouTube" 2 "YouTubeMusic" 3 "Twitter" 4 "Reddit" 5 "TikTok" 6 "Edit Patches" 7 "Edit Patch Options" 2>&1> /dev/tty)
+    input=$(dialog --backtitle "Revancify" --title 'Select App' --ascii-lines --ok-label "Select" --menu "Select Option" 20 40 10 1 "YouTube" 2 "YouTubeMusic" 3 "Twitter" 4 "Reddit" 5 "TikTok" 6 "Edit Patches" 7 "Edit Patch Options" 2>&1> /dev/tty)
     if [ "$input" -eq "1" ]
     then
         options="YouTube"
@@ -450,10 +403,6 @@ app_dl()
     fi
 }
 
-appname=$(dialog --backtitle "Revancify" --title 'Select App' --no-items --ascii-lines --ok-label "Select" --menu "Select Option" 20 40 10 "YouTube" "YouTubeMusic" "Twitter" "Reddit" "TikTok" 2>&1> /dev/tty)
-
-appver=($(python3 version-list.py "$appname"))
-
 
 
 
@@ -470,16 +419,8 @@ then
     if [ "$variant" = "root" ]
     then
         appver=$( su -c dumpsys package com.google.android.youtube | grep versionName | cut -d= -f 2)
-        python3 latest-app.py yt root "$appver" & pid=$!
-        trap 'kill $pid 2> /dev/null' EXIT
-        while kill -0 $pid 2> /dev/null; do
-            anim
-        done
-        trap - EXIT
-        sleep 0.5s
-        tput rc; tput ed
-        getlink="$(sed -n '2p' latest-app.txt)"
-        app_dl YouTube "$appver" "$getlink" &&
+        getlink=$(python3 fetch-link.py "YouTube" "$appver")
+        app_dl YouTube "$appver" "$getlink" | dialog --progressbox 25 40
         echo "Building Youtube Revanced ..."
         java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTube-"$appver".apk -e microg-support $excludeyt --keystore ./revanced.keystore -o ./com.google.android.youtube.apk --custom-aapt2-binary ./aapt2_"$arch" --experimental --options options.toml
         rm -rf revanced-cache
@@ -499,7 +440,7 @@ then
         appverlist=($(python3 version-list.py "YouTube"))
         appver=$(dialog --backtitle "Revancify" --title YouTube --no-items --ascii-lines --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
         getlink=$(python3 fetch-link.py "YouTube" "$appver")
-        tput rc; tput ed
+        clear
         read -r -p "Download MicroG [y/n]: " mgprompt
         if [[ "$mgprompt" =~ [Y,y] ]]
         then
@@ -512,9 +453,7 @@ then
             :
         fi
         tput rc; tput ed
-        appver=$(sed -n '1p' latest-app.txt)
-        getlink="$(sed -n '2p' latest-app.txt)"
-        app_dl YouTube "$appver" "$getlink" &&
+        app_dl YouTube "$appver" "$getlink" | dialog --progressbox 25 40
         echo "Building YouTube Revanced..."
         java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTube-"$appver".apk $excludeyt --keystore ./revanced.keystore -o ./YouTubeRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --experimental --options options.toml
         rm -rf revanced-cache
@@ -541,29 +480,10 @@ then
     if [ "$variant" = "root" ]
     then
         appver=$(su -c dumpsys package com.google.android.apps.youtube.music | grep versionName | cut -d= -f 2 )
-        if [ "$arch" = "arm64" ]
-        then
-            python3 latest-app.py ytm root arm64 "$appver" & pid=$!
-            trap 'kill $pid 2> /dev/null' EXIT
-            while kill -0 $pid 2> /dev/null; do
-                anim
-            done
-            trap - EXIT
-        elif [ "$arch" = "armeabi" ]
-        then
-            python3 latest-app.py ytm root armeabi "$appver" & pid=$!
-            trap 'kill $pid 2> /dev/null' EXIT
-            while kill -0 $pid 2> /dev/null; do
-                anim
-            done
-            trap - EXIT
-        fi
-        sleep 0.5s
-        tput rc; tput ed
-        getlink=$(sed -n '2p' latest-app.txt)
+        getlink=$(python3 fetch-link.py "YouTubeMusic" "$appver" "$arch")
         app_dl YouTubeMusic "$appver" "$getlink" &&
         echo "Building YouTube Music Revanced..."
-        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTubeMusic-"$appver".apk -e music-microg-support $excludeytm --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2_"$arch" --experimental
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTubeMusic-"$appver".apk -e music-microg-support $excludeytm --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2_"$arch" --experimental | dialog --progressbox 25 40
         rm -rf revanced-cache
         echo "Mounting the app"
         if su -mm -c 'stockapp=$(pm path com.google.android.apps.youtube.music | grep base | sed 's/package://g'); grep com.google.android.apps.youtube.music /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l > /dev/null 2>&1; done; rm /data/adb/revanced/com.google.android.apps.youtube.music.apk > /dev/null 2>&1; mv com.google.android.apps.youtube.music.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.apps.youtube.music && exit'
@@ -580,12 +500,9 @@ then
     then
         if [ "$arch" = "arm64" ]
         then
-            python3 latest-app.py ytm non_root arm64 & pid=$!
-            trap 'kill $pid 2> /dev/null' EXIT
-            while kill -0 $pid 2> /dev/null; do
-                anim
-            done
-            trap - EXIT
+            appverlist=($(python3 version-list.py "YouTube Music"))
+            appver=$(dialog --backtitle "Revancify" --title "YouTube Music" --no-items --ascii-lines --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
+            getlink=$(python3 fetch-link.py "YouTubeMusic" "$appver" "$arch")
         elif [ "$arch" = "armeabi" ]
         then
             python3 latest-app.py ytm non_root armeabi & pid=$!
