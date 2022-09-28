@@ -420,7 +420,7 @@ then
     then
         appver=$( su -c dumpsys package com.google.android.youtube | grep versionName | cut -d= -f 2)
         getlink=$(python3 fetch-link.py "YouTube" "$appver")
-        app_dl YouTube "$appver" "$getlink" | dialog --progressbox 25 40
+        app_dl YouTube "$appver" "$getlink"
         echo "Building Youtube Revanced ..."
         java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTube-"$appver".apk -e microg-support $excludeyt --keystore ./revanced.keystore -o ./com.google.android.youtube.apk --custom-aapt2-binary ./aapt2_"$arch" --experimental --options options.toml | dialog --progressbox 25 40
         rm -rf revanced-cache
@@ -453,7 +453,7 @@ then
             :
         fi
         tput rc; tput ed
-        app_dl YouTube "$appver" "$getlink" | dialog --progressbox 25 40
+        app_dl YouTube "$appver" "$getlink"
         echo "Building YouTube Revanced..."
         java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTube-"$appver".apk $excludeyt --keystore ./revanced.keystore -o ./YouTubeRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --experimental --options options.toml  | dialog --progressbox 25 40
         rm -rf revanced-cache
