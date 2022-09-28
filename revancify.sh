@@ -165,10 +165,6 @@ get_components(){
     fi
 }
 
-[[ ! -f ~/.dialogrc ]] && dialog --create-rc ~/.dialogrc
-sed -i 'use_colors/s/ON/OFF' ~/.dialogrc
-sed -i 'screen_color/s/\(.*\)/(WHITE,BLACK,OFF)' ~/.dialogrc
-
 intro
 
 echo "Checking for update..."
