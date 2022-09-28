@@ -10,7 +10,7 @@ trap revive SIGINT
 clear
 rm -rf ./*cache
 
-if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/dialog ] && [ -e ~/../usr/bin/tput ] && [ "$(find ~/../usr/lib/ -name "wheel" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "requests" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "bs4" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "toml" | wc -l)" != "0" ] && [ -e ~/../usr/bin/revancify ] 
+if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/dialog ] && [ -e ~/../usr/bin/tput ] && [ "$(find ~/../usr/lib/ -name "wheel" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "requests" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "bs4" | wc -l)" != "0" ] && [ -e ~/../usr/bin/revancify ] 
 then
     :
 else
@@ -18,10 +18,10 @@ else
     sleep 0.5s
     git pull
     pkg update -y &&
-    pkg install python openjdk-17 wget ncurses-utils libxml2 libxslt dialog -y
+    pkg install python openjdk-17 wget ncurses-utils dialog -y
     pip install --upgrade pip
     pip install wheel
-    pip install requests toml bs4
+    pip install requests bs4
     cp revancify ~/../usr/bin
     sed -i 's/# allow-external-apps = true/allow-external-apps = true/g' ~/.termux/termux.properties
     sleep 0.5s
@@ -187,7 +187,7 @@ else
     echo "Script already up to date."
     sleep 0.5s
     tput rc; tput ed
-    get_components
+    get_components | dialog --progressbox 10 40 
 fi
 cp revancify ~/../usr/bin
 
@@ -303,16 +303,7 @@ ytmpatches()
 
 user_input()
 {
-    tput rc; tput ed
-    echo "What do you want to do?"
-    echo "1. Patch YouTube"
-    echo "2. Patch YouTube Music"
-    echo "3. Patch Twitter"
-    echo "4. Patch Reddit"
-    echo "5. Patch TikTok"
-    echo "6. Edit Patches"
-    echo "7. Edit Patches Options"
-    read -r -p "Your Input: " input
+    input=$(dialog --backtitle "Revancify" --title 'Select App' --no-items --ascii-lines --ok-label "Select" --menu "Select Option" 20 40 10 1 "YouTube" 2 "YouTubeMusic" 3 "Twitter" 4 "Reddit" 5 "TikTok" 6 "Edit Patches" 7 "Edit Patch Options" 2>&1> /dev/tty)
     if [ "$input" -eq "1" ]
     then
         options="YouTube"
@@ -459,6 +450,13 @@ app_dl()
     fi
 }
 
+appname=$(dialog --backtitle "Revancify" --title 'Select App' --no-items --ascii-lines --ok-label "Select" --menu "Select Option" 20 40 10 "YouTube" "YouTubeMusic" "Twitter" "Reddit" "TikTok" 2>&1> /dev/tty)
+
+appver=($(python3 version-list.py "$appname"))
+
+
+
+
 #Build apps
 su_check
 if [ "$options" = "YouTube" ]
@@ -498,13 +496,9 @@ then
         fi
     elif [ "$variant" = "non_root" ]
     then
-        python3 latest-app.py yt non_root & pid=$!
-        trap 'kill $pid 2> /dev/null' EXIT
-        while kill -0 $pid 2> /dev/null; do
-            anim
-        done
-        trap - EXIT
-        sleep 0.5s
+        appverlist=($(python3 version-list.py "YouTube"))
+        appver=$(dialog --backtitle "Revancify" --title YouTube --no-items --ascii-lines --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
+        getlink=$(python3 fetch-link.py "YouTube" "$appver")
         tput rc; tput ed
         read -r -p "Download MicroG [y/n]: " mgprompt
         if [[ "$mgprompt" =~ [Y,y] ]]
