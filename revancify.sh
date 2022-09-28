@@ -241,12 +241,12 @@ anim()
 
 ytpatches()
 {
-    if dialog --backtitle "Revancify" --title 'Confirmation' --no-items --ascii-lines --no-shadow --no-cancel --yesno "All patches will be reset. Do You want to continue?" 10 40
+    if dialog --backtitle "Revancify" --title 'Confirmation' --no-items --ascii-lines --no-cancel --yesno "All patches will be reset. Do You want to continue?" 10 40
     then
         python3 ./python-utils/fetch-patches.py yt
         sed -i '/microg-support/d' youtube-patches.txt
         sed -i '/enable-debugging/d' youtube-patches.txt
-        cmd=(dialog --backtitle "Revancify" --title 'YouTube Patches' --no-items --ascii-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 45 10)
+        cmd=(dialog --backtitle "Revancify" --title 'YouTube Patches' --no-items --ascii-lines --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 45 10)
         patches=()
         while read -r line
         do
@@ -272,11 +272,11 @@ ytpatches()
 
 ytmpatches()
 {
-    if dialog --backtitle "Revancify" --title 'Confirmation' --no-items --ascii-lines --no-shadow --no-cancel --yesno "All patches will be reset. Do You want to continue?" 10 40
+    if dialog --backtitle "Revancify" --title 'Confirmation' --no-items --ascii-lines --no-cancel --yesno "All patches will be reset. Do You want to continue?" 10 40
     then
         python3 ./python-utils/fetch-patches.py yt
         sed -i '/music-microg-support/d' youtubemusic-patches.txt
-        cmd=(dialog --backtitle "Revancify" --title 'YouTube Music Patches' --no-items --ascii-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 45 10)
+        cmd=(dialog --backtitle "Revancify" --title 'YouTube Music Patches' --no-items --ascii-lines --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 45 10)
         patches=()
         while read -r line
         do
@@ -330,7 +330,7 @@ user_input()
         options="TikTok"
     elif [ "$input" -eq "6" ]
     then
-        patchedit=$(dialog --backtitle "Revancify" --title 'Select App' --ascii-lines --no-shadow --ok-label "Select" --no-cancel --menu "Select Option" 10 40 10 1 "YouTube" 2 "YouTube Music" 2>&1> /dev/tty)
+        patchedit=$(dialog --backtitle "Revancify" --title 'Select App' --ascii-lines --ok-label "Select" --no-cancel --menu "Select Option" 10 40 10 1 "YouTube" 2 "YouTube Music" 2>&1> /dev/tty)
         if [ "$patchedit" -eq "1" ]
         then
             ytpatches
@@ -346,7 +346,7 @@ user_input()
         java -jar revanced-cli* -b revanced-patches* -m revanced-integrations* -a no.apk -o nooutput.apk > /dev/null 2>&1
         rm -rf revanced-cache
         tput cnorm
-        dialog --backtitle "Revancify" --ascii-lines --no-shadow --title "Edit Options file" --editbox options.toml 25 60 2> file.tmp && cat file.tmp > options.toml && rm file.tmp
+        dialog --backtitle "Revancify" --ascii-lines --title "Edit Options file" --editbox options.toml 25 60 2> file.tmp && cat file.tmp > options.toml && rm file.tmp
         tput civis
         clear
         intro
@@ -491,19 +491,18 @@ then
     elif [ "$variant" = "non_root" ]
     then
         appverlist=($(python3 ./python-utils/version-list.py "YouTube"))
-        appver=$(dialog --backtitle "Revancify" --title "YouTube" --no-items --ascii-lines --no-shadow --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
+        appver=$(dialog --backtitle "Revancify" --title "YouTube" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
         getlink=$(python3 ./python-utils/fetch-link.py "YouTube" "$appver")
-        clear
-        intro
-        read -r -p "Download MicroG [y/n]: " mgprompt
-        if [[ "$mgprompt" =~ [Y,y] ]]
+        if dialog --backtitle "Revancify" --title 'MicroG' --no-items --ascii-lines --no-cancel --yesno "Download MicroG?" 10 40
         then
+            clear
             wget -q -c "https://github.com/TeamVanced/VancedMicroG/releases/download/v0.2.24.220220-220220001/microg.apk" -O "Vanced_MicroG.apk" --show-progress
             echo ""
             mv "Vanced_MicroG.apk" /storage/emulated/0/Revancify
             echo MicroG App saved to Revancify folder.
-            sleep 0.5s
         fi
+        clear
+        intro
         tput rc; tput ed
         app_dl YouTube "$appver" "$getlink" &&
         echo "Building YouTube Revanced..."
@@ -551,20 +550,18 @@ then
     elif [ "$variant" = "non_root" ]
     then
         appverlist=($(python3 ./python-utils/version-list.py "YouTubeMusic"))
-        appver=$(dialog --backtitle "Revancify" --title "YouTube Music" --no-items --ascii-lines --no-shadow --ok-label "Select" --menu "Select App Version" 20 40 10 "${appver[@]}" 2>&1> /dev/tty)
+        appver=$(dialog --backtitle "Revancify" --title "YouTube Music" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Select App Version" 20 40 10 "${appver[@]}" 2>&1> /dev/tty)
         getlink=$(python3 ./python-utils/fetch-link.py "YouTube Music" "$appver" "$arch")
-        clear
-        intro
-        read -r -p "Download MicroG [y/n]: " mgprompt
-        if [[ "$mgprompt" =~ [Y,y] ]]
+        if dialog --backtitle "Revancify" --title 'MicroG' --no-items --ascii-lines --no-cancel --yesno "Download MicroG?" 10 40
         then
+            clear
             wget -q -c "https://github.com/TeamVanced/VancedMicroG/releases/download/v0.2.24.220220-220220001/microg.apk" -O "Vanced_MicroG.apk" --show-progress
             echo ""
             mv "Vanced_MicroG.apk" /storage/emulated/0/Revancify
             echo MicroG App saved to Revancify folder.
-        else
-            :
         fi
+        clear
+        intro
         tput rc; tput ed
         app_dl YouTubeMusic "$appver" "$getlink" &&
         echo "Building YouTube Music Revanced..."
@@ -579,7 +576,7 @@ then
 elif [ "$options" = "Twitter" ]
 then
     appverlist=($(python3 ./python-utils/version-list.py "Twitter"))
-    appver=$(dialog --backtitle "Revancify" --title "Twitter" --no-items --ascii-lines --no-shadow --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
+    appver=$(dialog --backtitle "Revancify" --title "Twitter" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
     getlink=$(python3 ./python-utils/fetch-link.py "Twitter" "$appver")
     clear
     intro
@@ -596,7 +593,7 @@ then
 elif [ "$options" = "Reddit" ]
 then
     appverlist=($(python3 ./python-utils/version-list.py "Reddit"))
-    appver=$(dialog --backtitle "Revancify" --title "Reddit" --no-items --ascii-lines --no-shadow --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
+    appver=$(dialog --backtitle "Revancify" --title "Reddit" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
     getlink=$(python3 ./python-utils/fetch-link.py "Reddit" "$appver")
     clear
     intro
@@ -613,7 +610,7 @@ then
 elif [ "$options" = "TikTok" ]
 then
     appverlist=($(python3 ./python-utils/version-list.py "Reddit"))
-    appver=$(dialog --backtitle "Revancify" --title "Reddit" --no-items --ascii-lines --no-shadow --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
+    appver=$(dialog --backtitle "Revancify" --title "Reddit" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
     getlink=$(python3 ./python-utils/fetch-link.py "Reddit" "$appver")
     clear
     intro
