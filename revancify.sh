@@ -493,7 +493,7 @@ then
         appverlist=($(python3 ./python-utils/version-list.py "YouTube"))
         appver=$(dialog --backtitle "Revancify" --title "YouTube" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
         getlink=$(python3 ./python-utils/fetch-link.py "YouTube" "$appver")
-        if dialog --backtitle "Revancify" --title 'MicroG' --no-items --ascii-lines --no-cancel --yesno "Download MicroG?" 10 40
+        if dialog --backtitle "Revancify" --title 'MicroG' --no-items --defaultno --ascii-lines --yesno "Download MicroG?" 5 20
         then
             clear
             wget -q -c "https://github.com/TeamVanced/VancedMicroG/releases/download/v0.2.24.220220-220220001/microg.apk" -O "Vanced_MicroG.apk" --show-progress
@@ -512,13 +512,8 @@ then
         sleep 0.5s
         echo "YouTube App saved to Revancify folder." &&
         echo "Thanks for using Revancify..." &&
+        [[ -f Vanced_MicroG.apk ]] && termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
         termux-open /storage/emulated/0/Revancify/YouTubeRevanced-"$appver".apk
-        if [ "$mgprompt" = "y" ]
-        then
-            termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
-        else
-            :
-        fi
     fi
 elif [ "$options" = "YouTubeMusic" ]
 then
@@ -552,7 +547,7 @@ then
         appverlist=($(python3 ./python-utils/version-list.py "YouTubeMusic"))
         appver=$(dialog --backtitle "Revancify" --title "YouTube Music" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Select App Version" 20 40 10 "${appver[@]}" 2>&1> /dev/tty)
         getlink=$(python3 ./python-utils/fetch-link.py "YouTube Music" "$appver" "$arch")
-        if dialog --backtitle "Revancify" --title 'MicroG' --no-items --ascii-lines --no-cancel --yesno "Download MicroG?" 10 40
+        if dialog --backtitle "Revancify" --title 'MicroG' --no-items --defaultno --ascii-lines --yesno "Download MicroG?" 5 20
         then
             clear
             wget -q -c "https://github.com/TeamVanced/VancedMicroG/releases/download/v0.2.24.220220-220220001/microg.apk" -O "Vanced_MicroG.apk" --show-progress
@@ -571,6 +566,7 @@ then
         sleep 0.5s &&
         echo "YouTube Music App saved to Revancify folder." &&
         echo "Thanks for using Revancify..." &&
+        [[ -f Vanced_MicroG.apk ]] && termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
         termux-open /storage/emulated/0/Revancify/YouTubeMusicRevanced-"$appver".apk
     fi
 elif [ "$options" = "Twitter" ]
