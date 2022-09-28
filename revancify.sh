@@ -166,9 +166,8 @@ get_components(){
 }
 
 [[ ! -f ~/.dialogrc ]] && dialog --create-rc ~/.dialogrc
-sed -i "/$line/s/ on/ off/"
-sed 'use_colors/s/ON/OFF' ~/.dialogrc
-sed 'screen_color/s/\(.*\)/(WHITE,BLACK,OFF)' ~/.dialogrc
+sed -i 'use_colors/s/ON/OFF' ~/.dialogrc
+sed -i 'screen_color/s/\(.*\)/(WHITE,BLACK,OFF)' ~/.dialogrc
 
 intro
 
@@ -249,20 +248,20 @@ ytpatches()
     if dialog --backtitle "Revancify" --title 'Confirmation' --no-items --ascii-lines --no-shadow --no-cancel --yesno "All patches will be reset. Do You want to continue?" 10 40
     then
         python3 ./python-utils/fetch-patches.py yt
-        sed -i '/microg-support/d' ./python-utils/youtube-patches.txt
-        sed -i '/enable-debugging/d' ./python-utils/youtube-patches.txt
+        sed -i '/microg-support/d' youtube-patches.txt
+        sed -i '/enable-debugging/d' youtube-patches.txt
         cmd=(dialog --backtitle "Revancify" --title 'YouTube Patches' --no-items --ascii-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 45 10)
         patches=()
         while read -r line
         do
             read -r -a arr <<< "$line"
             patches+=("${arr[@]}")
-        done < <(cat ./python-utils/youtube-patches.txt)
+        done < <(cat youtube-patches.txt)
         mapfile -t choices < <("${cmd[@]}" "${patches[@]}" 2>&1 >/dev/tty)
         while read -r line
         do
-            echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" ./python-utils/youtube-patches.txt
-        done < <(cut -d " " -f 1 ./python-utils/youtube-patches.txt)
+            echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtube-patches.txt
+        done < <(cut -d " " -f 1 youtube-patches.txt)
         clear
         intro
         user_input
@@ -280,19 +279,19 @@ ytmpatches()
     if dialog --backtitle "Revancify" --title 'Confirmation' --no-items --ascii-lines --no-shadow --no-cancel --yesno "All patches will be reset. Do You want to continue?" 10 40
     then
         python3 ./python-utils/fetch-patches.py yt
-        sed -i '/music-microg-support/d' ./python-utils/youtubemusic-patches.txt
+        sed -i '/music-microg-support/d' youtubemusic-patches.txt
         cmd=(dialog --backtitle "Revancify" --title 'YouTube Music Patches' --no-items --ascii-lines --no-shadow --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 45 10)
         patches=()
         while read -r line
         do
             read -r -a arr <<< "$line"
             patches+=("${arr[@]}")
-        done < <(cat ./python-utils/youtubemusic-patches.txt)
+        done < <(cat youtubemusic-patches.txt)
         mapfile -t choices < <("${cmd[@]}" "${patches[@]}" 2>&1 >/dev/tty)
         while read -r line
         do
-            echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" ./python-utils/youtubemusic-patches.txt
-        done < <(cut -d " " -f 1 ./python-utils/youtubemusic-patches.txt)
+            echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtubemusic-patches.txt
+        done < <(cut -d " " -f 1 youtubemusic-patches.txt)
         clear
         intro
         user_input
@@ -468,12 +467,12 @@ app_dl()
 su_check
 if [ "$options" = "YouTube" ]
 then
-    [[ ! -f ./python-utils/youtube-patches.txt ]] && python3 ./python-utils/fetch-patches.py yt
+    [[ ! -f youtube-patches.txt ]] && python3 ./python-utils/fetch-patches.py yt
     excludeyt=$(while read -r line; do
         patch=$(echo "$line"| cut -d " " -f 1)
         printf -- " -e "
         printf "%s""$patch"
-    done < <(grep " off" ./python-utils/youtube-patches.txt))
+    done < <(grep " off" youtube-patches.txt))
     if [ "$variant" = "root" ]
     then
         appver=$( su -c dumpsys package com.google.android.youtube | grep versionName | cut -d= -f 2)
@@ -510,8 +509,6 @@ then
             sleep 0.5s
         fi
         tput rc; tput ed
-        appver=$(sed -n '1p' latest-app.txt)
-        getlink="$(sed -n '2p' latest-app.txt)"
         app_dl YouTube "$appver" "$getlink" &&
         echo "Building YouTube Revanced..."
         java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTube-"$appver".apk $excludeyt --keystore ./revanced.keystore -o ./YouTubeRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --experimental --options options.toml
@@ -530,12 +527,12 @@ then
     fi
 elif [ "$options" = "YouTubeMusic" ]
 then
-    [[ ! -f ./python-utils/youtubemusic-patches.txt ]] && python3 ./python-utils/fetch-patches.py ytm
+    [[ ! -f youtubemusic-patches.txt ]] && python3 ./python-utils/fetch-patches.py ytm
     excludeytm=$(while read -r line; do
         patch=$(echo "$line"| cut -d " " -f 1)
         printf -- " -e "
         printf "%s""$patch"
-    done < <(grep " off" ./python-utils/youtubemusic-patches.txt))
+    done < <(grep " off" youtubemusic-patches.txt))
     if [ "$variant" = "root" ]
     then
         appver=$(su -c dumpsys package com.google.android.apps.youtube.music | grep versionName | cut -d= -f 2 )
