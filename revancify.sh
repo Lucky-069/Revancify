@@ -275,8 +275,18 @@ ytmpatches()
     done < <(cut -d " " -f 1 youtubemusic-patches.txt)
 }
 
-
-
+patch_options() {
+    echo ""
+    echo "Generating Options File. Please wait..."
+    java -jar revanced-cli* -b revanced-patches* -m revanced-integrations* -a no.apk -o nooutput.apk > /dev/null 2>&1
+    rm -rf revanced-cache
+    tput cnorm
+    dialog --backtitle "Revancify" --ascii-lines --title "Edit Options file" --editbox options.toml 20 40 2> file.tmp && cat file.tmp > options.toml && rm file.tmp
+    tput civis
+    clear
+    intro
+    user_input
+}
 user_input()
 {
     tput rc; tput ed
@@ -319,16 +329,7 @@ user_input()
         user_input
     elif [ "$input" -eq "7" ]
     then
-        echo ""
-        echo "Generating Options File. Please wait..."
-        java -jar revanced-cli* -b revanced-patches* -m revanced-integrations* -a no.apk -o nooutput.apk > /dev/null 2>&1
-        rm -rf revanced-cache
-        tput cnorm
-        dialog --backtitle "Revancify" --ascii-lines --title "Edit Options file" --editbox options.toml 25 60 2> file.tmp && cat file.tmp > options.toml && rm file.tmp
-        tput civis
-        clear
-        intro
-        user_input
+        patch_options
     else
         echo No input given..
         tput rc; tput ed
