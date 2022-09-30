@@ -289,6 +289,7 @@ patch_options() {
     intro
     user_input
 }
+
 user_input()
 {
     tput rc; tput ed
@@ -319,11 +320,14 @@ user_input()
     elif [ "$input" -eq "6" ]
     then
         patchedit=$(dialog --backtitle "Revancify" --title 'Select App' --ascii-lines --ok-label "Select" --no-cancel --menu "Select Option" 10 40 10 1 "YouTube" 2 "YouTube Music" 2>&1> /dev/tty)
+        tput civis
         if [ "$patchedit" -eq "1" ] && dialog --backtitle "Revancify" --title 'Confirmation' --no-items --ascii-lines --no-cancel --yesno "All patches will be reset. Do You want to continue?" 10 40
         then
+            tput civis
             ytpatches
         elif [ "$patchedit" -eq "2" ] && dialog --backtitle "Revancify" --title 'Confirmation' --no-items --ascii-lines --no-cancel --yesno "All patches will be reset. Do You want to continue?" 10 40
         then
+            tput civis
             ytmpatches
         fi
         clear
