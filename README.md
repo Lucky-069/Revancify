@@ -28,7 +28,6 @@ termux-setup-storage && pkg update -y && pkg install git -y && cd storage && git
 2. Type `revancify` 
 
 To Force Update use `revancify -f`. It will solve any update problem if exists.  
-> Now Revancify is a binary, it can be run directly after opening.
 
 # Troubleshoot
 
