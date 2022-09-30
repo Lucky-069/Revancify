@@ -173,7 +173,8 @@ sleep 0.5s
 
 if [ "$(git pull)" != "Already up to date." ]
 then
-    sleep 0.5s
+    cp dialog-config.txt ~/.dialogrc
+    cp revancify ~/../usr/bin/revancify
     tput rc; tput ed
     echo Revancify updated...
     sleep 0.5s
