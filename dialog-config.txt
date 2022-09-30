@@ -61,7 +61,7 @@ button_key_inactive_color = dialog_color
 button_label_active_color = button_active_color
 
 # Inactive button label color
-button_label_inactive_color = (BLACK,WHITE,ON)
+button_label_inactive_color = dialog_color
 
 # Input box color
 inputbox_color = dialog_color
