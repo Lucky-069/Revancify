@@ -249,8 +249,8 @@ ytpatches()
     patches=()
     while read -r line
     do
-        read -r -a arr <<< "$line"
-        patches+=("${arr[@]}")
+        read -r -a eachline <<< "$line"
+        patches+=("${eachline[@]}")
     done < <(cat youtube-patches.txt)
     mapfile -t choices < <(dialog --backtitle "Revancify" --title 'YouTube Patches' --no-items --ascii-lines --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 45 10 "${patches[@]}" 2>&1 >/dev/tty)
     while read -r line
@@ -267,8 +267,8 @@ ytmpatches()
     patches=()
     while read -r line
     do
-        read -r -a arr <<< "$line"
-        patches+=("${arr[@]}")
+        read -r -a eachline <<< "$line"
+        patches+=("${eachline[@]}")
     done < <(cat youtubemusic-patches.txt)
     mapfile -t choices < <(dialog --backtitle "Revancify" --title 'YouTube Music Patches' --no-items --ascii-lines --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 45 10 "${patches[@]}" 2>&1 >/dev/tty)
     while read -r line
