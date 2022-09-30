@@ -189,8 +189,8 @@ else
     tput rc; tput ed
     get_components
 fi
-grep decipher ~/.dialogrc || cp dialog-config.txt ~/.dialogrc
-grep flag ~/../usr/bin/revancify || cp revancify ~/../usr/bin/revancify
+grep -q decipher ~/.dialogrc || cp dialog-config.txt ~/.dialogrc
+grep -q flag ~/../usr/bin/revancify || cp revancify ~/../usr/bin/revancify
 
 anim()
 {
