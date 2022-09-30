@@ -241,62 +241,38 @@ anim()
 
 ytpatches()
 {
-    if dialog --backtitle "Revancify" --title 'Confirmation' --no-items --ascii-lines --no-cancel --yesno "All patches will be reset. Do You want to continue?" 10 40
-    then
-        python3 ./python-utils/fetch-patches.py yt
-        sed -i '/microg-support/d' youtube-patches.txt
-        sed -i '/enable-debugging/d' youtube-patches.txt
-        cmd=(dialog --backtitle "Revancify" --title 'YouTube Patches' --no-items --ascii-lines --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 45 10)
-        patches=()
-        while read -r line
-        do
-            read -r -a arr <<< "$line"
-            patches+=("${arr[@]}")
-        done < <(cat youtube-patches.txt)
-        mapfile -t choices < <("${cmd[@]}" "${patches[@]}" 2>&1 >/dev/tty)
-        while read -r line
-        do
-            echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtube-patches.txt
-        done < <(cut -d " " -f 1 youtube-patches.txt)
-        clear
-        intro
-        user_input
-    else
-        clear
-        intro
-        user_input
-        return 0
-    fi
+    python3 ./python-utils/fetch-patches.py yt
+    sed -i '/microg-support/d' youtube-patches.txt
+    sed -i '/enable-debugging/d' youtube-patches.txt
+    patches=()
+    while read -r line
+    do
+        read -r -a arr <<< "$line"
+        patches+=("${arr[@]}")
+    done < <(cat youtube-patches.txt)
+    mapfile -t choices < <(dialog --backtitle "Revancify" --title 'YouTube Patches' --no-items --ascii-lines --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 45 10 "${patches[@]}" 2>&1 >/dev/tty)
+    while read -r line
+    do
+        echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtube-patches.txt
+    done < <(cut -d " " -f 1 youtube-patches.txt)
 }
 
 
 ytmpatches()
 {
-    if dialog --backtitle "Revancify" --title 'Confirmation' --no-items --ascii-lines --no-cancel --yesno "All patches will be reset. Do You want to continue?" 10 40
-    then
-        python3 ./python-utils/fetch-patches.py yt
-        sed -i '/music-microg-support/d' youtubemusic-patches.txt
-        cmd=(dialog --backtitle "Revancify" --title 'YouTube Music Patches' --no-items --ascii-lines --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 45 10)
-        patches=()
-        while read -r line
-        do
-            read -r -a arr <<< "$line"
-            patches+=("${arr[@]}")
-        done < <(cat youtubemusic-patches.txt)
-        mapfile -t choices < <("${cmd[@]}" "${patches[@]}" 2>&1 >/dev/tty)
-        while read -r line
-        do
-            echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtubemusic-patches.txt
-        done < <(cut -d " " -f 1 youtubemusic-patches.txt)
-        clear
-        intro
-        user_input
-    else
-        clear
-        intro
-        user_input
-        return 0
-    fi
+    python3 ./python-utils/fetch-patches.py yt
+    sed -i '/music-microg-support/d' youtubemusic-patches.txt
+    patches=()
+    while read -r line
+    do
+        read -r -a arr <<< "$line"
+        patches+=("${arr[@]}")
+    done < <(cat youtubemusic-patches.txt)
+    mapfile -t choices < <(dialog --backtitle "Revancify" --title 'YouTube Music Patches' --no-items --ascii-lines --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 45 10 "${patches[@]}" 2>&1 >/dev/tty)
+    while read -r line
+    do
+        echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtubemusic-patches.txt
+    done < <(cut -d " " -f 1 youtubemusic-patches.txt)
 }
 
 
@@ -331,14 +307,16 @@ user_input()
     elif [ "$input" -eq "6" ]
     then
         patchedit=$(dialog --backtitle "Revancify" --title 'Select App' --ascii-lines --ok-label "Select" --no-cancel --menu "Select Option" 10 40 10 1 "YouTube" 2 "YouTube Music" 2>&1> /dev/tty)
-        if [ "$patchedit" -eq "1" ]
+        if [ "$patchedit" -eq "1" ] && dialog --backtitle "Revancify" --title 'Confirmation' --no-items --ascii-lines --no-cancel --yesno "All patches will be reset. Do You want to continue?" 10 40
         then
             ytpatches
-        elif [ "$patchedit" -eq "2" ]
+        elif [ "$patchedit" -eq "2" ] && dialog --backtitle "Revancify" --title 'Confirmation' --no-items --ascii-lines --no-cancel --yesno "All patches will be reset. Do You want to continue?" 10 40
         then
             ytmpatches
         fi
-
+        clear
+        intro
+        user_input
     elif [ "$input" -eq "7" ]
     then
         echo ""
@@ -353,6 +331,7 @@ user_input()
         user_input
     else
         echo No input given..
+        tput rc; tput ed
         user_input
     fi
     tput rc; tput ed
@@ -463,7 +442,7 @@ app_dl()
 su_check
 if [ "$options" = "YouTube" ]
 then
-    [[ ! -f youtube-patches.txt ]] && python3 ./python-utils/fetch-patches.py yt
+    [[ ! -f youtube-patches.txt ]] && ytpatches
     excludeyt=$(while read -r line; do
         patch=$(echo "$line"| cut -d " " -f 1)
         printf -- " -e "
@@ -506,7 +485,7 @@ then
         tput rc; tput ed
         app_dl YouTube "$appver" "$getlink" &&
         echo "Building YouTube Revanced..."
-        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTube-"$appver".apk $excludeyt --keystore ./revanced.keystore -o ./YouTubeRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --experimental --options options.toml
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTube-"$appver".apk $excludeyt --keystore ./revanced.keystore -o ./YouTubeRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --options options.toml
         rm -rf revanced-cache
         mv YouTubeRevanced* /storage/emulated/0/Revancify/ &&
         sleep 0.5s
@@ -517,7 +496,7 @@ then
     fi
 elif [ "$options" = "YouTubeMusic" ]
 then
-    [[ ! -f youtubemusic-patches.txt ]] && python3 ./python-utils/fetch-patches.py ytm
+    [[ ! -f youtubemusic-patches.txt ]] && ytmpatches
     excludeytm=$(while read -r line; do
         patch=$(echo "$line"| cut -d " " -f 1)
         printf -- " -e "
@@ -560,7 +539,7 @@ then
         tput rc; tput ed
         app_dl YouTubeMusic "$appver" "$getlink" &&
         echo "Building YouTube Music Revanced..."
-        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTubeMusic-"$appver".apk $excludeytm --keystore ./revanced.keystore -o ./YouTubeMusicRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --experimental
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -a ./YouTubeMusic-"$appver".apk $excludeytm --keystore ./revanced.keystore -o ./YouTubeMusicRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch"
         rm -rf revanced-cache
         mv YouTubeMusicRevanced* /storage/emulated/0/Revancify/ &&
         sleep 0.5s &&
