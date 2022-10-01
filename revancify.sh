@@ -5,7 +5,7 @@ revive(){
 }
 trap revive SIGINT
 
-# For update change this sentence here ...
+# For update change this sentence here ..
 
 clear
 rm -rf ./*cache
