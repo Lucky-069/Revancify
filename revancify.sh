@@ -5,7 +5,7 @@ revive(){
 }
 trap revive SIGINT
 
-# For update change this sentence here ..
+# For update change this sentence here ...
 
 clear
 rm -rf ./*cache
@@ -66,7 +66,7 @@ intro()
 
 get_components(){
 
-    revanced_latest=($(python3 ./python-utils/revanced-latest.py))
+    mapfile -t revanced_latest < <(python3 ./python-utils/revanced-latest.py)
     
     #get patches version
     patches_latest="${revanced_latest[0]}"
@@ -476,7 +476,7 @@ then
         fi
     elif [ "$variant" = "non_root" ]
     then
-        appverlist=($(python3 ./python-utils/version-list.py "YouTube"))
+        mapfile -t appverlist < <(python3 ./python-utils/version-list.py "YouTube")
         appver=$(dialog --backtitle "Revancify" --title "YouTube" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
         getlink=$(python3 ./python-utils/fetch-link.py "YouTube" "$appver")
         if dialog --backtitle "Revancify" --title 'MicroG' --no-items --defaultno --ascii-lines --yesno "Download MicroG?" 5 20
@@ -530,7 +530,7 @@ then
         fi
     elif [ "$variant" = "non_root" ]
     then
-        appverlist=($(python3 ./python-utils/version-list.py "YouTubeMusic"))
+        mapfile -t appverlist < <(python3 ./python-utils/version-list.py "YouTubeMusic")
         appver=$(dialog --backtitle "Revancify" --title "YouTube Music" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
         getlink=$(python3 ./python-utils/fetch-link.py "YouTubeMusic" "$appver" "$arch")
         if dialog --backtitle "Revancify" --title 'MicroG' --no-items --defaultno --ascii-lines --yesno "Download MicroG?" 5 20
@@ -557,7 +557,7 @@ then
     fi
 elif [ "$options" = "Twitter" ]
 then
-    appverlist=($(python3 ./python-utils/version-list.py "Twitter"))
+    mapfile -t appverlist < <(python3 ./python-utils/version-list.py "Twitter")
     appver=$(dialog --backtitle "Revancify" --title "Twitter" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
     getlink=$(python3 ./python-utils/fetch-link.py "Twitter" "$appver")
     clear
@@ -574,7 +574,7 @@ then
     termux-open /storage/emulated/0/Revancify/TwitterRevanced-"$appver".apk
 elif [ "$options" = "Reddit" ]
 then
-    appverlist=($(python3 ./python-utils/version-list.py "Reddit"))
+    mapfile -t appverlist < <(python3 ./python-utils/version-list.py "Reddit")
     appver=$(dialog --backtitle "Revancify" --title "Reddit" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
     getlink=$(python3 ./python-utils/fetch-link.py "Reddit" "$appver")
     clear
@@ -591,9 +591,9 @@ then
     termux-open /storage/emulated/0/Revancify/RedditRevanced-"$appver".apk
 elif [ "$options" = "TikTok" ]
 then
-    appverlist=($(python3 ./python-utils/version-list.py "Reddit"))
-    appver=$(dialog --backtitle "Revancify" --title "Reddit" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
-    getlink=$(python3 ./python-utils/fetch-link.py "Reddit" "$appver")
+    mapfile -t appverlist < <(python3 ./python-utils/version-list.py "TikTok")
+    appver=$(dialog --backtitle "Revancify" --title "TikTok" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
+    getlink=$(python3 ./python-utils/fetch-link.py "TikTok" "$appver")
     clear
     intro
     app_dl TikTok "$appver" "$getlink" &&
