@@ -390,7 +390,7 @@ then
     echo "Please wait fetching link ..."
     getlink=$(python3 ./python-utils/fetch-link.py "$appname" "$appver")
     tput rc; tput ed
-    app_dl YouTube "$appver" "$getlink" &&
+    app_dl "$appname" "$appver" "$getlink" &&
     echo "Building $appname Revanced..."
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./"$appname"-"$appver".apk $excludepatches --keystore ./revanced.keystore -o ./"$appname"Revanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --options options.toml --experimental
     rm -rf revanced-cache
@@ -423,9 +423,10 @@ then
 else
     mapfile -t appverlist < <(python3 ./python-utils/version-list.py "$appname")
     appver=$(dialog --backtitle "Revancify" --title "Version Selection Menu" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
-    getlink=$(python3 ./python-utils/fetch-link.py "$appname" "$appver")
     clear
     intro
+    echo "Please wait fetching link ..."
+    getlink=$(python3 ./python-utils/fetch-link.py "$appname" "$appver")
     app_dl "$appname" "$appver" "$getlink" &&
     echo "Building $appname Revanced..."
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./"$appname"-"$appver".apk --keystore ./revanced.keystore -o ./"$appname"Revanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --options options.toml --experimental
