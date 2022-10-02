@@ -288,28 +288,6 @@ arch=$(getprop ro.product.cpu.abi | cut -d "-" -f 1)
 
 mainmenu
 
-su_check()
-{
-    # variant
-    if su -c exit > /dev/null 2>&1
-    then
-        variant="root"
-        su -c 'mkdir -p /data/adb/revanced'
-        if su -c ls /data/adb/service.d | grep -q mount_revanced_com.google.android.youtube.sh && su -c ls /data/adb/service.d | grep -q mount_revanced_com.google.android.apps.youtube.music.sh
-        then
-            :
-        else
-            su -c cp mount_revanced_com.google.android.youtube.sh /data/adb/service.d/
-            su -c chmod +x /data/adb/service.d/mount_revanced_com.google.android.youtube.sh
-            su -c cp mount_revanced_com.google.android.apps.youtube.music.sh /data/adb/service.d/
-            su -c chmod +x /data/adb/service.d/mount_revanced_com.google.android.apps.youtube.music.sh
-        fi
-    else
-        variant="nonroot"
-        mkdir -p /storage/emulated/0/Revancify
-    fi
-}
-
 # App Downloader
 app_dl()
 {
@@ -352,26 +330,20 @@ excludepatches=$(while read -r line; do printf %s"$line" " "; done < <(jq -r --a
 
 
 #Build apps
-
-
 if [ "$pkgname" = "com.google.android.youtube" ] || [ "$pkgname" = "com.google.android.apps.youtube.music" ]
 then
-    su_check
-    if [ "$variant" = "nonroot" ]
+    if su -c exit > /dev/null 2>&1
     then
-        mapfile -t appverlist < <(python3 ./python-utils/version-list.py "$appname")
-        appver=$(dialog --backtitle "Revancify" --title "Version Selection Menu" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Choose App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
-
-        if dialog --backtitle "Revancify" --title 'MicroG' --no-items --defaultno --ascii-lines --yesno "Download MicroG?" 8 30
+        su -c 'mkdir -p /data/adb/revanced'
+        if su -c ls /data/adb/service.d | grep -q mount_revanced_com.google.android.youtube.sh && su -c ls /data/adb/service.d | grep -q mount_revanced_com.google.android.apps.youtube.music.sh
         then
-            clear
-            wget -q -c "https://github.com/TeamVanced/VancedMicroG/releases/download/v0.2.24.220220-220220001/microg.apk" -O "Vanced_MicroG.apk" --show-progress
-            echo ""
-            mv "Vanced_MicroG.apk" /storage/emulated/0/Revancify
-            echo MicroG App saved to Revancify folder.
+            :
+        else
+            su -c cp mount_revanced_com.google.android.youtube.sh /data/adb/service.d/
+            su -c chmod +x /data/adb/service.d/mount_revanced_com.google.android.youtube.sh
+            su -c cp mount_revanced_com.google.android.apps.youtube.music.sh /data/adb/service.d/
+            su -c chmod +x /data/adb/service.d/mount_revanced_com.google.android.apps.youtube.music.sh
         fi
-    elif [ "$variant" = "root" ]
-    then
         if su -c dumpsys package $pkgname | grep -q path
         then
             appver=$(su -c dumpsys package $pkgname | grep versionName | cut -d= -f 2 )
@@ -385,6 +357,20 @@ then
             cd ~ || exit
             exit
         fi
+        
+    else
+        mkdir -p /storage/emulated/0/Revancify
+        mapfile -t appverlist < <(python3 ./python-utils/version-list.py "$appname")
+        appver=$(dialog --backtitle "Revancify" --title "Version Selection Menu" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Choose App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
+
+        if dialog --backtitle "Revancify" --title 'MicroG' --no-items --defaultno --ascii-lines --yesno "Download MicroG?" 8 30
+        then
+            clear
+            wget -q -c "https://github.com/TeamVanced/VancedMicroG/releases/download/v0.2.24.220220-220220001/microg.apk" -O "Vanced_MicroG.apk" --show-progress
+            echo ""
+            mv "Vanced_MicroG.apk" /storage/emulated/0/Revancify
+            echo MicroG App saved to Revancify folder.
+        fi
     fi
     clear
     intro
@@ -396,16 +382,7 @@ then
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./"$appname"-"$appver".apk $excludepatches --keystore ./revanced.keystore -o ./"$appname"Revanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --options options.toml --experimental
     rm -rf revanced-cache
 
-    if [ "$variant" = "nonroot" ]
-    then
-        mv "$appname"Revanced* /storage/emulated/0/Revancify/ &&
-        sleep 0.5s
-        echo "$appname App saved to Revancify folder." &&
-        echo "Thanks for using Revancify..." &&
-        [[ -f Vanced_MicroG.apk ]] && termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
-        termux-open /storage/emulated/0/Revancify/"$appname"Revanced-"$appver".apk
-
-    elif [ "$variant" = "root" ]
+    if su -c exit > /dev/null 2>&1
     then
         mv "$appname"Revanced-"$appver".apk "$pkgname".apk
         echo "Mounting the app"
@@ -419,9 +396,17 @@ then
             echo "Exiting the script"
             tput cnorm && cd ~ && exit
         fi
+    else
+        mv "$appname"Revanced* /storage/emulated/0/Revancify/ &&
+        sleep 0.5s
+        echo "$appname App saved to Revancify folder." &&
+        echo "Thanks for using Revancify..." &&
+        [[ -f Vanced_MicroG.apk ]] && termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
+        termux-open /storage/emulated/0/Revancify/"$appname"Revanced-"$appver".apk
     fi
 
 else
+    mkdir -p /storage/emulated/0/Revancify
     mapfile -t appverlist < <(python3 ./python-utils/version-list.py "$appname")
     appver=$(dialog --backtitle "Revancify" --title "Version Selection Menu" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
     clear
