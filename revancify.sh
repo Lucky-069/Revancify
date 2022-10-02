@@ -406,7 +406,7 @@ then
 
     elif [ "$variant" = "root" ]
     then
-        mv "$appname"Revanced-"$appver".apk "pkgname".apk
+        mv "$appname"Revanced-"$appver".apk "$pkgname".apk
         echo "Mounting the app"
         if su -mm -c 'pkgname=$( ls /data/data/com.termux/files/home/storage/Revancify | grep '^com.google.android' | sed 's/.apk//g' ) && stockapp=$(pm path $pkgname | grep base | sed 's/package://g') && grep $pkgname /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l > /dev/null 2>&1; done && rm /data/adb/revanced/"$pkgname".apk > /dev/null 2>&1 && mv "$pkgname".apk /data/adb/revanced && revancedapp=/data/adb/revanced/"$pkgname".apk && chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.apps.youtube.music && exit'
         then
