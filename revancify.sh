@@ -223,6 +223,7 @@ selectapp()
         then
             appname=TikTok
             pkgname=com.ss.android.ugc.trill
+
         fi
     elif [ "$exitstatus" -ne "0" ]
     then
