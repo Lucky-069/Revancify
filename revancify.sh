@@ -245,7 +245,7 @@ anim()
 
 patchapp()
 {
-    patchapp=$(dialog --backtitle "Revancify" --title 'Select App' --ascii-lines --ok-label "Select" --no-cancel --menu "Select Option" 10 40 10 1 "YouTube" 2 "YouTube Music" 3 "Twitter" 4 "Reddit" 5 "TikTok" 2>&1> /dev/tty)
+    patchapp=$(dialog --backtitle "Revancify" --title 'Select App' --ascii-lines --ok-label "Select" --no-cancel --menu "Select Option" 20 40 10 1 "YouTube" 2 "YouTube Music" 3 "Twitter" 4 "Reddit" 5 "TikTok" 2>&1> /dev/tty)
     if [ "$patchapp" -eq "1" ]
     then
         pkgname=com.google.android.youtube
@@ -294,7 +294,7 @@ patchoptions()
 user_input()
 {
     tput rc; tput ed
-    mainmenu=$(dialog --backtitle "Revancify" --title 'Select App' --ascii-lines --ok-label "Select" --no-cancel --menu "Select Option" 10 40 10 1 "Patch App" 2 "Select Patches" 3 "Edit Patch Options" 4 "Exit" 2>&1> /dev/tty)
+    mainmenu=$(dialog --backtitle "Revancify" --title 'Select App' --ascii-lines --ok-label "Select" --no-cancel --menu "Select Option" 20 40 10 1 "Patch App" 2 "Select Patches" 3 "Edit Patch Options" 4 "Exit" 2>&1> /dev/tty)
     if [ "$mainmenu" -eq "1" ]
     then
         patchapp
