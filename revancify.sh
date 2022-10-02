@@ -303,39 +303,6 @@ su_check()
             su -c cp mount_revanced_com.google.android.apps.youtube.music.sh /data/adb/service.d/
             su -c chmod +x /data/adb/service.d/mount_revanced_com.google.android.apps.youtube.music.sh
         fi
-        if [ "$pkgname" = "com.google.android.youtube" ] ||  [ "$pkgname" = "com.google.android.apps.youtube.music" ]
-        then
-            if su -c dumpsys package com.google.android.youtube | grep -q path
-            then
-                :
-            else
-                sleep 0.5s
-                echo "Oh No, YouTube is not installed"
-                echo ""
-                sleep 0.5s
-                echo "Install YouTube from PlayStore and run this script again."
-                tput cnorm
-                cd ~ || exit
-                exit
-            fi
-        elif [ "$pkgname" = "com.google.android.apps.youtube.music" ]
-        then
-            if su -c dumpsys package com.google.android.apps.youtube.music | grep -q path
-            then
-                :
-            else
-                sleep 0.5s
-                tput rc; tput ed
-                echo "Oh No, YouTube Music is not installed"
-                echo ""
-                sleep 0.5s
-                echo "Install YouTube Music from PlayStore and run this script again."
-                tput cnorm
-                cd ~ || exit
-                exit
-                
-            fi
-        fi
     else
         variant="nonroot"
         mkdir -p /storage/emulated/0/Revancify
@@ -384,10 +351,11 @@ excludepatches=$(while read -r line; do printf %s"$line" " "; done < <(jq -r --a
 
 
 #Build apps
-su_check
+
 
 if [ "$pkgname" = "com.google.android.youtube" ] || [ "$pkgname" = "com.google.android.apps.youtube.music" ]
 then
+    su_check
     if [ "$variant" = "nonroot" ]
     then
         mapfile -t appverlist < <(python3 ./python-utils/version-list.py "$appname")
@@ -401,12 +369,11 @@ then
             mv "Vanced_MicroG.apk" /storage/emulated/0/Revancify
             echo MicroG App saved to Revancify folder.
         fi
-
     elif [ "$variant" = "root" ]
     then
         if su -c dumpsys package $pkgname | grep -q path
         then
-            :
+            appver=$(su -c dumpsys $pkgname | grep versionName | cut -d= -f 2 )
         else
             sleep 0.5s
             echo "Oh No, YouTube is not installed"
@@ -417,9 +384,7 @@ then
             cd ~ || exit
             exit
         fi
-        appver=$(su -c dumpsys "$pkgname" | grep versionName | cut -d= -f 2 )
     fi
-
     clear
     intro
     echo "Please wait fetching link ..."
