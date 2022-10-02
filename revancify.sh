@@ -163,6 +163,9 @@ get_components(){
         sleep 0.5s
         tput rc; tput ed
     fi
+
+    # Fetch patches
+    python3 ./python-utils/fetch-patches.py
 }
 
 intro
@@ -243,38 +246,27 @@ anim()
 
 ytpatches()
 {
-    python3 ./python-utils/fetch-patches.py yt
-    sed -i '/microg-support/d' youtube-patches.txt
-    sed -i '/enable-debugging/d' youtube-patches.txt
-    patches=()
     while read -r line
     do
         read -r -a eachline <<< "$line"
         patches+=("${eachline[@]}")
-    done < <(cat youtube-patches.txt)
+    done < <(jq -r 'map(select(.appname == "com.google.android.youtube"))[] | "\(.patchname) \(.status)"' patches.json)
     mapfile -t choices < <(dialog --backtitle "Revancify" --title 'YouTube Patches' --no-items --ascii-lines --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 45 10 "${patches[@]}" 2>&1 >/dev/tty)
-    while read -r line
-    do
-        echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtube-patches.txt
-    done < <(cut -d " " -f 1 youtube-patches.txt)
+    tmp=$(mktemp)
+    jq 'map(select(.appname == "com.google.android.youtube").status = "off")' patches.json |jq 'map(select(IN(.patchname; $ARGS.positional[])).status = "on")' --args "${choices[@]}" > "$tmp" && mv "$tmp" patches.json
 }
 
 
 ytmpatches()
 {
-    python3 ./python-utils/fetch-patches.py ytm
-    sed -i '/music-microg-support/d' youtubemusic-patches.txt
-    patches=()
     while read -r line
     do
         read -r -a eachline <<< "$line"
         patches+=("${eachline[@]}")
-    done < <(cat youtubemusic-patches.txt)
+    done < <(jq -r 'map(select(.appname == "com.google.android.youtube"))[] | "\(.patchname) \(.status)"' patches.json)
     mapfile -t choices < <(dialog --backtitle "Revancify" --title 'YouTube Music Patches' --no-items --ascii-lines --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 45 10 "${patches[@]}" 2>&1 >/dev/tty)
-    while read -r line
-    do
-        echo "${choices[*]}" | grep -q "$line" || sed -i "/$line/s/ on/ off/" youtubemusic-patches.txt
-    done < <(cut -d " " -f 1 youtubemusic-patches.txt)
+    tmp=$(mktemp)
+    jq 'map(select(.appname == "com.google.android.apps.youtube.music").status = "off")' patches.json |jq 'map(select(IN(.patchname; $ARGS.positional[])).status = "on")' --args "${choices[@]}" > "$tmp" && mv "$tmp" patches.json
 }
 
 patch_options() {
@@ -449,19 +441,16 @@ app_dl()
 su_check
 if [ "$options" = "YouTube" ]
 then
-    [[ ! -f youtube-patches.txt ]] && ytpatches
-    excludeyt=$(while read -r line; do
-        patch=$(echo "$line"| cut -d " " -f 1)
-        printf -- " -e "
-        printf "%s""$patch"
-    done < <(grep " off" youtube-patches.txt))
+    excludepatches=$(while read -r line; do
+        printf %s"$line" " "
+    done < <(jq 'map(select(.appname == "com.google.android.youtube" and .status == "off"))[].patchname' patches.json | sed 's/\"//g' | sed "s/^/-e /g"))
     if [ "$variant" = "root" ]
     then
         appver=$( su -c dumpsys package com.google.android.youtube | grep versionName | cut -d= -f 2 )
         getlink=$(python3 ./python-utils/fetch-link.py "YouTube" "$appver")
         app_dl YouTube "$appver" "$getlink" &&
         echo "Building Youtube Revanced ..."
-        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTube-"$appver".apk -e microg-support $excludeyt --keystore ./revanced.keystore -o ./com.google.android.youtube.apk --custom-aapt2-binary ./aapt2_"$arch" --experimental --options options.toml
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTube-"$appver".apk -e microg-support $excludepatches --keystore ./revanced.keystore -o ./com.google.android.youtube.apk --custom-aapt2-binary ./aapt2_"$arch" --experimental --options options.toml
         rm -rf revanced-cache
         echo "Mounting the app"
         if su -mm -c 'stockapp=$(pm path com.google.android.youtube | grep base | sed 's/package://g'); grep com.google.android.youtube /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l > /dev/null 2>&1; done; rm /data/adb/revanced/com.google.android.youtube.apk > /dev/null 2>&1; mv com.google.android.youtube.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.youtube.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.youtube && exit'
@@ -492,7 +481,7 @@ then
         tput rc; tput ed
         app_dl YouTube "$appver" "$getlink" &&
         echo "Building YouTube Revanced..."
-        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTube-"$appver".apk $excludeyt --keystore ./revanced.keystore -o ./YouTubeRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --options options.toml
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTube-"$appver".apk $excludepatches --keystore ./revanced.keystore -o ./YouTubeRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --options options.toml
         rm -rf revanced-cache
         mv YouTubeRevanced* /storage/emulated/0/Revancify/ &&
         sleep 0.5s
@@ -503,19 +492,16 @@ then
     fi
 elif [ "$options" = "YouTubeMusic" ]
 then
-    [[ ! -f youtubemusic-patches.txt ]] && ytmpatches
-    excludeytm=$(while read -r line; do
-        patch=$(echo "$line"| cut -d " " -f 1)
-        printf -- " -e "
-        printf "%s""$patch"
-    done < <(grep " off" youtubemusic-patches.txt))
+    excludepatches=$(while read -r line; do
+        printf %s"$line" " "
+    done < <(jq 'map(select(.appname == "com.google.android.apps.youtube.music" and .status == "off"))[].patchname' patches.json | sed 's/\"//g' | sed "s/^/-e /g"))
     if [ "$variant" = "root" ]
     then
         appver=$(su -c dumpsys package com.google.android.apps.youtube.music | grep versionName | cut -d= -f 2 )
         getlink=$(python3 ./python-utils/fetch-link.py "YouTubeMusic" "$appver" "$arch")
         app_dl YouTubeMusic "$appver" "$getlink" &&
         echo "Building YouTube Music Revanced..."
-        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic-"$appver".apk -e music-microg-support $excludeytm --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2_"$arch" --experimental
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic-"$appver".apk $excludepatches --keystore ./revanced.keystore -o ./com.google.android.apps.youtube.music.apk --custom-aapt2-binary ./aapt2_"$arch" --experimental
         rm -rf revanced-cache
         echo "Mounting the app"
         if su -mm -c 'stockapp=$(pm path com.google.android.apps.youtube.music | grep base | sed 's/package://g'); grep com.google.android.apps.youtube.music /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l > /dev/null 2>&1; done; rm /data/adb/revanced/com.google.android.apps.youtube.music.apk > /dev/null 2>&1; mv com.google.android.apps.youtube.music.apk /data/adb/revanced && revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.apps.youtube.music && exit'
@@ -546,7 +532,7 @@ then
         tput rc; tput ed
         app_dl YouTubeMusic "$appver" "$getlink" &&
         echo "Building YouTube Music Revanced..."
-        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic-"$appver".apk $excludeytm --keystore ./revanced.keystore -o ./YouTubeMusicRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch"
+        java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./YouTubeMusic-"$appver".apk $excludepatches --keystore ./revanced.keystore -o ./YouTubeMusicRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch"
         rm -rf revanced-cache
         mv YouTubeMusicRevanced* /storage/emulated/0/Revancify/ &&
         sleep 0.5s &&
@@ -557,6 +543,9 @@ then
     fi
 elif [ "$options" = "Twitter" ]
 then
+    excludepatches=$(while read -r line; do
+        printf %s"$line" " "
+    done < <(jq 'map(select(.appname == "com.twitter.android" and .status == "off"))[].patchname' patches.json | sed 's/\"//g' | sed "s/^/-e /g"))
     mapfile -t appverlist < <(python3 ./python-utils/version-list.py "Twitter")
     appver=$(dialog --backtitle "Revancify" --title "Twitter" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
     getlink=$(python3 ./python-utils/fetch-link.py "Twitter" "$appver")
@@ -564,7 +553,7 @@ then
     intro
     app_dl Twitter "$appver" "$getlink" &&
     echo "Building Twitter Revanced..."
-    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./Twitter-"$appver".apk --keystore ./revanced.keystore -o ./TwitterRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --experimental
+    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./Twitter-"$appver".apk $excludepatches --keystore ./revanced.keystore -o ./TwitterRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --experimental
     rm -rf revanced-cache
     mkdir -p /storage/emulated/0/Revancify
     mv TwitterRevanced* /storage/emulated/0/Revancify/ &&
@@ -574,6 +563,9 @@ then
     termux-open /storage/emulated/0/Revancify/TwitterRevanced-"$appver".apk
 elif [ "$options" = "Reddit" ]
 then
+    excludepatches=$(while read -r line; do
+        printf %s"$line" " "
+    done < <(jq 'map(select(.appname == "com.reddit.frontpage" and .status == "off"))[].patchname' patches.json | sed 's/\"//g' | sed "s/^/-e /g"))
     mapfile -t appverlist < <(python3 ./python-utils/version-list.py "Reddit")
     appver=$(dialog --backtitle "Revancify" --title "Reddit" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
     getlink=$(python3 ./python-utils/fetch-link.py "Reddit" "$appver")
@@ -581,7 +573,7 @@ then
     intro
     app_dl Reddit "$appver" "$getlink" &&
     echo "Building Reddit Revanced..."
-    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./Reddit-"$appver".apk --keystore ./revanced.keystore -o ./RedditRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --experimental
+    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./Reddit-"$appver".apk $excludepatches --keystore ./revanced.keystore -o ./RedditRevanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --experimental
     rm -rf revanced-cache
     mkdir -p /storage/emulated/0/Revancify
     mv RedditRevanced* /storage/emulated/0/Revancify/ &&
@@ -591,6 +583,9 @@ then
     termux-open /storage/emulated/0/Revancify/RedditRevanced-"$appver".apk
 elif [ "$options" = "TikTok" ]
 then
+    excludepatches=$(while read -r line; do
+        printf %s"$line" " "
+    done < <(jq 'map(select(.appname == "com.zhiliaoapp.musically" and .status == "off"))[].patchname' patches.json | sed 's/\"//g' | sed "s/^/-e /g"))
     mapfile -t appverlist < <(python3 ./python-utils/version-list.py "TikTok")
     appver=$(dialog --backtitle "Revancify" --title "TikTok" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
     getlink=$(python3 ./python-utils/fetch-link.py "TikTok" "$appver")
