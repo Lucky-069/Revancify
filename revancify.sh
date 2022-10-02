@@ -228,7 +228,7 @@ selectapp()
 selectpatches()
 {  
     selectapp
-    patches=()
+    declare -a patches
     while read -r line
     do
         read -r -a eachline <<< "$line"
