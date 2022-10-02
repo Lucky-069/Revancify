@@ -243,33 +243,42 @@ anim()
     tput sc
 }
 
-
-ytpatches()
+patchapp()
 {
-    while read -r line
-    do
-        read -r -a eachline <<< "$line"
-        patches+=("${eachline[@]}")
-    done < <(jq -r 'map(select(.appname == "com.google.android.youtube"))[] | "\(.patchname) \(.status)"' patches.json)
-    mapfile -t choices < <(dialog --backtitle "Revancify" --title 'YouTube Patches' --no-items --ascii-lines --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 45 10 "${patches[@]}" 2>&1 >/dev/tty)
-    tmp=$(mktemp)
-    jq 'map(select(.appname == "com.google.android.youtube").status = "off")' patches.json |jq 'map(select(IN(.patchname; $ARGS.positional[])).status = "on")' --args "${choices[@]}" > "$tmp" && mv "$tmp" patches.json
+    patchapp=$(dialog --backtitle "Revancify" --title 'Select App' --ascii-lines --ok-label "Select" --no-cancel --menu "Select Option" 10 40 10 1 "YouTube" 2 "YouTube Music" 3 "Twitter" 4 "Reddit" 5 "TikTok" 2>&1> /dev/tty)
+    if [ "$patchapp" -eq "1" ]
+    then
+        pkgname=com.google.android.youtube
+    elif [ "$patchapp" -eq "2" ]
+    then
+        pkgname=com.google.android.apps.youtube.music
+    elif [ "$patchapp" -eq "3" ]
+    then
+        pkgname=com.twitter.android
+    elif [ "$patchapp" -eq "4" ]
+    then
+        pkgname=com.reddit.frontpage
+    elif [ "$patchapp" -eq "5" ]
+    then
+        pkgname=com.zhiliaoapp.musically
+    fi
 }
 
-
-ytmpatches()
+selectpatches()
 {
     while read -r line
     do
         read -r -a eachline <<< "$line"
         patches+=("${eachline[@]}")
-    done < <(jq -r 'map(select(.appname == "com.google.android.youtube"))[] | "\(.patchname) \(.status)"' patches.json)
+    done < <(jq -r --arg pkgname "$pkgname" 'map(select(.appname == "$pkgname"))[] | "\(.patchname) \(.status)"' patches.json)
     mapfile -t choices < <(dialog --backtitle "Revancify" --title 'YouTube Music Patches' --no-items --ascii-lines --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 45 10 "${patches[@]}" 2>&1 >/dev/tty)
     tmp=$(mktemp)
-    jq 'map(select(.appname == "com.google.android.apps.youtube.music").status = "off")' patches.json |jq 'map(select(IN(.patchname; $ARGS.positional[])).status = "on")' --args "${choices[@]}" > "$tmp" && mv "$tmp" patches.json
+    jq 'map(select(.appname == "$pkgname").status = "off")' patches.json |jq 'map(select(IN(.patchname; $ARGS.positional[])).status = "on")' --args "${choices[@]}" > "$tmp" && mv "$tmp" patches.json
 }
 
-patch_options() {
+
+patchoptions()
+{
     echo ""
     echo "Generating Options File. Please wait..."
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -c -a ./noinput.apk -o nooutput.apk > /dev/null 2>&1
@@ -285,55 +294,20 @@ patch_options() {
 user_input()
 {
     tput rc; tput ed
-    echo "What do you want to do?"
-    echo "1. Patch YouTube"
-    echo "2. Patch YouTube Music"
-    echo "3. Patch Twitter"
-    echo "4. Patch Reddit"
-    echo "5. Patch TikTok"
-    echo "6. Edit Patches"
-    echo "7. Edit Patches Options"
-    read -r -p "Your Input: " input
-    if [ "$input" -eq "1" ]
+    mainmenu=$(dialog --backtitle "Revancify" --title 'Select App' --ascii-lines --ok-label "Select" --no-cancel --menu "Select Option" 10 40 10 1 "Patch App" 2 "Select Patches" 3 "Edit Patch Options" 4 "Exit" 2>&1> /dev/tty)
+    if [ "$mainmenu" -eq "1" ]
     then
-        options="YouTube"
-    elif [ "$input" -eq "2" ]
+        patchapp
+    elif [ "$mainmenu" -eq "2" ]
     then
-        options="YouTubeMusic"
-    elif [ "$input" -eq "3" ]
+        selectpatches
+    elif [ "$mainmenu" -eq "3" ]
     then
-        options="Twitter"
-    elif [ "$input" -eq "4" ]
+        patchoptions
+    elif [ "$mainmenu" -eq "4" ]
     then
-        options="Reddit"
-    elif [ "$input" -eq "5" ]
-    then
-        options="TikTok"
-    elif [ "$input" -eq "6" ]
-    then
-        patchedit=$(dialog --backtitle "Revancify" --title 'Select App' --ascii-lines --ok-label "Select" --no-cancel --menu "Select Option" 10 40 10 1 "YouTube" 2 "YouTube Music" 2>&1> /dev/tty)
-        tput civis
-        if [ "$patchedit" -eq "1" ] && dialog --backtitle "Revancify" --title 'Confirmation' --no-items --ascii-lines --no-cancel --yesno "All patches will be reset. Do You want to continue?" 10 40
-        then
-            tput civis
-            ytpatches
-        elif [ "$patchedit" -eq "2" ] && dialog --backtitle "Revancify" --title 'Confirmation' --no-items --ascii-lines --no-cancel --yesno "All patches will be reset. Do You want to continue?" 10 40
-        then
-            tput civis
-            ytmpatches
-        fi
-        clear
-        intro
-        user_input
-    elif [ "$input" -eq "7" ]
-    then
-        patch_options
-    else
-        echo No input given..
-        tput rc; tput ed
-        user_input
+        revive
     fi
-    tput rc; tput ed
 }
 
 
@@ -359,7 +333,7 @@ su_check()
             su -c cp mount_revanced_com.google.android.apps.youtube.music.sh /data/adb/service.d/
             su -c chmod +x /data/adb/service.d/mount_revanced_com.google.android.apps.youtube.music.sh
         fi
-        if [ "$options" = "YouTube" ]
+        if [ "$pkgname" = "com.google.android.youtube" ]
         then
             if su -c dumpsys package com.google.android.youtube | grep -q path
             then
@@ -374,7 +348,7 @@ su_check()
                 cd ~ || exit
                 exit
             fi
-        elif [ "$options" = "YouTubeMusic" ] 
+        elif [ "$pkgname" = "com.google.android.apps.youtube.music" ]
         then
             if su -c dumpsys package com.google.android.apps.youtube.music | grep -q path
             then
@@ -439,7 +413,7 @@ app_dl()
 
 #Build apps
 su_check
-if [ "$options" = "YouTube" ]
+if [ "$pkgname" = "com.google.android.youtube" ]
 then
     excludepatches=$(while read -r line; do
         printf %s"$line" " "
@@ -490,7 +464,7 @@ then
         [[ -f Vanced_MicroG.apk ]] && termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
         termux-open /storage/emulated/0/Revancify/YouTubeRevanced-"$appver".apk
     fi
-elif [ "$options" = "YouTubeMusic" ]
+elif [ "$pkgname" = "com.google.android.apps.youtube.music" ]
 then
     excludepatches=$(while read -r line; do
         printf %s"$line" " "
@@ -541,7 +515,7 @@ then
         [[ -f Vanced_MicroG.apk ]] && termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
         termux-open /storage/emulated/0/Revancify/YouTubeMusicRevanced-"$appver".apk
     fi
-elif [ "$options" = "Twitter" ]
+elif [ "$pkgname" = "com.twitter.android" ]
 then
     excludepatches=$(while read -r line; do
         printf %s"$line" " "
@@ -561,7 +535,7 @@ then
     echo "Twitter App saved to Revancify folder." &&
     echo "Thanks for using Revancify..." &&
     termux-open /storage/emulated/0/Revancify/TwitterRevanced-"$appver".apk
-elif [ "$options" = "Reddit" ]
+elif [ "$pkgname" = "com.reddit.frontpage" ]
 then
     excludepatches=$(while read -r line; do
         printf %s"$line" " "
@@ -581,7 +555,7 @@ then
     echo "Reddit App saved to Revancify folder." &&
     echo "Thanks for using Revancify..." &&
     termux-open /storage/emulated/0/Revancify/RedditRevanced-"$appver".apk
-elif [ "$options" = "TikTok" ]
+elif [ "$pkgname" = "com.zhiliaoapp.musically" ]
 then
     excludepatches=$(while read -r line; do
         printf %s"$line" " "
