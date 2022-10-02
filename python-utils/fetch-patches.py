@@ -1,16 +1,49 @@
 import requests
-import sys
+import json
 
-if sys.argv[1] == "yt":
-    open("youtube-patches.txt", "w").close()
-    for i in (requests.get('https://raw.githubusercontent.com/revanced/revanced-patches/main/patches.json')).json():
-        if (((i['compatiblePackages'])[0])['name']) == "com.google.android.youtube" and i['deprecated'] != True:
-            with open("youtube-patches.txt", "a") as p:
-                p.write(str(i['name']) + " " + "on" + "\n")
+localjson = None
 
-elif sys.argv[1] == "ytm":
-    open("youtubemusic-patches.txt", "w").close()
-    for i in (requests.get('https://raw.githubusercontent.com/revanced/revanced-patches/main/patches.json')).json():
-        if (((i['compatiblePackages'])[0])['name']) == "com.google.android.apps.youtube.music" and i['deprecated'] != True:
-            with open("youtubemusic-patches.txt", "a") as p:
-                p.write(str(i['name']) + " " + "on" + "\n")
+def openjson():
+    global localjson
+    try:
+        with open("patches.json", "r") as patchesfile:
+            localjson = json.load(patchesfile)
+    except (json.decoder.JSONDecodeError, FileNotFoundError) as e:
+        with open("patches.json", "w") as patchesfile:
+            emptyjson = [{"patchname": None, "appname": None, "status": None}]
+            json.dump(emptyjson, patchesfile, indent=4)
+        openjson()
+
+openjson()
+
+
+remotejson = requests.get('https://raw.githubusercontent.com/revanced/revanced-patches/main/patches.json').json()
+
+remotepatches = []
+localpatches = []
+
+for key in remotejson:
+    remotepatches.append(key['name'])
+
+for key in localjson:
+    localpatches.append(key['patchname'])
+
+
+for patchname in remotepatches:
+    if patchname not in localpatches:
+        newkey = {}
+        newkey['patchname'] = patchname
+        for patches in remotejson:
+            if patches['name'] == patchname:
+                newkey['appname'] = patches['compatiblePackages'][0]['name']
+        newkey['status'] = "on"
+        localjson.append(newkey)
+    else:
+        None
+
+for patchname in localpatches:
+    if patchname not in remotepatches:
+        del localjson[localpatches.index(patchname)]
+
+with open("patches.json", "w") as patchesfile:
+    json.dump(localjson, patchesfile, indent=4)
