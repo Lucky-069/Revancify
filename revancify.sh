@@ -10,7 +10,7 @@ trap revive SIGINT
 clear
 rm -rf ./*cache
 
-if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/dialog ] && [ -e ~/../usr/bin/tput ] && [ -e ~/../usr/bin/jq ] && [ "$(find ~/../usr/lib/ -name "wheel" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "json" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "bs4" | wc -l)" != "0" ] && [ -e ~/../usr/bin/revancify ] 
+if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/dialog ] && [ -e ~/../usr/bin/tput ] && [ -e ~/../usr/bin/jq ] && [ "$(find ~/../usr/lib/ -name "wheel" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "requests" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "bs4" | wc -l)" != "0" ] && [ -e ~/../usr/bin/revancify ] 
 then
     :
 else
@@ -21,7 +21,7 @@ else
     pkg install python openjdk-17 wget ncurses-utils dialog jq -y
     pip install --upgrade pip
     pip install wheel
-    pip install requests bs4 json
+    pip install requests bs4
     cp revancify ~/../usr/bin
     sed -i 's/# allow-external-apps = true/allow-external-apps = true/g' ~/.termux/termux.properties
     sleep 0.5s
@@ -410,6 +410,8 @@ then
 
     clear
     intro
+    echo "Please wait fetching link ..."
+    tput rc; tput ed
     getlink=$(python3 ./python-utils/fetch-link.py "$appname" "$appver")
     app_dl YouTube "$appver" "$getlink" &&
     echo "Building $appname Revanced..."
