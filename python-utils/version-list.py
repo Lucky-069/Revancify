@@ -29,9 +29,6 @@ elif sys.argv[1] == "Reddit":
         appver = ((a.parent).parent).parent.find(["a"], class_="fontBlack").string
         print(appver.replace("Reddit ", ""))
 elif sys.argv[1] == "TikTok":
-    for a in bsurl("https://www.apkmirror.com/uploads/?appcategory=tik-tok-including-musical-ly").find_all(text = re.compile(".*variants")):
-        appver = ((a.parent).parent).parent.find(["a"], class_="fontBlack", text = re.compile("^((?!beta).)*$"))
-        if appver != None:
-            print(appver.string.replace("TikTok ", ""))
-        else:
-            pass
+    for a in bsurl("https://www.apkmirror.com/uploads/?appcategory=tik-tok").find_all(text = re.compile(".*variants")):
+        appver = ((a.parent).parent).parent.find(["a"], class_="fontBlack")
+        print(appver.string.replace("TikTok ", ""))
