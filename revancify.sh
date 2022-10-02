@@ -246,21 +246,28 @@ anim()
 patchapp()
 {
     patchapp=$(dialog --backtitle "Revancify" --title 'Patch App' --ascii-lines --ok-label "Select" --menu "Select App" 20 30 10 1 "YouTube" 2 "YouTube Music" 3 "Twitter" 4 "Reddit" 5 "TikTok" 2>&1> /dev/tty)
-    if [ "$patchapp" -eq "1" ]
+    exitstatus=$?
+    if [ "$exitstatus" -eq "0" ]
     then
-        pkgname=com.google.android.youtube
-    elif [ "$patchapp" -eq "2" ]
+        if [ "$patchapp" -eq "1" ]
+        then
+            pkgname=com.google.android.youtube
+        elif [ "$patchapp" -eq "2" ]
+        then
+            pkgname=com.google.android.apps.youtube.music
+        elif [ "$patchapp" -eq "3" ]
+        then
+            pkgname=com.twitter.android
+        elif [ "$patchapp" -eq "4" ]
+        then
+            pkgname=com.reddit.frontpage
+        elif [ "$patchapp" -eq "5" ]
+        then
+            pkgname=com.zhiliaoapp.musically
+        fi
+    elif [ "$exitstatus" -ne "0" ]
     then
-        pkgname=com.google.android.apps.youtube.music
-    elif [ "$patchapp" -eq "3" ]
-    then
-        pkgname=com.twitter.android
-    elif [ "$patchapp" -eq "4" ]
-    then
-        pkgname=com.reddit.frontpage
-    elif [ "$patchapp" -eq "5" ]
-    then
-        pkgname=com.zhiliaoapp.musically
+        user_input
     fi
 }
 
@@ -287,7 +294,6 @@ patchoptions()
     dialog --backtitle "Revancify" --ascii-lines --title "Edit Options file" --editbox options.toml 22 50 2> "$tmp" && mv "$tmp" ./options.toml
     tput civis
     clear
-    intro
     user_input
 }
 
@@ -295,16 +301,20 @@ user_input()
 {
     tput rc; tput ed
     mainmenu=$(dialog --backtitle "Revancify" --title 'Select App' --ascii-lines --ok-label "Select" --no-cancel --menu "Select Option" 12 30 10 1 "Patch App" 2 "Select Patches" 3 "Edit Patch Options" 4 "Exit" 2>&1> /dev/tty)
-    if [ "$mainmenu" -eq "1" ]
+    exitstatus=$?
+    if [ "$exitstatus" -eq "0" ]
     then
-        patchapp
-    elif [ "$mainmenu" -eq "2" ]
-    then
-        selectpatches
-    elif [ "$mainmenu" -eq "3" ]
-    then
-        patchoptions
-    elif [ "$mainmenu" -eq "4" ]
+        if [ "$mainmenu" -eq "1" ]
+        then
+            patchapp
+        elif [ "$mainmenu" -eq "2" ]
+        then
+            selectpatches
+        elif [ "$mainmenu" -eq "3" ]
+        then
+            patchoptions
+        fi
+    elif [ "$exitstatus" -ne "0" ]
     then
         revive
     fi
