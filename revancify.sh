@@ -18,7 +18,7 @@ else
     sleep 0.5s
     git pull
     pkg update -y &&
-    pkg install python openjdk-17 wget ncurses-utils dialog -y
+    pkg install python openjdk-17 wget ncurses-utils dialog jq -y
     pip install --upgrade pip
     pip install wheel
     pip install requests bs4 json
