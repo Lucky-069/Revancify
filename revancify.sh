@@ -392,7 +392,7 @@ then
     tput rc; tput ed
     app_dl YouTube "$appver" "$getlink" &&
     echo "Building $appname Revanced..."
-    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./"$appname"-"$appver".apk $excludepatches --keystore ./revanced.keystore -o ./"$appname"Revanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --options options.toml
+    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./"$appname"-"$appver".apk $excludepatches --keystore ./revanced.keystore -o ./"$appname"Revanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --options options.toml --experimental
     rm -rf revanced-cache
 
     if [ "$variant" = "nonroot" ]
@@ -406,9 +406,9 @@ then
 
     elif [ "$variant" = "root" ]
     then
+        mv "$appname"Revanced-"$appver".apk "pkgname".apk
         echo "Mounting the app"
-
-        if su -mm -c 'pkgname=$( ls /data/data/com.termux/files/home/storage/Revancify | grep com.google.android | sed 's/.apk//g' ) && stockapp=$(pm path "$pkgname" | grep base | sed 's/package://g') && grep "$pkgname" /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l > /dev/null 2>&1; done && rm /data/adb/revanced/"$pkgname".apk > /dev/null 2>&1 && mv "$pkgname".apk /data/adb/revanced && revancedapp=/data/adb/revanced/"$pkgname".apk && chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.apps.youtube.music && exit'
+        if su -mm -c 'pkgname=$( ls /data/data/com.termux/files/home/storage/Revancify | grep '^com.google.android' | sed 's/.apk//g' ) && stockapp=$(pm path $pkgname | grep base | sed 's/package://g') && grep $pkgname /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l > /dev/null 2>&1; done && rm /data/adb/revanced/"$pkgname".apk > /dev/null 2>&1 && mv "$pkgname".apk /data/adb/revanced && revancedapp=/data/adb/revanced/"$pkgname".apk && chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.apps.youtube.music && exit'
         then
             echo "Mounting successful"
             tput cnorm && cd ~ && exit
@@ -428,7 +428,7 @@ else
     intro
     app_dl "$appname" "$appver" "$getlink" &&
     echo "Building $appname Revanced..."
-    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./"$appname"-"$appver".apk --keystore ./revanced.keystore -o ./"$appname"Revanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --experimental
+    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./"$appname"-"$appver".apk --keystore ./revanced.keystore -o ./"$appname"Revanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --options options.toml --experimental
     rm -rf revanced-cache
     mkdir -p /storage/emulated/0/Revancify
     mv "$appname"Revanced* /storage/emulated/0/Revancify/ &&
