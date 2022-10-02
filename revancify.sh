@@ -423,7 +423,7 @@ then
         echo "$appname App saved to Revancify folder." &&
         echo "Thanks for using Revancify..." &&
         [[ -f Vanced_MicroG.apk ]] && termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
-        termux-open /storage/emulated/0/Revancify/"$pkgname"Revanced-"$appver".apk
+        termux-open /storage/emulated/0/Revancify/"$appname"Revanced-"$appver".apk
 
     elif [ "$variant" = "root" ]
     then
@@ -447,7 +447,7 @@ else
     getlink=$(python3 ./python-utils/fetch-link.py "$appname" "$appver")
     clear
     intro
-    app_dl $appname "$appver" "$getlink" &&
+    app_dl "$appname" "$appver" "$getlink" &&
     echo "Building $appname Revanced..."
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./"$appname"-"$appver".apk --keystore ./revanced.keystore -o ./"$appname"Revanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --experimental
     rm -rf revanced-cache
@@ -458,3 +458,8 @@ else
     echo "Thanks for using Revancify..." &&
     termux-open /storage/emulated/0/Revancify/"$appname"Revanced-"$appver".apk
 fi
+
+tput cnorm
+rm -rf ./*cache
+cd ~ || exit
+exit
