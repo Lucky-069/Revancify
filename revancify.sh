@@ -1,7 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 revive(){
-    clear && echo "Script terminated" && rm -rf ./*cache && tput cnorm && cd ~ && exit
+    clear && echo "Script terminated" && rm -rf ./*cache ; tput cnorm ; cd ~ ; exit
 }
 trap revive SIGINT
 
@@ -267,7 +267,7 @@ selectapp()
         fi
     elif [ "$exitstatus" -ne "0" ]
     then
-        user_input
+        mainmenu
     fi
 }
 
@@ -327,7 +327,7 @@ mainmenu()
 arch=$(getprop ro.product.cpu.abi | cut -d "-" -f 1)
 
 
-user_input
+mainmenu
 
 su_check()
 {
