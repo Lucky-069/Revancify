@@ -373,7 +373,7 @@ then
     then
         if su -c dumpsys package $pkgname | grep -q path
         then
-            appver=$(su -c dumpsys $pkgname | grep versionName | cut -d= -f 2 )
+            appver=$(su -c dumpsys package $pkgname | grep versionName | cut -d= -f 2 )
         else
             sleep 0.5s
             echo "Oh No, YouTube is not installed"
@@ -388,8 +388,8 @@ then
     clear
     intro
     echo "Please wait fetching link ..."
-    tput rc; tput ed
     getlink=$(python3 ./python-utils/fetch-link.py "$appname" "$appver")
+    tput rc; tput ed
     app_dl YouTube "$appver" "$getlink" &&
     echo "Building $appname Revanced..."
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./"$appname"-"$appver".apk $excludepatches --keystore ./revanced.keystore -o ./"$appname"Revanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --options options.toml
