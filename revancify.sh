@@ -222,7 +222,7 @@ selectapp()
         elif [ "$selectapp" -eq "5" ]
         then
             appname=TikTok
-            pkgname=com.zhiliaoapp.musically
+            pkgname=com.ss.android.ugc.trill
         fi
     elif [ "$exitstatus" -ne "0" ]
     then
