@@ -8,7 +8,7 @@ def openjson():
     try:
         with open("patches.json", "r") as patchesfile:
             localjson = json.load(patchesfile)
-    except json.decoder.JSONDecodeError:
+    except (json.decoder.JSONDecodeError, FileNotFoundError) as e:
         with open("patches.json", "w") as patchesfile:
             emptyjson = [{"patchname": None, "appname": None, "status": None}]
             json.dump(emptyjson, patchesfile, indent=4)
