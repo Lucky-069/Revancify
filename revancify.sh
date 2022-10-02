@@ -335,6 +335,7 @@ then
     if su -c exit > /dev/null 2>&1
     then
         su -c 'mkdir -p /data/adb/revanced'
+        su -c 'chmod 777 /data/adb/revanced'
         if su -c ls /data/adb/service.d | grep -q mount_revanced_com.google.android.youtube.sh && su -c ls /data/adb/service.d | grep -q mount_revanced_com.google.android.apps.youtube.music.sh
         then
             :
@@ -360,6 +361,7 @@ then
         
     else
         mkdir -p /storage/emulated/0/Revancify
+        chmod 777 /storage/emulated/0/Revancify/
         mapfile -t appverlist < <(python3 ./python-utils/version-list.py "$appname")
         appver=$(dialog --backtitle "Revancify" --title "Version Selection Menu" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Choose App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
 
@@ -407,6 +409,7 @@ then
 
 else
     mkdir -p /storage/emulated/0/Revancify
+    chmod 777 /storage/emulated/0/Revancify/
     mapfile -t appverlist < <(python3 ./python-utils/version-list.py "$appname")
     appver=$(dialog --backtitle "Revancify" --title "Version Selection Menu" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
     clear
