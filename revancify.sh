@@ -303,7 +303,7 @@ su_check()
             su -c cp mount_revanced_com.google.android.apps.youtube.music.sh /data/adb/service.d/
             su -c chmod +x /data/adb/service.d/mount_revanced_com.google.android.apps.youtube.music.sh
         fi
-        if [ "$pkgname" = "com.google.android.youtube" ]
+        if [ "$pkgname" = "com.google.android.youtube" ] ||  [ "$pkgname" = "com.google.android.apps.youtube.music" ]
         then
             if su -c dumpsys package com.google.android.youtube | grep -q path
             then
@@ -341,7 +341,6 @@ su_check()
         mkdir -p /storage/emulated/0/Revancify
     fi
 }
-
 
 # App Downloader
 app_dl()
@@ -405,6 +404,19 @@ then
 
     elif [ "$variant" = "root" ]
     then
+        if su -c dumpsys package $pkgname | grep -q path
+        then
+            :
+        else
+            sleep 0.5s
+            echo "Oh No, YouTube is not installed"
+            echo ""
+            sleep 0.5s
+            echo "Install YouTube from PlayStore and run this script again."
+            tput cnorm
+            cd ~ || exit
+            exit
+        fi
         appver=$(su -c dumpsys "$pkgname" | grep versionName | cut -d= -f 2 )
     fi
 
@@ -431,7 +443,7 @@ then
     then
         echo "Mounting the app"
 
-        if su -mm -c 'pkgname=$( ls /data/data/com.termux/files/home/storage | grep com.google ) && stockapp=$(pm path "$pkgname" | grep base | sed 's/package://g'); grep "$pkgname" /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l > /dev/null 2>&1; done; rm /data/adb/revanced/"$pkgname".apk > /dev/null 2>&1; mv "$pkgname".apk /data/adb/revanced && revancedapp=/data/adb/revanced/"$pkgname".apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.apps.youtube.music && exit'
+        if su -mm -c 'pkgname=$( ls /data/data/com.termux/files/home/storage | grep com.google | sed 's/.apk//g' ) && stockapp=$(pm path "$pkgname" | grep base | sed 's/package://g'); grep "$pkgname" /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l > /dev/null 2>&1; done; rm /data/adb/revanced/"$pkgname".apk > /dev/null 2>&1; mv "$pkgname".apk /data/adb/revanced && revancedapp=/data/adb/revanced/"$pkgname".apk; chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.apps.youtube.music && exit'
         then
             echo "Mounting successful"
             tput cnorm && cd ~ && exit
