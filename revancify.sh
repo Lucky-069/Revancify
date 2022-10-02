@@ -245,7 +245,7 @@ anim()
 
 patchapp()
 {
-    patchapp=$(dialog --backtitle "Revancify" --title 'Patch App' --ascii-lines --ok-label "Select" --no-cancel --menu "Select App" 20 30 10 1 "YouTube" 2 "YouTube Music" 3 "Twitter" 4 "Reddit" 5 "TikTok" 2>&1> /dev/tty)
+    patchapp=$(dialog --backtitle "Revancify" --title 'Patch App' --ascii-lines --ok-label "Select" --menu "Select App" 20 30 10 1 "YouTube" 2 "YouTube Music" 3 "Twitter" 4 "Reddit" 5 "TikTok" 2>&1> /dev/tty)
     if [ "$patchapp" -eq "1" ]
     then
         pkgname=com.google.android.youtube
