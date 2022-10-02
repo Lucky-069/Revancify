@@ -43,7 +43,7 @@ elif sys.argv[1] == "Reddit":
 
     apppage1= "".join(["https://apkmirror.com", bsurl(appurl).find(["span"], text="APK").parent.find(["a"], class_="accent_color")['href']])
 
-elif sys.argv[1] == "Tiktok":
+elif sys.argv[1] == "TikTok":
 
     appurl = "".join(["https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok/tik-tok-", sys.argv[2].replace(".","-"), "-release/"])
 
