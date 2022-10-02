@@ -245,7 +245,7 @@ anim()
 
 patchapp()
 {
-    patchapp=$(dialog --backtitle "Revancify" --title 'Select App' --ascii-lines --ok-label "Select" --no-cancel --menu "Select Option" 20 40 10 1 "YouTube" 2 "YouTube Music" 3 "Twitter" 4 "Reddit" 5 "TikTok" 2>&1> /dev/tty)
+    patchapp=$(dialog --backtitle "Revancify" --title 'Patch App' --ascii-lines --ok-label "Select" --no-cancel --menu "Select App" 20 30 10 1 "YouTube" 2 "YouTube Music" 3 "Twitter" 4 "Reddit" 5 "TikTok" 2>&1> /dev/tty)
     if [ "$patchapp" -eq "1" ]
     then
         pkgname=com.google.android.youtube
@@ -281,7 +281,7 @@ patchoptions()
 {
     echo ""
     echo "Generating Options File. Please wait..."
-    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -c -a ./noinput.apk -o nooutput.apk > /dev/null 2>&1
+    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./noinput.apk -o nooutput.apk > /dev/null 2>&1
     tput cnorm
     tmp=$(mktemp)
     dialog --backtitle "Revancify" --ascii-lines --title "Edit Options file" --editbox options.toml 22 50 2> "$tmp" && mv "$tmp" ./options.toml
@@ -294,7 +294,7 @@ patchoptions()
 user_input()
 {
     tput rc; tput ed
-    mainmenu=$(dialog --backtitle "Revancify" --title 'Select App' --ascii-lines --ok-label "Select" --no-cancel --menu "Select Option" 20 40 10 1 "Patch App" 2 "Select Patches" 3 "Edit Patch Options" 4 "Exit" 2>&1> /dev/tty)
+    mainmenu=$(dialog --backtitle "Revancify" --title 'Select App' --ascii-lines --ok-label "Select" --no-cancel --menu "Select Option" 12 30 10 1 "Patch App" 2 "Select Patches" 3 "Edit Patch Options" 4 "Exit" 2>&1> /dev/tty)
     if [ "$mainmenu" -eq "1" ]
     then
         patchapp
