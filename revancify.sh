@@ -369,15 +369,19 @@ mountapk()
     mv "$appname"Revanced-"$appver".apk "$pkgname".apk
     echo "Mounting the app"
     if su -mm -c "revancedapp=/data/adb/revanced/$pkgname.apk && stockapp=$(pm path $pkgname | grep base | sed 's/package://g') && mv ./$pkgname.apk /data/local/tmp/revanced.delete && grep $pkgname /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l > /dev/null 2>&1; done && mv /data/local/tmp/revanced.delete $revancedapp && chmod 644 $revancedapp && chown system:system $revancedapp && chcon u:object_r:apk_data_file:s0 $revancedapp && mount -o bind $revancedapp $stockapp && am force-stop $pkgname && exit"
-        then
-            echo "Mounting successful"
-            tput cnorm && cd ~ && exit
-        
-        else
-            echo "Mount failed..."
-            echo "Exiting the script"
-            tput cnorm && cd ~ && exit
-        fi
+    then
+        echo "Mounting successful"
+        tput cnorm && cd ~ && exit
+    
+    else
+        echo "Mount failed..."
+        echo "Exiting the script"
+        tput cnorm && cd ~ && exit
+    fi
+    tput cnorm
+    rm -rf ./*cache
+    cd ~ || exit
+    exit
 }
 
 moveapk()
@@ -388,6 +392,10 @@ moveapk()
     echo "Thanks for using Revancify..." &&
     [[ -f Vanced_MicroG.apk ]] && termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
     termux-open /storage/emulated/0/Revancify/"$appname"Revanced-"$appver".apk
+    tput cnorm
+    rm -rf ./*cache
+    cd ~ || exit
+    exit
 }
 
 # App Downloader
@@ -433,9 +441,9 @@ excludepatches=$(while read -r line; do printf %s"$line" " "; done < <(jq -r --a
 
 versionselector()
 {
-    if [ "$pkgname" = "com.google.android.youtube" ] || [ "$pkgname" = "com.google.android.apps.youtube.music" ]
+    if su -c exit > /dev/null 2>&1
     then
-        if su -c exit > /dev/null 2>&1
+        if [ "$pkgname" = "com.google.android.youtube" ] || [ "$pkgname" = "com.google.android.apps.youtube.music" ]
         then
             appver=$(su -c dumpsys package $pkgname | grep versionName | cut -d= -f 2 )
         fi
@@ -486,7 +494,3 @@ else
     moveapk
 fi
 
-tput cnorm
-rm -rf ./*cache
-cd ~ || exit
-exit
