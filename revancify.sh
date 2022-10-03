@@ -281,6 +281,36 @@ mainmenu()
     fi
 }
 
+mountapk()
+{
+    echo "Mounting the app"
+    if su -mm -c "revancedapp=/data/adb/revanced/$pkgname.apk && stockapp=$(pm path $pkgname | grep base | sed 's/package://g') && cp "$appname"Revanced-$appver.apk /data/local/tmp/revanced.delete && grep $pkgname /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l > /dev/null 2>&1; done && mv /data/local/tmp/revanced.delete $revancedapp && chmod 644 $revancedapp && chown system:system $revancedapp && chcon u:object_r:apk_data_file:s0 $revancedapp && mount -o bind $revancedapp $stockapp && am force-stop $pkgname && exit"
+    then
+        echo "Mounting successful"
+        tput cnorm && cd ~ && exit
+    
+    else
+        echo "Mount failed..."
+        echo "Exiting the script"
+        tput cnorm && cd ~ && exit
+    fi
+    tput cnorm
+    rm -rf ./*cache
+    cd ~ || exit
+    exit
+}
+
+moveapk()
+{
+    mkdir -p /storage/emulated/0/Revancify
+    mv "$appname"Revanced* /storage/emulated/0/Revancify/ &&
+    echo "$appname App saved to Revancify folder." &&
+    echo "Thanks for using Revancify..." &&
+    [[ -f Vanced_MicroG.apk ]] && termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
+    
+}
+
+
 dlmicrog()
 {
     if dialog --backtitle "Revancify" --title 'MicroG' --no-items --defaultno --ascii-lines --yesno "Download MicroG?" 8 30
@@ -304,6 +334,8 @@ checkpatched()
             then
                 if dialog --backtitle "Revancify" --title 'Patched APK found' --no-items --defaultno --ascii-lines --yesno "Current directory contains a patched apk. Do You still want to patch?" 8 30
                 then
+                    :
+                else
                     clear
                     intro
                     mountapk
@@ -315,9 +347,13 @@ checkpatched()
         then
             if dialog --backtitle "Revancify" --title 'Patched APK found' --no-items --defaultno --ascii-lines --yesno "Current directory contains a patched apk. Do You still want to patch?" 8 30
             then
-                clear
-                intro
-                mountapk
+                :
+            else
+                termux-open /storage/emulated/0/Revancify/"$appname"Revanced-"$appver".apk
+                tput cnorm
+                rm -rf ./*cache
+                cd ~ || exit
+                exit
             fi
         fi
     fi
@@ -357,40 +393,6 @@ sucheck()
     else
         dlmicrog
     fi
-}
-
-
-mountapk()
-{
-    echo "Mounting the app"
-    if su -mm -c "revancedapp=/data/adb/revanced/$pkgname.apk && stockapp=$(pm path $pkgname | grep base | sed 's/package://g') && cp "$appname"Revanced-$appver.apk /data/local/tmp/revanced.delete && grep $pkgname /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l > /dev/null 2>&1; done && mv /data/local/tmp/revanced.delete $revancedapp && chmod 644 $revancedapp && chown system:system $revancedapp && chcon u:object_r:apk_data_file:s0 $revancedapp && mount -o bind $revancedapp $stockapp && am force-stop $pkgname && exit"
-    then
-        echo "Mounting successful"
-        tput cnorm && cd ~ && exit
-    
-    else
-        echo "Mount failed..."
-        echo "Exiting the script"
-        tput cnorm && cd ~ && exit
-    fi
-    tput cnorm
-    rm -rf ./*cache
-    cd ~ || exit
-    exit
-}
-
-moveapk()
-{
-    mkdir -p /storage/emulated/0/Revancify
-    mv "$appname"Revanced* /storage/emulated/0/Revancify/ &&
-    echo "$appname App saved to Revancify folder." &&
-    echo "Thanks for using Revancify..." &&
-    [[ -f Vanced_MicroG.apk ]] && termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
-    termux-open /storage/emulated/0/Revancify/"$appname"Revanced-"$appver".apk
-    tput cnorm
-    rm -rf ./*cache
-    cd ~ || exit
-    exit
 }
 
 # App Downloader
