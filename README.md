@@ -17,29 +17,27 @@ Download Termux from their github or FDroid
 1. Open Termux.  
 2. Copy and paste this code.  
 ```
-termux-setup-storage && pkg update -y && pkg install git -y && cd storage && git clone https://github.com/decipher3114/Revancify && cd Revancify && bash revancify.sh && exit
+termux-setup-storage && pkg update -y && pkg install git -y && cd storage && git clone https://github.com/decipher3114/Revancify && cd Revancify && bash revancify
 ```
 ### Dependencies:  
-**packages**: python, openjdk-17, wget, ncurses-utils  
-**python modules**: requests, wheel, bs4
+**packages**: python, openjdk-17, wget, ncurses-utils, jq  
+**python modules**: requests, wheel, bs4  
 
 # Usage
 1. Open Termux.  
-2. Type `revancify` 
-
-To Force Update use `revancify -f`. It will solve any update problem if exists.  
+2. Type `revancify`  
 
 # Troubleshoot
 
 ## Command 1: 
 Use this command in case of any fatal error
 ```
-cd storage/Revancify && bash revancify.sh
+cd storage/Revancify && bash revancify
 ```  
 ## Command 2:  
 if command 1 fails, use this command, this will delete and reinitialize the repo.
 ```
-cd storage && rm -rf Revancify && rm ~/../usr/bin/revancify && git clone https://github.com/decipher3114/Revancify && cd Revancify && bash revancify.sh
+cd storage && rm -rf Revancify && rm ~/../usr/bin/revancify && git clone https://github.com/decipher3114/Revancify && cd Revancify && bash revancify
 ```
 # Uninstallation
 1. Open Termux.  

@@ -6,7 +6,7 @@ then
     then
         clear
         rm -rf ./*cache
-        git checkout . && git pull && bash revancify.sh
+        git checkout . && git pull && clear && bash revancify.
     else
         echo "Revancify is not installed"
         exit

@@ -7,9 +7,6 @@ trap revive SIGINT
 
 # For update change this sentence here ...
 
-clear
-rm -rf ./*cache
-
 intro()
 {
     tput civis
@@ -22,8 +19,8 @@ intro()
     tput cm 5 0
     tput sc
 }
-leavecols=$(($(($(tput cols) - 38)) / 2))
 
+leavecols=$(($(($(tput cols) - 38)) / 2))
 fullpagewidth=$(tput cols )
 fullpageheight=$(($(tput lines) - 5 ))
 get_components(){
