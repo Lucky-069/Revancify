@@ -54,13 +54,7 @@ intro()
     tput cm 1 $leave1
     echo "█▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░"
     echo ""
-    leave2=$(($(($(tput cols) - 40)) / 2))
-    tput cm 3 $leave2
-    echo "█▄▄ █▄█    █▀▄ █▀▀ █▀▀ █ █▀█ █░█ █▀▀ █▀█"
-    tput cm 4 $leave2
-    echo "█▄█ ░█░    █▄▀ ██▄ █▄▄ █ █▀▀ █▀█ ██▄ █▀▄"
-    echo ""
-    tput cm 8 0
+    tput cm 4 0
     tput sc
 }
 
@@ -284,7 +278,7 @@ mainmenu()
 mountapk()
 {
     echo "Mounting the app"
-    if su -mm -c "revancedapp=/data/adb/revanced/$pkgname.apk && stockapp=$(pm path $pkgname | grep base | sed 's/package://g') && cp "$appname"Revanced-$appver.apk /data/local/tmp/revanced.delete && grep $pkgname /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l > /dev/null 2>&1; done && mv /data/local/tmp/revanced.delete $revancedapp && chmod 644 $revancedapp && chown system:system $revancedapp && chcon u:object_r:apk_data_file:s0 $revancedapp && mount -o bind $revancedapp $stockapp && am force-stop $pkgname && exit"
+    if su -mm -c "revancedapp=/data/adb/revanced/$pkgname.apk && stockapp=$(pm path $pkgname | grep base | sed 's/package://g') && cp "$appname"Revanced-"$appver".apk /data/local/tmp/revanced.delete && grep $pkgname /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l > /dev/null 2>&1; done && mv /data/local/tmp/revanced.delete $revancedapp && chmod 644 $revancedapp && chown system:system $revancedapp && chcon u:object_r:apk_data_file:s0 $revancedapp && mount -o bind $revancedapp $stockapp && am force-stop $pkgname && exit"
     then
         echo "Mounting successful"
         tput cnorm && cd ~ && exit
@@ -330,7 +324,7 @@ checkpatched()
         then
             if dialog --backtitle "Revancify" --title 'Patched APK found' --no-items --defaultno --ascii-lines --yesno "Current directory contains a patched apk. Do You still want to patch?" 8 30
             then
-                :
+                rm ./"$1"Revanced-"$2"*
             else
                 clear
                 intro
