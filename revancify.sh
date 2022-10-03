@@ -281,49 +281,94 @@ mainmenu()
     fi
 }
 
+dlmicrog()
+{
+    if dialog --backtitle "Revancify" --title 'MicroG' --no-items --defaultno --ascii-lines --yesno "Download MicroG?" 8 30
+        then
+            clear
+            wget -q -c "https://github.com/TeamVanced/VancedMicroG/releases/download/v0.2.24.220220-220220001/microg.apk" -O "Vanced_MicroG.apk" --show-progress
+            echo ""
+            mv "Vanced_MicroG.apk" /storage/emulated/0/Revancify
+            echo MicroG App saved to Revancify folder.
+    fi
+}
+
 checkpatched()
 {
-    if ls ./"$1"Revanced-* > /dev/null 2>&1
+    if su -c exit > /dev/null 2>&1
     then
-        app_available=$(basename "$1"Revanced-* .apk | cut -d '-' -f 2)
-        if [ "$2" = "$app_available" ]
+        if ls ./"$1"Revanced-* > /dev/null 2>&1
         then
-            if dialog --backtitle "Revancify" --title 'Patched APK found' --no-items --defaultno --ascii-lines --yesno "Current directory contains a patched apk. Do You still want to patch?" 8 30
+            app_available=$(basename "$1"Revanced-* .apk | cut -d '-' -f 2)
+            if [ "$2" = "$app_available" ]
             then
-                if su -c exit > /dev/null 2>&1
+                if dialog --backtitle "Revancify" --title 'Patched APK found' --no-items --defaultno --ascii-lines --yesno "Current directory contains a patched apk. Do You still want to patch?" 8 30
                 then
                     clear
                     intro
                     mountapk
-                else
-                    clear
-                    intro
-                    moveapk
                 fi
             fi
-        else
-            :
         fi
     else
-         :
+        if ls /storage/emulated/0/Revancify/"$1"Revanced-* > /dev/null 2>&1
+        then
+            app_available=$(basename /storage/emulated/0/Revancify/"$1"Revanced-* .apk | cut -d '-' -f 2)
+            if [ "$2" = "$app_available" ]
+            then
+                if dialog --backtitle "Revancify" --title 'Patched APK found' --no-items --defaultno --ascii-lines --yesno "Current directory contains a patched apk. Do You still want to patch?" 8 30
+                then
+                    clear
+                    intro
+                    mountapk
+                fi
+            fi
+        fi
     fi
 
 }
-
-checkpatched YouTube 26.17.1
 
 arch=$(getprop ro.product.cpu.abi | cut -d "-" -f 1)
 
 
 mainmenu
 
+sucheck()
+{
+    if su -c exit > /dev/null 2>&1
+    then
+        su -c "mkdir -p /data/adb/revanced"
+        if su -c "ls /data/adb/service.d/mount_revanced*" > /dev/null 2>&1
+        then
+            :
+        else
+            su -c "cp mount_revanced_com.google.android.youtube.sh /data/adb/service.d/ && chmod +x /data/adb/service.d/mount_revanced_com.google.android.youtube.sh"
+            su -c "cp mount_revanced_com.google.android.apps.youtube.music.sh /data/adb/service.d/ && chmod +x /data/adb/service.d/mount_revanced_com.google.android.apps.youtube.music.sh"
+        fi
+        if su -c "dumpsys package $pkgname | grep -q path"
+        then
+            :
+        else
+            sleep 0.5s
+            echo "Oh No, $appname is not installed"
+            echo ""
+            sleep 0.5s
+            echo "Install $appname from PlayStore and run this script again."
+            tput cnorm
+            cd ~ || exit
+            exit
+        fi
+    else
+        dlmicrog
+    fi
+}
+
+
 mountapk()
 {
     mv "$appname"Revanced-"$appver".apk "$pkgname".apk
     echo "Mounting the app"
-    if [ "$pkgname" = "com.google.android.youtube" ]
-    then
-        if su -mm -c 'revancedapp=/data/adb/revanced/com.google.android.youtube.apk && stockapp=$(pm path com.google.android.youtube | grep base | sed 's/package://g') && mv "$revancedapp" /data/local/tmp/revanced.delete && grep com.google.android.youtube /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l > /dev/null 2>&1; done && mv /data/local/tmp/revanced.delete "$revancedapp" && chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp" && mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.youtube && exit'
+    if su -mm -c "revancedapp=/data/adb/revanced/$pkgname.apk && stockapp=$(pm path $pkgname | grep base | sed 's/package://g') && mv ./$pkgname.apk /data/local/tmp/revanced.delete && grep $pkgname /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l > /dev/null 2>&1; done && mv /data/local/tmp/revanced.delete $revancedapp && chmod 644 $revancedapp && chown system:system $revancedapp && chcon u:object_r:apk_data_file:s0 $revancedapp && mount -o bind $revancedapp $stockapp && am force-stop $pkgname && exit"
         then
             echo "Mounting successful"
             tput cnorm && cd ~ && exit
@@ -333,21 +378,7 @@ mountapk()
             echo "Exiting the script"
             tput cnorm && cd ~ && exit
         fi
-    elif [ "$pkgname" = "com.google.android.apps.youtube.music" ]
-    then
-        if su -mm -c 'revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk && stockapp=$(pm path com.google.android.apps.youtube.music | grep base | sed 's/package://g') && mv "$revancedapp" /data/local/tmp/revanced.delete && grep com.google.android.apps.youtube.music /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l > /dev/null 2>&1; done && mv /data/local/tmp/revanced.delete "$revancedapp" && chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp" && mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.apps.youtube.music && exit'
-        then
-            echo "Mounting successful"
-            tput cnorm && cd ~ && exit
-        
-        else
-            echo "Mount failed..."
-            echo "Exiting the script"
-            tput cnorm && cd ~ && exit
-        fi
-    fi
 }
-
 
 moveapk()
 {
@@ -358,26 +389,6 @@ moveapk()
     [[ -f Vanced_MicroG.apk ]] && termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
     termux-open /storage/emulated/0/Revancify/"$appname"Revanced-"$appver".apk
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # App Downloader
 app_dl()
@@ -420,64 +431,38 @@ app_dl()
 
 excludepatches=$(while read -r line; do printf %s"$line" " "; done < <(jq -r --arg pkgname "$pkgname" 'map(select(.appname == $pkgname and .status == "off"))[].patchname' patches.json | sed "s/^/-e /g"))
 
+versionselector()
+{
+    if [ "$pkgname" = "com.google.android.youtube" ] || [ "$pkgname" = "com.google.android.apps.youtube.music" ]
+    then
+        if su -c exit > /dev/null 2>&1
+        then
+            appver=$(su -c dumpsys package $pkgname | grep versionName | cut -d= -f 2 )
+        fi
+    else
+        mapfile -t appverlist < <(python3 ./python-utils/version-list.py "$appname")
+        appver=$(dialog --backtitle "Revancify" --title "Version Selection Menu" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Choose App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
+    fi
+}
+
 
 #Build apps
 clear
 intro
 if [ "$pkgname" = "com.google.android.youtube" ] || [ "$pkgname" = "com.google.android.apps.youtube.music" ]
 then
-    if su -c exit > /dev/null 2>&1
-    then
-        su -c 'mkdir -p /data/adb/revanced'
-        su -c 'chmod -R 777 /data/adb/revanced'
-        if su -c ls /data/adb/service.d | grep -q mount_revanced_com.google.android.youtube.sh && su -c ls /data/adb/service.d | grep -q mount_revanced_com.google.android.apps.youtube.music.sh
-        then
-            :
-        else
-            su -c cp mount_revanced_com.google.android.youtube.sh /data/adb/service.d/
-            su -c chmod +x /data/adb/service.d/mount_revanced_com.google.android.youtube.sh
-            su -c cp mount_revanced_com.google.android.apps.youtube.music.sh /data/adb/service.d/
-            su -c chmod +x /data/adb/service.d/mount_revanced_com.google.android.apps.youtube.music.sh
-        fi
-        if su -c dumpsys package $pkgname | grep -q path
-        then
-            appver=$(su -c dumpsys package $pkgname | grep versionName | cut -d= -f 2 )
-        else
-            sleep 0.5s
-            echo "Oh No, YouTube is not installed"
-            echo ""
-            sleep 0.5s
-            echo "Install YouTube from PlayStore and run this script again."
-            tput cnorm
-            cd ~ || exit
-            exit
-        fi
-        
-    else
-        mkdir -p /storage/emulated/0/Revancify
-        chmod -R 777 /storage/emulated/0/Revancify/
-        mapfile -t appverlist < <(python3 ./python-utils/version-list.py "$appname")
-        appver=$(dialog --backtitle "Revancify" --title "Version Selection Menu" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Choose App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
-
-        if dialog --backtitle "Revancify" --title 'MicroG' --no-items --defaultno --ascii-lines --yesno "Download MicroG?" 8 30
-        then
-            clear
-            wget -q -c "https://github.com/TeamVanced/VancedMicroG/releases/download/v0.2.24.220220-220220001/microg.apk" -O "Vanced_MicroG.apk" --show-progress
-            echo ""
-            mv "Vanced_MicroG.apk" /storage/emulated/0/Revancify
-            echo MicroG App saved to Revancify folder.
-        fi
-    fi
+    sucheck
+    versionselector
+    checkpatched "$appname" "$appver"
     clear
     intro
     echo "Please wait fetching link ..."
     getlink=$(python3 ./python-utils/fetch-link.py "$appname" "$appver")
     tput rc; tput ed
-    app_dl "$appname" "$appver" "$getlink" &&
+    app_dl "$appname" "$appver" "$getlink" "$arch" &&
     echo "Building $appname Revanced..."
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./"$appname"-"$appver".apk $excludepatches --keystore ./revanced.keystore -o ./"$appname"Revanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --options options.toml --experimental
     rm -rf revanced-cache
-
     if su -c exit > /dev/null 2>&1
     then
         mountapk
