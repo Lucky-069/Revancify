@@ -371,7 +371,7 @@ sucheck()
             su -c "cp mount_revanced_com.google.android.youtube.sh /data/adb/service.d/ && chmod +x /data/adb/service.d/mount_revanced_com.google.android.youtube.sh"
             su -c "cp mount_revanced_com.google.android.apps.youtube.music.sh /data/adb/service.d/ && chmod +x /data/adb/service.d/mount_revanced_com.google.android.apps.youtube.music.sh"
         fi
-        if su -c "dumpsys package $pkgname | grep -q path"
+        if su -c "dumpsys package $pkgname" | grep -q path
         then
             :
         else
