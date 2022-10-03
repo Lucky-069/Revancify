@@ -31,6 +31,7 @@ if cd ~/storage/Revancify > /dev/null 2>&1
 then
     tput civis
     rm -rf ./*cache
+    echo Updating the script ...
     git checkout . > /dev/null 2>&1
     git pull > /dev/null 2>&1
     cp dialog-config.txt ~/.dialogrc
