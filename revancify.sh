@@ -48,17 +48,17 @@ intro()
 {
     tput civis
     tput cs 7 $LINES
-    leavecols=$(($(($(tput cols) - 34)) / 2))
+    leave1=$(($(($(tput cols) - 34)) / 2))
     echo ""
-    tput cm 0 $leavecols
+    tput cm 0 $leave1
     echo "█▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█"
-    tput cm 1 $leavecols
+    tput cm 1 $leave1
     echo "█▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░"
     echo ""
     tput cm 5 0
     tput sc
 }
-
+leavecols=$(($(($(tput cols) - 38)) / 2))
 get_components(){
 
     mapfile -t revanced_latest < <(python3 ./python-utils/revanced-latest.py)
