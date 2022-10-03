@@ -280,7 +280,7 @@ mainmenu()
 mountapk()
 {
     echo "Mounting the app"
-    revancedapp=/data/adb/revanced/"$pkgname".apk
+    revancedapp=$(echo /data/adb/revanced/"$pkgname".apk)
     if su -mm -c "stockapp=$(pm path $pkgname | grep base | sed 's/package://g') && cp "$appname"Revanced-"$appver".apk /data/local/tmp/revanced.delete && grep $pkgname /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l > /dev/null 2>&1; done && mv /data/local/tmp/revanced.delete $revancedapp && chmod 644 $revancedapp && chown system:system $revancedapp && chcon u:object_r:apk_data_file:s0 $revancedapp && mount -o bind $revancedapp $stockapp && am force-stop $pkgname && exit"
     then
         echo "Mounting successful"
