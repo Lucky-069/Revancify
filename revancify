@@ -1,7 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 tput civis
-if wget -q --spider http://google.com
+if wget -q --spider https://google.com
 then
     :
 else
