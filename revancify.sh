@@ -167,28 +167,9 @@ get_components(){
 intro
 
 echo "Checking for update..."
-git config pull.rebase true
 sleep 0.5s
 
-if [ "$(git pull)" != "Already up to date." ]
-then
-    cp dialog-config.txt ~/.dialogrc
-    cp revancify ~/../usr/bin/revancify
-    tput rc; tput ed
-    echo Revancify updated...
-    sleep 0.5s
-    echo Run this script again
-    sleep 0.5s
-    tput cnorm
-    cd ~ || exit
-    exit
-else
-    echo ""
-    echo "Script already up to date."
-    sleep 0.5s
-    tput rc; tput ed
-    get_components
-fi
+
 grep -q decipher ~/.dialogrc || cp dialog-config.txt ~/.dialogrc
 grep -q flag ~/../usr/bin/revancify || cp revancify ~/../usr/bin/revancify
 
@@ -257,7 +238,7 @@ patchoptions()
 mainmenu()
 {
     tput rc; tput ed
-    mainmenu=$(dialog --begin 0 $leavecols --no-lines --infobox "█▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n█▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░" 4 38 --and-widget --begin 5 0 --title 'Select App' --ascii-lines --ok-label "Select" --cancel-label "Exit" --menu "Select Option" $fullpageheight $fullpagewidth 10 1 "Patch App" 2 "Select Patches" 3 "Edit Patch Options" 2>&1> /dev/tty)
+    mainmenu=$(dialog --begin 0 $leavecols --no-lines --infobox "█▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n█▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░" 4 38 --and-widget --begin 5 0 --title 'Select App' --ascii-lines --ok-label "Select" --cancel-label "Exit" --menu "Select Option" $fullpageheight $fullpagewidth 10 1 "Patch App" 2 "Select Patches" 3 "Edit Patch Options" 4 "Update Resources" 2>&1> /dev/tty)
     exitstatus=$?
     if [ "$exitstatus" -eq "0" ]
     then
@@ -270,6 +251,9 @@ mainmenu()
         elif [ "$mainmenu" -eq "3" ]
         then
             patchoptions
+        elif [ "$mainmenu" -eq "3" ]
+        then
+            get_components
         fi
     elif [ "$exitstatus" -ne "0" ]
     then

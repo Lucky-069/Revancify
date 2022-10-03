@@ -2,14 +2,22 @@
 
 if cd ~/storage/Revancify > /dev/null 2>&1 
 then
-    while getopts 'f' flag; do
-    case "${flag}" in
-        f) git checkout . && git pull && exit ;;
-        *) echo "Not a valid option"
-    esac
-    done
-    bash revancify.sh
+    clear
+    rm -rf ./*cache
+    if [ "$(git pull)" != "Already up to date." ] 
+    then
+        cp dialog-config.txt ~/.dialogrc
+        cp revancify ~/../usr/bin/revancify
+        tput rc; tput ed
+        echo Revancify updated...
+        sleep 0.5s
+    else
+        echo ""
+        echo "Script already up to date."
+        sleep 0.5s
+        tput rc; tput ed
+    fi
 else
-    echo "Revancify not installed"
+    echo "Revancify is not installed"
     exit
 fi
