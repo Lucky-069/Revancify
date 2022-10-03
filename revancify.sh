@@ -49,16 +49,15 @@ intro()
     tput civis
     tput cs 7 $LINES
     leave1=$(($(($(tput cols) - 34)) / 2))
-    echo ""
-    tput cm 0 $leave1
-    echo "█▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█"
     tput cm 1 $leave1
+    echo "█▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█"
+    tput cm 2 $leave1
     echo "█▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░"
-    echo ""
     tput cm 5 0
     tput sc
 }
 leavecols=$(($(($(tput cols) - 38)) / 2))
+leavecols2=$(($(($(tput cols) - 45)) / 2))
 get_components(){
 
     mapfile -t revanced_latest < <(python3 ./python-utils/revanced-latest.py)
@@ -235,7 +234,7 @@ selectpatches()
         read -r -a eachline <<< "$line"
         patches+=("${eachline[@]}")
     done < <(jq -r --arg pkgname "$pkgname" 'map(select(.appname == $pkgname))[] | "\(.patchname) \(.status)"' patches.json)
-    mapfile -t choices < <(dialog --begin 0 $leavecols --no-lines --infobox "█▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n█▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░" 4 38 --and-widget --title 'Patch Selection Menu' --no-items --ascii-lines --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 18 45 10 "${patches[@]}" 2>&1 >/dev/tty)
+    mapfile -t choices < <(dialog --begin 0 $leavecols --no-lines --infobox "█▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n█▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░" 4 38 --and-widget --begin 6 $leavecols2 --title 'Patch Selection Menu' --no-items --ascii-lines --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 20 45 10 "${patches[@]}" 2>&1 >/dev/tty)
     tmp=$(mktemp)
     jq --arg pkgname "$pkgname" 'map(select(.appname == $pkgname).status = "off")' patches.json | jq 'map(select(IN(.patchname; $ARGS.positional[])).status = "on")' --args "${choices[@]}" > "$tmp" && mv "$tmp" ./patches.json
     mainmenu
