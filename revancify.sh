@@ -223,7 +223,7 @@ mainmenu()
 mountapk()
 {
     echo "Unmounting $appname ..."
-    [[ "$pkgname" = "com.google.android.youtube" ]] && su -c -mm 'grep com.google.android.youtube /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | sed -n "s/apk.*/apk/" | xargs -r umount -l > /dev/null 2>&1; done' || su -c -mm 'grep com.google.android.apps.youtube.music /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | sed -n "s/apk.*/apk/" | xargs -r umount -l > /dev/null 2>&1; done'
+    [[ "$pkgname" = "com.google.android.youtube" ]] && su -c 'grep com.google.android.youtube /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | sed "s/apk.*/apk/" | xargs -r umount -l > /dev/null 2>&1; done' || su -c 'grep com.google.android.apps.youtube.music /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | sed "s/apk.*/apk/" | xargs -r umount -l > /dev/null 2>&1; done'
     echo "Mounting $appname Revanced ..."
     revancedapp="/data/adb/revanced/"$pkgname".apk"
     stockapp=$(su -c "pm path $pkgname" | grep base | sed 's/package://g')
