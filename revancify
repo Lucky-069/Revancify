@@ -32,7 +32,9 @@ fi
 if cd ~/storage/Revancify > /dev/null 2>&1 
 then
     rm -rf ./*cache
-    git checkout . && git pull && clear && bash revancify.sh
+    git checkout .
+    git pull
+    clear && bash revancify.sh
 else
     echo "Revancify is not installed"
     exit
