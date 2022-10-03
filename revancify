@@ -1,6 +1,4 @@
 #!/data/data/com.termux/files/usr/bin/bash
-
-tput civis
 if wget -q --spider https://google.com
 then
     :
@@ -31,6 +29,7 @@ fi
 
 if cd ~/storage/Revancify > /dev/null 2>&1 
 then
+    tput civis
     rm -rf ./*cache
     git checkout . > /dev/null 2>&1
     git pull > /dev/null 2>&1
