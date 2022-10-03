@@ -158,8 +158,8 @@ echo "Checking for update..."
 sleep 0.5s
 
 
-grep -q decipher ~/.dialogrc || cp dialog-config.txt ~/.dialogrc
-grep -q flag ~/../usr/bin/revancify || cp revancify ~/../usr/bin/revancify
+cp dialog-config.txt ~/.dialogrc
+cp revancify ~/../usr/bin/revancify
 
 
 selectapp()
