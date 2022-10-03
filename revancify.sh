@@ -286,7 +286,7 @@ checkpatched()
 {
     if su -c exit > /dev/null 2>&1
     then
-        if ls ./"$appname"Revanced-"$appver"* > /dev/null 2>&1
+        if ls ./"$appname"Revanced* > /dev/null 2>&1
         then
             if dialog --begin 0 $leavecols --no-lines --infobox "█▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n█▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░" 4 38 --and-widget --begin 5 0 --title 'Patched APK found' --no-items --defaultno --ascii-lines --yesno "Current directory contains a patched apk. Do You still want to patch?" $fullpageheight $fullpagewidth
             then
