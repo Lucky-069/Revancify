@@ -125,6 +125,7 @@ get_components(){
 
     # Fetch patches
     python3 ./python-utils/fetch-patches.py
+    mainmenu
 }
 
 intro
@@ -216,6 +217,8 @@ mainmenu()
             patchoptions
         elif [ "$mainmenu" -eq "3" ]
         then
+            clear
+            intro
             get_components
         fi
     elif [ "$exitstatus" -ne "0" ]

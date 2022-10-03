@@ -1,16 +1,16 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
+if wget -q --spider http://google.com
+then
+    :
+else
+    echo "No Internet connection available"
+    exit
+fi
+
 if [ -e ~/../usr/bin/java ] && [ -e ~/../usr/bin/python ] && [ -e ~/../usr/bin/wget ] && [ -e ~/../usr/bin/dialog ] && [ -e ~/../usr/bin/tput ] && [ -e ~/../usr/bin/jq ] && [ "$(find ~/../usr/lib/ -name "wheel" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "requests" | wc -l)" != "0" ] && [ "$(find ~/../usr/lib/ -name "bs4" | wc -l)" != "0" ] && [ -e ~/../usr/bin/revancify ] 
 then
-    if cd ~/storage/Revancify > /dev/null 2>&1 
-    then
-        clear
-        rm -rf ./*cache
-        git checkout . && git pull && clear && bash revancify.
-    else
-        echo "Revancify is not installed"
-        exit
-    fi
+    :
 else
     echo "Installing dependencies..."
     sleep 0.5s
@@ -27,5 +27,15 @@ else
     sleep 0.5s
     echo "Run this script again"
     cd ~ || exit
+    exit
+fi
+
+if cd ~/storage/Revancify > /dev/null 2>&1 
+then
+    clear
+    rm -rf ./*cache
+    git checkout . && git pull && clear && bash revancify.
+else
+    echo "Revancify is not installed"
     exit
 fi
