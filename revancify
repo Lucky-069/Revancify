@@ -36,8 +36,10 @@ then
     git pull > /dev/null 2>&1
     cp dialog-config.txt ~/.dialogrc
     cp revancify ~/../usr/bin/revancify
-    clear && bash revancify.sh
+    clear
 else
     echo "Revancify is not installed"
     exit
 fi
+
+bash revancify.sh
