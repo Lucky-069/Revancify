@@ -281,12 +281,103 @@ mainmenu()
     fi
 }
 
+checkpatched()
+{
+    if ls ./"$1"Revanced-* > /dev/null 2>&1
+    then
+        app_available=$(basename "$1"Revanced-* .apk | cut -d '-' -f 2)
+        if [ "$2" = "$app_available" ]
+        then
+            if dialog --backtitle "Revancify" --title 'Patched APK found' --no-items --defaultno --ascii-lines --yesno "Current directory contains a patched apk. Do You still want to patch?" 8 30
+            then
+                if su -c exit > /dev/null 2>&1
+                then
+                    clear
+                    intro
+                    mountapk
+                else
+                    clear
+                    intro
+                    moveapk
+                fi
+            fi
+        else
+            :
+        fi
+    else
+         :
+    fi
 
+}
+
+checkpatched YouTube 26.17.1
 
 arch=$(getprop ro.product.cpu.abi | cut -d "-" -f 1)
 
 
 mainmenu
+
+mountapk()
+{
+    mv "$appname"Revanced-"$appver".apk "$pkgname".apk
+    echo "Mounting the app"
+    if [ "$pkgname" = "com.google.android.youtube" ]
+    then
+        if su -mm -c 'revancedapp=/data/adb/revanced/com.google.android.youtube.apk && stockapp=$(pm path com.google.android.youtube | grep base | sed 's/package://g') && mv "$revancedapp" /data/local/tmp/revanced.delete && grep com.google.android.youtube /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l > /dev/null 2>&1; done && mv /data/local/tmp/revanced.delete "$revancedapp" && chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp" && mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.youtube && exit'
+        then
+            echo "Mounting successful"
+            tput cnorm && cd ~ && exit
+        
+        else
+            echo "Mount failed..."
+            echo "Exiting the script"
+            tput cnorm && cd ~ && exit
+        fi
+    elif [ "$pkgname" = "com.google.android.apps.youtube.music" ]
+    then
+        if su -mm -c 'revancedapp=/data/adb/revanced/com.google.android.apps.youtube.music.apk && stockapp=$(pm path com.google.android.apps.youtube.music | grep base | sed 's/package://g') && mv "$revancedapp" /data/local/tmp/revanced.delete && grep com.google.android.apps.youtube.music /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l > /dev/null 2>&1; done && mv /data/local/tmp/revanced.delete "$revancedapp" && chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp" && mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.apps.youtube.music && exit'
+        then
+            echo "Mounting successful"
+            tput cnorm && cd ~ && exit
+        
+        else
+            echo "Mount failed..."
+            echo "Exiting the script"
+            tput cnorm && cd ~ && exit
+        fi
+    fi
+}
+
+
+moveapk()
+{
+    mkdir -p /storage/emulated/0/Revancify
+    mv "$appname"Revanced* /storage/emulated/0/Revancify/ &&
+    echo "$appname App saved to Revancify folder." &&
+    echo "Thanks for using Revancify..." &&
+    [[ -f Vanced_MicroG.apk ]] && termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
+    termux-open /storage/emulated/0/Revancify/"$appname"Revanced-"$appver".apk
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # App Downloader
 app_dl()
@@ -294,7 +385,8 @@ app_dl()
     if ls ./"$1"-* > /dev/null 2>&1
     then
         app_available=$(basename "$1"-* .apk | cut -d '-' -f 2) #get version
-        if [ "$2" = "$app_available" ];then
+        if [ "$2" = "$app_available" ]
+        then
             echo "Latest $1 apk already exists."
             echo ""
             sleep 0.5s
@@ -330,6 +422,8 @@ excludepatches=$(while read -r line; do printf %s"$line" " "; done < <(jq -r --a
 
 
 #Build apps
+clear
+intro
 if [ "$pkgname" = "com.google.android.youtube" ] || [ "$pkgname" = "com.google.android.apps.youtube.music" ]
 then
     if su -c exit > /dev/null 2>&1
@@ -386,25 +480,9 @@ then
 
     if su -c exit > /dev/null 2>&1
     then
-        mv "$appname"Revanced-"$appver".apk /data/local/tmp/revanced.delete
-        echo "Mounting the app"
-        if su -mm -c 'pkgname=$( ls /data/data/com.termux/files/home/storage/Revancify | grep '^com.google.android' | sed 's/.apk//g' ) && stockapp=$(pm path $pkgname | grep base | sed 's/package://g') && grep $pkgname /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l > /dev/null 2>&1; done && revancedapp=/data/adb/revanced/"$pkgname".apk && mv /data/local/tmp/revanced.delete "$revancedapp" && chmod 644 "$revancedapp" && chown system:system "$revancedapp" && chcon u:object_r:apk_data_file:s0 "$revancedapp"; mount -o bind "$revancedapp" "$stockapp" && am force-stop com.google.android.apps.youtube.music && exit'
-        then
-            echo "Mounting successful"
-            tput cnorm && cd ~ && exit
-        
-        else
-            echo "Mount failed..."
-            echo "Exiting the script"
-            tput cnorm && cd ~ && exit
-        fi
+        mountapk
     else
-        mv "$appname"Revanced* /storage/emulated/0/Revancify/ &&
-        sleep 0.5s
-        echo "$appname App saved to Revancify folder." &&
-        echo "Thanks for using Revancify..." &&
-        [[ -f Vanced_MicroG.apk ]] && termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
-        termux-open /storage/emulated/0/Revancify/"$appname"Revanced-"$appver".apk
+        moveapk
     fi
 
 else
@@ -420,12 +498,7 @@ else
     echo "Building $appname Revanced..."
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./"$appname"-"$appver".apk --keystore ./revanced.keystore -o ./"$appname"Revanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --options options.toml --experimental
     rm -rf revanced-cache
-    mkdir -p /storage/emulated/0/Revancify
-    mv "$appname"Revanced* /storage/emulated/0/Revancify/ &&
-    sleep 0.5s &&
-    echo "$appname App saved to Revancify folder." &&
-    echo "Thanks for using Revancify..." &&
-    termux-open /storage/emulated/0/Revancify/"$appname"Revanced-"$appver".apk
+    moveapk
 fi
 
 tput cnorm
