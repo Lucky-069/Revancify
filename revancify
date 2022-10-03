@@ -32,8 +32,8 @@ fi
 if cd ~/storage/Revancify > /dev/null 2>&1 
 then
     rm -rf ./*cache
-    git checkout .
-    git pull
+    git checkout . > /dev/null 2>&1
+    git pull > /dev/null 2>&1
     cp dialog-config.txt ~/.dialogrc
     cp revancify ~/../usr/bin/revancify
     clear && bash revancify.sh
