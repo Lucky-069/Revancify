@@ -48,11 +48,11 @@ intro()
 {
     tput civis
     tput cs 7 $LINES
-    leave1=$(($(($(tput cols) - 34)) / 2))
+    leavecols=$(($(($(tput cols) - 34)) / 2))
     echo ""
-    tput cm 0 $leave1
+    tput cm 0 $leavecols
     echo "█▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█"
-    tput cm 1 $leave1
+    tput cm 1 $leavecols
     echo "█▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░"
     echo ""
     tput cm 5 0
@@ -194,7 +194,7 @@ grep -q flag ~/../usr/bin/revancify || cp revancify ~/../usr/bin/revancify
 
 selectapp()
 {
-    selectapp=$(dialog --backtitle "Revancify" --title 'App Selection Menu' --ascii-lines --ok-label "Select" --menu "Select App" 12 30 10 1 "YouTube" 2 "YouTube Music" 3 "Twitter" 4 "Reddit" 5 "TikTok" 2>&1> /dev/tty)
+    selectapp=$(dialog --begin 0 $leavecols --no-lines --infobox "█▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n█▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░" 4 38 --and-widget --title 'App Selection Menu' --ascii-lines --ok-label "Select" --menu "Select App" 12 30 10 1 "YouTube" 2 "YouTube Music" 3 "Twitter" 4 "Reddit" 5 "TikTok" 2>&1> /dev/tty)
     exitstatus=$?
     if [ "$exitstatus" -eq "0" ]
     then
@@ -235,7 +235,7 @@ selectpatches()
         read -r -a eachline <<< "$line"
         patches+=("${eachline[@]}")
     done < <(jq -r --arg pkgname "$pkgname" 'map(select(.appname == $pkgname))[] | "\(.patchname) \(.status)"' patches.json)
-    mapfile -t choices < <(dialog --backtitle "Revancify" --title 'Patch Selection Menu' --no-items --ascii-lines --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 18 45 10 "${patches[@]}" 2>&1 >/dev/tty)
+    mapfile -t choices < <(dialog --begin 0 $leavecols --no-lines --infobox "█▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n█▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░" 4 38 --and-widget --title 'Patch Selection Menu' --no-items --ascii-lines --ok-label "Save" --no-cancel --separate-output --checklist "Select patches to include" 18 45 10 "${patches[@]}" 2>&1 >/dev/tty)
     tmp=$(mktemp)
     jq --arg pkgname "$pkgname" 'map(select(.appname == $pkgname).status = "off")' patches.json | jq 'map(select(IN(.patchname; $ARGS.positional[])).status = "on")' --args "${choices[@]}" > "$tmp" && mv "$tmp" ./patches.json
     mainmenu
@@ -247,7 +247,7 @@ patchoptions()
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./noinput.apk -o nooutput.apk > /dev/null 2>&1
     tput cnorm
     tmp=$(mktemp)
-    dialog --backtitle "Revancify" --ascii-lines --title "Options File Editor" --editbox options.toml 22 50 2> "$tmp" && mv "$tmp" ./options.toml
+    dialog --begin 0 $leavecols --no-lines --infobox "█▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n█▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░" 4 38 --and-widget --ascii-lines --title "Options File Editor" --editbox options.toml 22 50 2> "$tmp" && mv "$tmp" ./options.toml
     tput civis
     clear
     mainmenu
@@ -256,7 +256,7 @@ patchoptions()
 mainmenu()
 {
     tput rc; tput ed
-    mainmenu=$(dialog --backtitle "Revancify" --title 'Select App' --ascii-lines --ok-label "Select" --cancel-label "Exit" --menu "Select Option" 12 30 10 1 "Patch App" 2 "Select Patches" 3 "Edit Patch Options" 2>&1> /dev/tty)
+    mainmenu=$(dialog --begin 0 $leavecols --no-lines --infobox "█▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n█▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░" 4 38 --and-widget --title 'Select App' --ascii-lines --ok-label "Select" --cancel-label "Exit" --menu "Select Option" 12 30 10 1 "Patch App" 2 "Select Patches" 3 "Edit Patch Options" 2>&1> /dev/tty)
     exitstatus=$?
     if [ "$exitstatus" -eq "0" ]
     then
@@ -308,7 +308,7 @@ moveapk()
 
 dlmicrog()
 {
-    if dialog --backtitle "Revancify" --title 'MicroG' --no-items --defaultno --ascii-lines --yesno "Download MicroG?" 8 30
+    if dialog --begin 0 $leavecols --no-lines --infobox "█▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n█▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░" 4 38 --and-widget --title 'MicroG' --no-items --defaultno --ascii-lines --yesno "Download MicroG?" 8 30
         then
             clear
             wget -q -c "https://github.com/TeamVanced/VancedMicroG/releases/download/v0.2.24.220220-220220001/microg.apk" -O "Vanced_MicroG.apk" --show-progress
@@ -324,7 +324,7 @@ checkpatched()
     then
         if ls ./"$appname"Revanced-"$appver"* > /dev/null 2>&1
         then
-            if dialog --backtitle "Revancify" --title 'Patched APK found' --no-items --defaultno --ascii-lines --yesno "Current directory contains a patched apk. Do You still want to patch?" 8 30
+            if dialog --begin 0 $leavecols --no-lines --infobox "█▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n█▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░" 4 38 --and-widget --title 'Patched APK found' --no-items --defaultno --ascii-lines --yesno "Current directory contains a patched apk. Do You still want to patch?" 8 30
             then
                 rm ./"$appname"Revanced-"$appver"*
             else
@@ -336,7 +336,7 @@ checkpatched()
     else
         if ls /storage/emulated/0/Revancify/"$appname"Revanced-"$appver"* > /dev/null 2>&1
         then
-            if dialog --backtitle "Revancify" --title 'Patched APK found' --no-items --defaultno --ascii-lines --yesno "Patched $appname with sane version is found in Internal Storage inside Revancify folder. Do You still want to patch?" 12 40
+            if dialog --begin 0 $leavecols --no-lines --infobox "█▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n█▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░" 4 38 --and-widget --title 'Patched APK found' --no-items --defaultno --ascii-lines --yesno "Patched $appname with sane version is found in Internal Storage inside Revancify folder. Do You still want to patch?" 12 40
             then
                 :
             else
@@ -442,7 +442,7 @@ versionselector()
         fi
     else
         mapfile -t appverlist < <(python3 ./python-utils/version-list.py "$appname")
-        appver=$(dialog --backtitle "Revancify" --title "Version Selection Menu" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Choose App Version" 15 30 10 "${appverlist[@]}" 2>&1> /dev/tty)
+        appver=$(dialog --begin 0 $leavecols --no-lines --infobox "█▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n█▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░" 4 38 --and-widget --title "Version Selection Menu" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Choose App Version" 15 30 10 "${appverlist[@]}" 2>&1> /dev/tty)
     fi
 }
 
