@@ -222,10 +222,12 @@ mainmenu()
 
 mountapk()
 {
+    echo "Unmounting $appname ..."
+    su -c -mm "grep $pkgname /proc/mounts" | while read -r line; do echo $line | cut -d " " -f 2 | sed -n 's/apk.*/apk/' | xargs -r su -c umount -l > /dev/null 2>&1; done
     echo "Mounting $appname Revanced ..."
     revancedapp="/data/adb/revanced/"$pkgname".apk"
     stockapp=$(su -c "pm path $pkgname" | grep base | sed 's/package://g')
-    if su -mm -c "cp '$appname'Revanced-'$appver'.apk /data/local/tmp/revanced.delete && grep $pkgname /proc/mounts | while read -r line; do echo $line | cut -d ' ' -f 2 | sed -n 's/apk.*/apk/' | xargs -r umount -l > /dev/null 2>&1; echo $line; done && mv /data/local/tmp/revanced.delete $revancedapp && chmod 644 $revancedapp && chown system:system $revancedapp && chcon u:object_r:apk_data_file:s0 $revancedapp && mount -o bind '$revancedapp' '$stockapp' && am force-stop $pkgname && exit"
+    if su -mm -c "cp "$appname"Revanced-"$appver".apk /data/local/tmp/revanced.delete && mv /data/local/tmp/revanced.delete $revancedapp && chmod 644 $revancedapp && chown system:system $revancedapp && chcon u:object_r:apk_data_file:s0 $revancedapp && mount -o bind '$revancedapp' '$stockapp' && am force-stop $pkgname && exit"
     then
         echo "Mounting successful"
         tput cnorm && cd ~ && exit
