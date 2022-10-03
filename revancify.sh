@@ -130,9 +130,6 @@ get_components(){
 
 intro
 
-echo "Checking for update..."
-sleep 0.5s
-
 
 selectapp()
 {
@@ -211,7 +208,7 @@ mainmenu()
         elif [ "$mainmenu" -eq "3" ]
         then
             patchoptions
-        elif [ "$mainmenu" -eq "3" ]
+        elif [ "$mainmenu" -eq "4" ]
         then
             clear
             intro
