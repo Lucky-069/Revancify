@@ -49,12 +49,13 @@ intro()
     tput civis
     tput cs 7 $LINES
     leave1=$(($(($(tput cols) - 34)) / 2))
+    echo ""
     tput cm 0 $leave1
     echo "█▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█"
     tput cm 1 $leave1
     echo "█▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░"
     echo ""
-    tput cm 4 0
+    tput cm 5 0
     tput sc
 }
 
@@ -301,6 +302,7 @@ moveapk()
     echo "$appname App saved to Revancify folder." &&
     echo "Thanks for using Revancify..." &&
     [[ -f Vanced_MicroG.apk ]] && termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
+    termux-open /storage/emulated/0/Revancify/"$appname"Revanced-"$appver".apk
 }
 
 
@@ -320,11 +322,11 @@ checkpatched()
 {
     if su -c exit > /dev/null 2>&1
     then
-        if ls ./"$1"Revanced-"$2"* > /dev/null 2>&1
+        if ls ./"$appname"Revanced-"$appver"* > /dev/null 2>&1
         then
             if dialog --backtitle "Revancify" --title 'Patched APK found' --no-items --defaultno --ascii-lines --yesno "Current directory contains a patched apk. Do You still want to patch?" 8 30
             then
-                rm ./"$1"Revanced-"$2"*
+                rm ./"$appname"Revanced-"$appver"*
             else
                 clear
                 intro
@@ -332,7 +334,7 @@ checkpatched()
             fi
         fi
     else
-        if ls /storage/emulated/0/Revancify/"$1"Revanced-"$2"* > /dev/null 2>&1
+        if ls /storage/emulated/0/Revancify/"$appname"Revanced-"$appver"* > /dev/null 2>&1
         then
             if dialog --backtitle "Revancify" --title 'Patched APK found' --no-items --defaultno --ascii-lines --yesno "Patched $appname with sane version is found in Internal Storage inside Revancify folder. Do You still want to patch?" 12 40
             then
@@ -389,37 +391,37 @@ sucheck()
 # App Downloader
 app_dl()
 {
-    if ls ./"$1"-* > /dev/null 2>&1
+    if ls ./"$appname"-* > /dev/null 2>&1
     then
-        app_available=$(basename "$1"-* .apk | cut -d '-' -f 2) #get version
-        if [ "$2" = "$app_available" ]
+        app_available=$(basename "$appname"-* .apk | cut -d '-' -f 2) #get version
+        if [ "$appver" = "$app_available" ]
         then
-            echo "Latest $1 apk already exists."
+            echo "Latest $appname apk already exists."
             echo ""
             sleep 0.5s
-            wget -q -c "$3" -O "$1"-"$2".apk --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+            wget -q -c "$applink" -O "$appname"-"$appver".apk --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
             sleep 0.5s
             tput rc; tput ed
         else
-            echo "$1 update available !!"
+            echo "$appname update available !!"
             sleep 0.5s
             tput rc; tput ed
-            echo "Removing previous $1 apk..."
-            rm $1-*.apk
+            echo "Removing previous $appname apk..."
+            rm $appname-*.apk
             sleep 0.5s
             tput rc; tput ed
-            echo "Downloading latest $1 apk..."
+            echo "Downloading latest $appname apk..."
             echo " "
-            wget -q -c "$3" -O "$1"-"$2".apk --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+            wget -q -c "$applink" -O "$appname"-"$appver".apk --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
             sleep 0.5s
             tput rc; tput ed
         fi
     else
-        echo "No $1 apk found in Current Directory"
+        echo "No $appname apk found in Current Directory"
         echo " "
-        echo "Downloading latest $1 apk..."
+        echo "Downloading latest $appname apk..."
         echo " "
-        wget -q -c "$3" -O "$1"-"$2".apk --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+        wget -q -c "$applink" -O "$appname"-"$appver".apk --show-progress --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
         sleep 0.5s
         tput rc; tput ed
     fi
@@ -449,23 +451,27 @@ fetchapk()
     clear
     intro
     echo "Please wait fetching link ..."
-    getlink=$(python3 ./python-utils/fetch-link.py "$appname" "$appver" "$arch")
+    applink=$(python3 ./python-utils/fetch-link.py "$appname" "$appver" "$arch")
     tput rc; tput ed
-    app_dl "$appname" "$appver" "$getlink"
+    app_dl
 }
 
+patchapp()
+{
+    echo "Patching $appname"
+    patchexclusion
+    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./"$appname"-"$appver".apk $excludepatches --keystore ./revanced.keystore -o ./"$appname"Revanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --options options.toml --experimental
+    rm -rf revanced-cache
+}
 
 #Build apps
 if [ "$pkgname" = "com.google.android.youtube" ] || [ "$pkgname" = "com.google.android.apps.youtube.music" ]
 then
     sucheck
     versionselector
-    checkpatched "$appname" "$appver"
+    checkpatched
     fetchapk
-    echo "Building $appname Revanced..."
-    patchexclusion
-    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./"$appname"-"$appver".apk $excludepatches --keystore ./revanced.keystore -o ./"$appname"Revanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --options options.toml --experimental
-    rm -rf revanced-cache
+    patchapp
     if su -c exit > /dev/null 2>&1
     then
         mountapk
@@ -475,12 +481,9 @@ then
 
 else
     versionselector
-    checkpatched "$appname" "$appver"
+    checkpatched
     fetchapk
-    echo "Building $appname Revanced..."
-    patchexclusion
-    java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./"$appname"-"$appver".apk --keystore ./revanced.keystore -o ./"$appname"Revanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --options options.toml --experimental
-    rm -rf revanced-cache
+    patchapp
     moveapk
 fi
 
