@@ -307,7 +307,6 @@ moveapk()
     echo "$appname App saved to Revancify folder." &&
     echo "Thanks for using Revancify..." &&
     [[ -f Vanced_MicroG.apk ]] && termux-open /storage/emulated/0/Revancify/Vanced_MicroG.apk
-    
 }
 
 
@@ -327,28 +326,26 @@ checkpatched()
 {
     if su -c exit > /dev/null 2>&1
     then
-        if ls ./"$1"Revanced-* > /dev/null 2>&1
-        then
-            app_available=$(basename "$1"Revanced-* .apk | cut -d '-' -f 2)
-            if [ "$2" = "$app_available" ]
-            then
-                if dialog --backtitle "Revancify" --title 'Patched APK found' --no-items --defaultno --ascii-lines --yesno "Current directory contains a patched apk. Do You still want to patch?" 8 30
-                then
-                    :
-                else
-                    clear
-                    intro
-                    mountapk
-                fi
-            fi
-        fi
-    else
-        if ls /storage/emulated/0/Revancify/"$1"Revanced-*"$2"* > /dev/null 2>&1
+        if ls ./"$1"Revanced-"$2"* > /dev/null 2>&1
         then
             if dialog --backtitle "Revancify" --title 'Patched APK found' --no-items --defaultno --ascii-lines --yesno "Current directory contains a patched apk. Do You still want to patch?" 8 30
             then
                 :
             else
+                clear
+                intro
+                mountapk
+            fi
+        fi
+    else
+        if ls /storage/emulated/0/Revancify/"$1"Revanced-"$2"* > /dev/null 2>&1
+        then
+            if dialog --backtitle "Revancify" --title 'Patched APK found' --no-items --defaultno --ascii-lines --yesno "Patched $appname with sane version is found in Internal Storage inside Revancify folder. Do You still want to patch?" 12 40
+            then
+                :
+            else
+                clear
+                intro
                 termux-open /storage/emulated/0/Revancify/"$appname"Revanced-"$appver".apk
                 tput cnorm
                 rm -rf ./*cache
@@ -434,7 +431,10 @@ app_dl()
     fi
 }
 
-excludepatches=$(while read -r line; do printf %s"$line" " "; done < <(jq -r --arg pkgname "$pkgname" 'map(select(.appname == $pkgname and .status == "off"))[].patchname' patches.json | sed "s/^/-e /g"))
+patchexclusion()
+{
+    excludepatches=$(while read -r line; do printf %s"$line" " "; done < <(jq -r --arg pkgname "$pkgname" 'map(select(.appname == $pkgname and .status == "off"))[].patchname' patches.json | sed "s/^/-e /g"))
+}
 
 versionselector()
 {
@@ -450,6 +450,16 @@ versionselector()
     fi
 }
 
+fetchapk()
+{
+    clear
+    intro
+    echo "Please wait fetching link ..."
+    getlink=$(python3 ./python-utils/fetch-link.py "$appname" "$appver" "$arch")
+    tput rc; tput ed
+    app_dl "$appname" "$appver" "$getlink"
+}
+
 
 #Build apps
 if [ "$pkgname" = "com.google.android.youtube" ] || [ "$pkgname" = "com.google.android.apps.youtube.music" ]
@@ -457,13 +467,9 @@ then
     sucheck
     versionselector
     checkpatched "$appname" "$appver"
-    clear
-    intro
-    echo "Please wait fetching link ..."
-    getlink=$(python3 ./python-utils/fetch-link.py "$appname" "$appver")
-    tput rc; tput ed
-    app_dl "$appname" "$appver" "$getlink" "$arch" &&
+    fetchapk
     echo "Building $appname Revanced..."
+    patchexclusion
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./"$appname"-"$appver".apk $excludepatches --keystore ./revanced.keystore -o ./"$appname"Revanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --options options.toml --experimental
     rm -rf revanced-cache
     if su -c exit > /dev/null 2>&1
@@ -474,16 +480,11 @@ then
     fi
 
 else
-    mkdir -p /storage/emulated/0/Revancify
-    chmod -R 777 /storage/emulated/0/Revancify/
-    mapfile -t appverlist < <(python3 ./python-utils/version-list.py "$appname")
-    appver=$(dialog --backtitle "Revancify" --title "Version Selection Menu" --no-items --no-cancel --ascii-lines --ok-label "Select" --menu "Select App Version" 20 40 10 "${appverlist[@]}" 2>&1> /dev/tty)
-    clear
-    intro
-    echo "Please wait fetching link ..."
-    getlink=$(python3 ./python-utils/fetch-link.py "$appname" "$appver")
-    app_dl "$appname" "$appver" "$getlink" &&
+    versionselector
+    checkpatched "$appname" "$appver"
+    fetchapk
     echo "Building $appname Revanced..."
+    patchexclusion
     java -jar ./revanced-cli*.jar -b ./revanced-patches*.jar -m ./revanced-integrations*.apk -c -a ./"$appname"-"$appver".apk --keystore ./revanced.keystore -o ./"$appname"Revanced-"$appver".apk --custom-aapt2-binary ./aapt2_"$arch" --options options.toml --experimental
     rm -rf revanced-cache
     moveapk
