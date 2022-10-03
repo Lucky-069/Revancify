@@ -311,17 +311,13 @@ checkpatched()
             fi
         fi
     else
-        if ls /storage/emulated/0/Revancify/"$1"Revanced-* > /dev/null 2>&1
+        if ls /storage/emulated/0/Revancify/"$1"Revanced-*"$2"* > /dev/null 2>&1
         then
-            app_available=$(basename /storage/emulated/0/Revancify/"$1"Revanced-* .apk | cut -d '-' -f 2)
-            if [ "$2" = "$app_available" ]
+            if dialog --backtitle "Revancify" --title 'Patched APK found' --no-items --defaultno --ascii-lines --yesno "Current directory contains a patched apk. Do You still want to patch?" 8 30
             then
-                if dialog --backtitle "Revancify" --title 'Patched APK found' --no-items --defaultno --ascii-lines --yesno "Current directory contains a patched apk. Do You still want to patch?" 8 30
-                then
-                    clear
-                    intro
-                    mountapk
-                fi
+                clear
+                intro
+                mountapk
             fi
         fi
     fi
@@ -366,9 +362,8 @@ sucheck()
 
 mountapk()
 {
-    mv "$appname"Revanced-"$appver".apk "$pkgname".apk
     echo "Mounting the app"
-    if su -mm -c "revancedapp=/data/adb/revanced/$pkgname.apk && stockapp=$(pm path $pkgname | grep base | sed 's/package://g') && mv ./$pkgname.apk /data/local/tmp/revanced.delete && grep $pkgname /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l > /dev/null 2>&1; done && mv /data/local/tmp/revanced.delete $revancedapp && chmod 644 $revancedapp && chown system:system $revancedapp && chcon u:object_r:apk_data_file:s0 $revancedapp && mount -o bind $revancedapp $stockapp && am force-stop $pkgname && exit"
+    if su -mm -c "revancedapp=/data/adb/revanced/$pkgname.apk && stockapp=$(pm path $pkgname | grep base | sed 's/package://g') && cp "$appname"Revanced-$appver.apk /data/local/tmp/revanced.delete && grep $pkgname /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | xargs -r umount -l > /dev/null 2>&1; done && mv /data/local/tmp/revanced.delete $revancedapp && chmod 644 $revancedapp && chown system:system $revancedapp && chcon u:object_r:apk_data_file:s0 $revancedapp && mount -o bind $revancedapp $stockapp && am force-stop $pkgname && exit"
     then
         echo "Mounting successful"
         tput cnorm && cd ~ && exit
@@ -455,8 +450,6 @@ versionselector()
 
 
 #Build apps
-clear
-intro
 if [ "$pkgname" = "com.google.android.youtube" ] || [ "$pkgname" = "com.google.android.apps.youtube.music" ]
 then
     sucheck
