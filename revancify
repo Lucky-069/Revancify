@@ -1,10 +1,12 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
+tput civis
 if wget -q --spider http://google.com
 then
     :
 else
     echo "No Internet connection available"
+    tput cnorm
     exit
 fi
 
@@ -24,17 +26,13 @@ else
     sed -i 's/# allow-external-apps = true/allow-external-apps = true/g' ~/.termux/termux.properties
     sleep 0.5s
     echo "Dependencies installed successfully."
-    sleep 0.5s
-    echo "Run this script again"
-    cd ~ || exit
-    exit
+    bash revancify.sh
 fi
 
 if cd ~/storage/Revancify > /dev/null 2>&1 
 then
-    clear
     rm -rf ./*cache
-    git checkout . && git pull && clear && bash revancify.
+    git checkout . && git pull && clear && bash revancify.sh
 else
     echo "Revancify is not installed"
     exit
