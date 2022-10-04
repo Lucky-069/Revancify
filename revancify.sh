@@ -23,7 +23,9 @@ intro()
 leavecols=$(($(($(tput cols) - 38)) / 2))
 fullpagewidth=$(tput cols )
 fullpageheight=$(($(tput lines) - 5 ))
-get_components(){
+get_components()
+{
+    intro
 
     mapfile -t revanced_latest < <(python3 ./python-utils/revanced-latest.py)
     
@@ -125,7 +127,7 @@ get_components(){
     mainmenu
 }
 
-intro
+
 if ls ./revanced-patches* > /dev/null 2>&1 && ls ./revanced-cli* > /dev/null 2>&1 && ls ./revanced-integrations* > /dev/null 2>&1
 then
     :
