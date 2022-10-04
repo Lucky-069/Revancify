@@ -32,15 +32,16 @@ for key in localjson:
 for patchname in remotepatches:
     if patchname not in localpatches:
         newkey = {}
+        patchindex = remotepatches.index(patchname)
         newkey['patchname'] = patchname
-        for patches in remotejson:
-            if patches['name'] == patchname:
-                newkey['appname'] = patches['compatiblePackages'][0]['name']
-                newkey['description'] = patches['description']
+        newkey['appname'] = remotejson[patchindex]['compatiblePackages'][0]['name']
         newkey['status'] = "on"
         localjson.append(newkey)
     else:
-        None
+        patchindex = remotepatches.index(patchname)
+        localjson[localpatches.index(patchname)]['patchname'] = remotejson[patchindex]['name']
+        localjson[localpatches.index(patchname)]['appname'] = remotejson[patchindex]['compatiblePackages'][0]['name']
+
 
 for patchname in localpatches:
     if patchname not in remotepatches:
