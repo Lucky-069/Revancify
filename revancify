@@ -4,7 +4,6 @@ then
     :
 else
     echo "No Internet connection available"
-    tput cnorm
     exit
 fi
 
