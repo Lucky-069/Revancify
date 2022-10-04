@@ -32,7 +32,7 @@ termux-setup-storage && pkg update -y && pkg install git -y && cd storage && git
 ## Command 1: 
 Use this command in case of any fatal error
 ```
-cd storage/Revancify && bash revancify
+cd storage/Revancify && git checkout .; git pull
 ```  
 ## Command 2:  
 if command 1 fails, use this command, this will delete and reinitialize the repo.
@@ -41,8 +41,7 @@ cd storage && rm -rf Revancify && rm ~/../usr/bin/revancify && git clone https:/
 ```
 # Uninstallation
 1. Open Termux.  
-2. Type `cd storage`  
-3. Type `rm -rf Revancify`  
+2. Type `rm -rf ~/storage/Revancify && rm ~/../usr/bin/revancify`   
 
 # Thanks & Credits
 [Revanced](https://github.com/revanced) 
