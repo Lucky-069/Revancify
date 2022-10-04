@@ -36,6 +36,7 @@ for patchname in remotepatches:
         for patches in remotejson:
             if patches['name'] == patchname:
                 newkey['appname'] = patches['compatiblePackages'][0]['name']
+                newkey['description'] = patches['description']
         newkey['status'] = "on"
         localjson.append(newkey)
     else:
