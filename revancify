@@ -1,5 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
-if wget -q --spider https://google.com
+if ping -c https://google.com > /dev/null 2>&1
 then
     :
 else
