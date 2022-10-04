@@ -1,5 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
-if ping -c https://google.com > /dev/null 2>&1
+if ping -c 1 google.com > /dev/null 2>&1
 then
     :
 else
