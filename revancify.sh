@@ -126,7 +126,7 @@ get_components(){
 }
 
 intro
-if ls ./revanced-patches* && ls ./revanced-cli* && ls ./revanced-integrations* > /dev/null 2>&1
+if ls ./revanced-patches* > /dev/null 2>&1 && ls ./revanced-cli* > /dev/null 2>&1 && ls ./revanced-integrations* > /dev/null 2>&1
 then
     :
 else
