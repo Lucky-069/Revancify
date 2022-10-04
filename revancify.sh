@@ -295,6 +295,8 @@ checkpatched()
                 intro
                 mountapk
             fi
+        else
+            rm ./"$appname"Revanced-*
         fi
     else
         if ls /storage/emulated/0/Revancify/"$appname"Revanced-"$appver"* > /dev/null 2>&1
