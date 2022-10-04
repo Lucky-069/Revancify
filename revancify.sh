@@ -126,7 +126,12 @@ get_components(){
 }
 
 intro
-
+if ls ./revanced-patches* && ls ./revanced-cli* && ls ./revanced-integrations*
+then
+    :
+else
+    get_components
+fi
 
 selectapp()
 {
@@ -165,6 +170,7 @@ selectapp()
 selectpatches()
 {  
     selectapp
+    python3 ./python-utils/fetch-patches.py
     declare -a patches
     while read -r line
     do
@@ -190,7 +196,7 @@ patchoptions()
 }
 
 mainmenu()
-{   python3 ./python-utils/fetch-patches.py
+{
     tput rc; tput ed
     mainmenu=$(dialog --begin 0 $leavecols --no-lines --infobox "█▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n█▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░" 4 38 --and-widget --begin 5 0 --title 'Select App' --ascii-lines --ok-label "Select" --cancel-label "Exit" --menu "Select Option" $fullpageheight $fullpagewidth 10 1 "Patch App" 2 "Select Patches" 3 "Edit Patch Options" 4 "Update Resources" 2>&1> /dev/tty)
     exitstatus=$?
@@ -274,10 +280,12 @@ dlmicrog()
     if dialog --begin 0 $leavecols --no-lines --infobox "█▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n█▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░" 4 38 --and-widget --begin 5 0 --title 'MicroG Prompt' --no-items --defaultno --ascii-lines --yesno "Vanced MicroG is used to run MicroG services without root.\nYouTube and YouTube Music won't work without it.\nIf you already have MicroG, You don't need to download it.\n\n\n\n\n\nDo you want to download Vanced MicroG app?" $fullpageheight $fullpagewidth
         then
             clear
+            intro
             wget -q -c "https://github.com/TeamVanced/VancedMicroG/releases/download/v0.2.24.220220-220220001/microg.apk" -O "Vanced_MicroG.apk" --show-progress
             echo ""
             mv "Vanced_MicroG.apk" /storage/emulated/0/Revancify
             echo MicroG App saved to Revancify folder.
+            sleep 1s
     fi
 }
 
@@ -430,6 +438,7 @@ patchapp()
 }
 
 #Build apps
+python3 ./python-utils/fetch-patches.py
 if [ "$pkgname" = "com.google.android.youtube" ] || [ "$pkgname" = "com.google.android.apps.youtube.music" ]
 then
     sucheck
