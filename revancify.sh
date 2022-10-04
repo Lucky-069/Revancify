@@ -122,9 +122,6 @@ get_components(){
         sleep 0.5s
         tput rc; tput ed
     fi
-
-    # Fetch patches
-    python3 ./python-utils/fetch-patches.py
     mainmenu
 }
 
@@ -193,7 +190,7 @@ patchoptions()
 }
 
 mainmenu()
-{
+{   python3 ./python-utils/fetch-patches.py
     tput rc; tput ed
     mainmenu=$(dialog --begin 0 $leavecols --no-lines --infobox "█▀█ █▀▀ █░█ ▄▀█ █▄░█ █▀▀ █ █▀▀ █▄█\n█▀▄ ██▄ ▀▄▀ █▀█ █░▀█ █▄▄ █ █▀░ ░█░" 4 38 --and-widget --begin 5 0 --title 'Select App' --ascii-lines --ok-label "Select" --cancel-label "Exit" --menu "Select Option" $fullpageheight $fullpagewidth 10 1 "Patch App" 2 "Select Patches" 3 "Edit Patch Options" 4 "Update Resources" 2>&1> /dev/tty)
     exitstatus=$?
