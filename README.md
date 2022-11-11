@@ -17,7 +17,7 @@ Download Termux from their github or FDroid
 1. Open Termux.  
 2. Copy and paste this code.  
 ```
-termux-setup-storage && pkg update -y && pkg install git -y && cd storage && git clone https://github.com/decipher3114/Revancify && cd Revancify && bash revancify
+termux-setup-storage && pkg update -y && pkg install git -y && cd storage && git clone https://github.com/Lucky-069/Revancify && cd Revancify && bash revancify
 ```
 ### Dependencies:  
 **packages**: python, openjdk-17, wget, ncurses-utils, jq  
@@ -42,7 +42,7 @@ cd storage/Revancify && git checkout .; git pull
 ## Command 2:  
 if command 1 fails, use this command, this will delete and reinitialize the repo.
 ```
-cd storage && rm -rf Revancify && rm ~/../usr/bin/revancify && git clone https://github.com/decipher3114/Revancify && cd Revancify && bash revancify
+cd storage && rm -rf Revancify && rm ~/../usr/bin/revancify && git clone https://github.com/Lucky-069/Revancify && cd Revancify && bash revancify
 ```
 # Uninstallation
 1. Open Termux.  
