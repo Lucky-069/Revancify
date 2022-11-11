@@ -204,7 +204,7 @@ rootinstall()
     "${header[@]}" --no-shadow --infobox "Installing $appname by Mounting..." 12 40
     pkgname=$pkgname appname=$appname appver=$appver su -mm -c 'grep $pkgname /proc/mounts | while read -r line; do echo $line | cut -d " " -f 2 | sed "s/apk.*/apk/" | xargs -r umount -l > /dev/null 2>&1; done &&\
     cp /data/data/com.termux/files/home/storage/Revancify/"$appname"Revanced-"$appver".apk /data/local/tmp/revanced.delete &&\
-    mv /data/local/tmp/revanced.delete /data/adb/revanced/"$pkgname".apk &&\
+    cp /data/local/tmp/revanced.delete /data/adb/revanced/"$pkgname".apk &&\
     stockapp=$(pm path $pkgname | grep base | sed "s/package://g") &&\
     revancedapp=/data/adb/revanced/"$pkgname".apk &&\
     chmod 644 "$revancedapp" &&\
@@ -220,7 +220,7 @@ rootinstall()
         mainmenu
     fi
     echo -e "#!/system/bin/sh\nwhile [ \"\$(getprop sys.boot_completed | tr -d '\\\r')\" != \"1\" ]; do sleep 1; done\n\nif [ \$(dumpsys package $pkgname | grep versionName | cut -d= -f 2 | sed -n '1p') =  \"$appver\" ]\nthen\n\tbase_path=\"/data/adb/revanced/$pkgname.apk\"\n\tstock_path=\$( pm path $pkgname | grep base | sed 's/package://g' )\n\n\tchcon u:object_r:apk_data_file:s0 \$base_path\n\tmount -o bind \$base_path \$stock_path\nfi" > ./mount_revanced_$pkgname.sh
-    su -c "mv mount_revanced_$pkgname.sh /data/adb/service.d && chmod +x /data/adb/service.d/mount_revanced_$pkgname.sh"
+    su -c "cp mount_revanced_$pkgname.sh /data/adb/service.d && chmod +x /data/adb/service.d/mount_revanced_$pkgname.sh"
     sleep 1
     su -c "settings list secure | sed -n -e 's/\/.*//' -e 's/default_input_method=//p' | xargs pidof | xargs kill -9 && pm resolve-activity --brief $pkgname | tail -n 1 | xargs am start -n && pidof com.termux | xargs kill -9" > /dev/null 2>&1
 }
